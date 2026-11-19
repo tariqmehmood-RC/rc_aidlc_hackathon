@@ -7,6 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "vitest run",
+    "scan:secrets": "gitleaks dir . --config .gitleaks.toml --no-banner --redact",
+    "scan:sast": "SEMGREP_SEND_METRICS=off semgrep scan --metrics=off --disable-version-check --config p/javascript --config p/typescript --config p/react --error src",
+    "check": "npm run lint && npm run scan:secrets && npm run scan:sast",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,6 +19,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -23,8 +31,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
+    "jsdom": "^31.0.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.6"
+    "vite": "^8.3.6",
+    "vitest": "^5.1.1"
   }
 }

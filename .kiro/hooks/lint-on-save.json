@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Lint on save",
+      "trigger": "PostFileSave",
+      "description": "Runs npm run lint whenever a TypeScript file (.ts or .tsx) is saved.",
+      "matcher": "\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "npm run lint"
+      }
+    }
+  ]
+}

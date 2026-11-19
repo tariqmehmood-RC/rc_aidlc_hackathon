@@ -1,0 +1,12 @@
+# Use gitleaks' default rules, but skip generated and third-party files.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Generated, installed and third-party files"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)dist/''',
+  '''(^|/)\.kiro/skills/skill-creator/''',
+  '''(^|/)package-lock\.json$''',
+]

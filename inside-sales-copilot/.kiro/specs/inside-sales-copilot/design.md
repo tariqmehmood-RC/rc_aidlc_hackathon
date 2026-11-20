@@ -564,7 +564,7 @@ The code then adds `warnings` (free-mail only, name and domain mismatch), merges
 
 ### P2. Extract company facts (Haiku, `maxTokens` 2500)
 
-System: "You are given numbered documents about one company, each with its URL. Extract only facts stated in the documents. Every fact must list the URLs of the documents that state it, using only the URLs provided. Return `employees` and `revenueUsd` as plain numbers only if a document states them, otherwise null. Write pain points as hypotheses about what this kind of company in this situation likely struggles with. Each hypothesis must cite the ids of the facts it is based on. Do not write a hypothesis you cannot tie to a fact."
+System: "You are given numbered documents about one company, each with its URL. Extract only facts stated in the documents. Every fact must list the URLs of the documents that state it, using only the URLs provided. Return `industry` and `headquarters` as a short value with the id of the fact that states it, or null. Return `employees` and `revenueUsd` as plain numbers with the id of the fact that states them, only if a document states them, otherwise null. Write pain points as hypotheses about what this kind of company in this situation likely struggles with. Each hypothesis must cite the ids of the facts it is based on. Do not write a hypothesis you cannot tie to a fact."
 
 User: `<company name="..." domain="..."/>` then `<document id="d1" url="https://...">text</document>` for each document.
 
@@ -573,7 +573,7 @@ Output schema:
 ```json
 {
   "type": "object",
-  "required": ["facts", "industryFactId", "hqFactId", "employees", "revenueUsd", "painPoints"],
+  "required": ["facts", "industry", "headquarters", "employees", "revenueUsd", "painPoints"],
   "properties": {
     "facts": {
       "type": "array", "maxItems": 25,
@@ -586,8 +586,14 @@ Output schema:
         }
       }
     },
-    "industryFactId": { "type": ["string", "null"] },
-    "hqFactId": { "type": ["string", "null"] },
+    "industry": {
+      "type": ["object", "null"], "required": ["value", "factId"],
+      "properties": { "value": { "type": "string", "maxLength": 200 }, "factId": { "type": "string" } }
+    },
+    "headquarters": {
+      "type": ["object", "null"], "required": ["value", "factId"],
+      "properties": { "value": { "type": "string", "maxLength": 200 }, "factId": { "type": "string" } }
+    },
     "employees": {
       "type": ["object", "null"], "required": ["value", "factId"],
       "properties": { "value": { "type": "number" }, "factId": { "type": "string" } }

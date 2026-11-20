@@ -440,7 +440,7 @@ Branch: `feature/wave-6`.
 
 - [ ] **6.5 [MVP] Cost estimate**
   - Files: `docs/cost-estimate.md`
-  - Do: R10.24 content. Assumptions (briefs per month, tokens per call measured from the smoke test, cache hit rate, users), per-service pricing table with current us-east-1 prices (looked up and linked), Bedrock token cost with and without the research cache, monthly total for the demo and for an example team, hours saved per SE per week with the baseline stated as an estimate.
+  - Do: R10.24 content. Model story: Haiku 4.5 for all five calls by default, Sonnet 5 optional for brief writing; show the cost per brief for both. Assumptions (briefs per month, tokens per call measured from the smoke test, cache hit rate, users), per-service pricing table with current us-east-1 prices (looked up and linked), Bedrock token cost with and without the research cache, monthly total for the demo and for an example team, hours saved per SE per week with the baseline stated as an estimate.
   - Test [MVP]: manual checklist: every pricing row has a source link; totals equal the sum of the rows; token counts come from the smoke test.
   - Needs: 5.8.
 

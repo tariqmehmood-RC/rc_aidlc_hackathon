@@ -232,3 +232,8 @@ def test_research_user_agent_default_matches_the_cdk_context():
 def test_cdk_brief_model_is_a_known_model():
     cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
     assert cdk["context"]["briefModel"] in c.BRIEF_MODELS
+
+
+def test_haiku_is_the_default_brief_model_in_code_and_in_cdk():
+    cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
+    assert cdk["context"]["briefModel"] == "haiku" == c.DEFAULT_BRIEF_MODEL

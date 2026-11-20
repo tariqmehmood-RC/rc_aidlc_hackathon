@@ -68,7 +68,7 @@ MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 2500, "ru
 # the BRIEF_MODEL environment variable overrides it locally.
 ENV_BRIEF_MODEL = "BRIEF_MODEL"
 BRIEF_MODELS = (MODEL_HAIKU, MODEL_SONNET)
-DEFAULT_BRIEF_MODEL = MODEL_SONNET
+DEFAULT_BRIEF_MODEL = MODEL_HAIKU  # decided after the Wave 3 rerun; Sonnet is available via config
 MAX_SNAPSHOT_ITEMS = 5
 
 # --- Research fetching -------------------------------------------------------------------

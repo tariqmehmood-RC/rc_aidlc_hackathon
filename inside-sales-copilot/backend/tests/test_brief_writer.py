@@ -76,10 +76,10 @@ def test_sections_are_in_the_required_order_and_valid():
     models.validate("brief_content", out.content)
 
 
-def test_uses_sonnet_with_the_write_token_limit():
+def test_uses_the_default_haiku_with_the_write_token_limit():
     _, fake = write([good_draft()])
     call = fake.calls[0]
-    assert call["model"] == "sonnet" and call["max_tokens"] == 2500 and call["schema"] is bw.P4_SCHEMA
+    assert call["model"] == "haiku" and call["max_tokens"] == 2500 and call["schema"] is bw.P4_SCHEMA
 
 
 def test_ids_are_assigned_by_code():
@@ -318,7 +318,7 @@ def test_a_failed_check_is_logged_by_name_and_counted():
     out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING,
                          log=lambda e, d: logged.append((e, d)))
     assert out.repairs == 1 and out.repair_problems == ["agenda_minutes"]
-    assert logged == [("brief_check_failed", {"model": "sonnet", "checks": ["agenda_minutes"]})]
+    assert logged == [("brief_check_failed", {"model": "haiku", "checks": ["agenda_minutes"]})]
 
 
 def test_at_most_five_snapshot_items_are_requested():
@@ -327,6 +327,12 @@ def test_at_most_five_snapshot_items_are_requested():
 
 
 @pytest.mark.parametrize("env,expected", [({"BRIEF_MODEL": "haiku"}, "haiku"), ({"BRIEF_MODEL": "SONNET"}, "sonnet"),
-                                          ({"BRIEF_MODEL": "opus"}, "sonnet"), ({}, "sonnet")])
+                                          ({"BRIEF_MODEL": "opus"}, "haiku"), ({}, "haiku")])
 def test_brief_model_from_env(env, expected):
     assert bw.brief_model_from_env(env) == expected
+
+
+def test_sonnet_is_still_available():
+    fake = FakeBedrock([good_draft()])
+    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="sonnet")
+    assert fake.calls[0]["model"] == "sonnet" and out.model == "sonnet"

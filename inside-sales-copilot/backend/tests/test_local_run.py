@@ -62,7 +62,8 @@ def test_timing_and_usage_are_reported():
     result, text = run("02-duolingo.txt", "Data & AI")
     assert result["timing"]["totalSeconds"] >= 0
     assert [name for name, _ in result["steps"]] == ["Researching", "Checking attendees", "Matching case studies", "Writing brief"]
-    assert "Time: parse" in text and "Bedrock haiku:" in text and "Bedrock sonnet:" in text
+    assert "Time: parse" in text and "Bedrock haiku: 4 calls" in text and "Brief model: haiku" in text
+    assert "Bedrock sonnet:" not in text          # Haiku writes the brief by default
 
 
 def test_a_saved_rule_is_applied():

@@ -225,7 +225,8 @@ def test_model_ids_are_read_from_the_environment_only():
 def test_research_user_agent_default_matches_the_cdk_context():
     cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
     assert c.RESEARCH_USER_AGENT_DEFAULT == cdk["context"]["researchUserAgent"]
-    assert "contact:" in c.RESEARCH_USER_AGENT_DEFAULT and c.ENV_RESEARCH_USER_AGENT == "RESEARCH_USER_AGENT"
+    assert "https://github.com/" in c.RESEARCH_USER_AGENT_DEFAULT and "@" not in c.RESEARCH_USER_AGENT_DEFAULT
+    assert c.ENV_RESEARCH_USER_AGENT == "RESEARCH_USER_AGENT"
 
 
 

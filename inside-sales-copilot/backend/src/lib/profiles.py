@@ -10,7 +10,8 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-SYNTHETIC_SOURCE_URL = "synthetic://profiles"
+from .constants import SYNTHETIC_SOURCE_URL
+
 # Repo layout is the same in the Lambda asset, so this works locally and deployed.
 DEFAULT_PATH = Path(__file__).resolve().parents[3] / "data" / "attendee_profiles.json"
 

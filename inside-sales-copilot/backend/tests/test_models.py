@@ -219,3 +219,9 @@ def test_model_ids_are_read_from_the_environment_only():
     assert c.ENV_MODEL_HAIKU == "BEDROCK_MODEL_HAIKU" and c.ENV_MODEL_SONNET == "BEDROCK_MODEL_SONNET"
     source = (ROOT / "backend" / "src" / "lib" / "constants.py").read_text(encoding="utf-8")
     assert "anthropic." not in source
+
+
+def test_research_user_agent_default_matches_the_cdk_context():
+    cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
+    assert c.RESEARCH_USER_AGENT_DEFAULT == cdk["context"]["researchUserAgent"]
+    assert "contact:" in c.RESEARCH_USER_AGENT_DEFAULT and c.ENV_RESEARCH_USER_AGENT == "RESEARCH_USER_AGENT"

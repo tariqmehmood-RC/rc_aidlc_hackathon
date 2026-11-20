@@ -65,6 +65,15 @@ ENV_MODEL_SONNET = "BEDROCK_MODEL_SONNET"
 # max_tokens per prompt (design section 10)
 MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 4000, "rules": 800}
 
+# --- Research fetching -------------------------------------------------------------------
+# Default User-Agent for company research (Wikimedia asks for a contact). The same value is the
+# CDK context default `researchUserAgent`. A deployment or a shell can override it with the
+# RESEARCH_USER_AGENT environment variable.
+RESEARCH_USER_AGENT_DEFAULT = (
+    "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)"
+)
+ENV_RESEARCH_USER_AGENT = "RESEARCH_USER_AGENT"
+
 # --- Attendee profiles -------------------------------------------------------------------
 SYNTHETIC_SOURCE_URL = "synthetic://profiles"
 VERDICT_VERIFIED = "verified"

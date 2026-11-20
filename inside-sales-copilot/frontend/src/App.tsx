@@ -18,10 +18,10 @@ function Protected({ children }: { children: ReactNode }) {
   )
 }
 
-export default function App({ mockMode = false, pollMs }: { mockMode?: boolean; pollMs?: number }) {
+export default function App({ loginHint, pollMs }: { loginHint?: string; pollMs?: number }) {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage mockMode={mockMode} />} />
+      <Route path="/login" element={<LoginPage hint={loginHint} />} />
       <Route path="/" element={<Protected><NewBriefPage /></Protected>} />
       <Route path="/briefs/:id" element={<Protected><BriefPage pollMs={pollMs} /></Protected>} />
       <Route path="*" element={<Navigate to="/" replace />} />

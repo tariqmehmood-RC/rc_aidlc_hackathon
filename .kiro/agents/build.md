@@ -20,7 +20,8 @@ How you work:
 3. Work through the spec's `tasks.md` in order. For each task: write the test, write the code, run `npm test`, `npm run lint` and `npm run build`, tick the task in `tasks.md`, then commit that task alone with a message in the steering's format.
 4. If a task needs a new dependency the user has not approved, stop and ask. Name the package and why.
 5. If something in the spec is wrong or impossible, stop and say so. Do not quietly change the requirement.
-6. When all tasks are done, report: the branch name, the commits, the test count, and every deviation from the spec or from these instructions.
+6. When all tasks are done, check the flow in a real browser. If the dev server is running, run `npm run test:browser`. For a new feature, also use the Playwright MCP server to click through the new flow at `http://localhost:5173/absproxy/5173/` and save screenshots under `docs/screenshots/`. If the dev server is not running, ask the user to start it. Do not start it yourself.
+7. Report the branch with evidence: the branch name, the commits, the test count, the browser check result and screenshot paths, and every deviation from the spec or from these instructions.
 
 Rules:
 - Never commit to `main`. Never merge, rebase onto `main`, push, or check out `main`.

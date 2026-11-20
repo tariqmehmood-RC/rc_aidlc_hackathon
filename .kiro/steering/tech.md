@@ -43,7 +43,7 @@ The app is viewed through the IDE's code-server and CloudFront proxy, and `vite.
 - `base: command === 'serve' ? '/absproxy/5173/' : '/'`, so only the dev server uses the prefix and production builds are unaffected. code-server's `/absproxy/<port>/` route keeps the path prefix. The `/proxy/<port>/` route strips it, which leaves root-absolute asset URLs unresolvable and the page blank.
 - `server.allowedHosts: ['.cloudfront.net']`. Vite 8 rejects unknown `Host` headers with 403 "Blocked request". The leading dot allows `cloudfront.net` and all its subdomains.
 - URL to open: `https://<cloudfront-host>/absproxy/5173/` (trailing slash required). The host is in the `VSCODE_PROXY_URI` env var.
-- Consequences of `base`: reference public files as `${import.meta.env.BASE_URL}file.svg`, not `/file.svg`. `App.tsx` currently uses `/icons.svg#...` in `<use href>`. Fix these when touching that code, because hardcoded root paths bypass `base`.
+- Consequences of `base`: reference public files as `${import.meta.env.BASE_URL}file.svg`, never `/file.svg`, because hardcoded root paths bypass `base`. Locally, the app is at `http://localhost:5173/absproxy/5173/`.
 - `base` is `/` for builds, so no change is needed for a production deploy.
 
 ## Conventions

@@ -1,12 +1,4 @@
-import type { BriefView, UnverifiedReason } from '../api/types'
-
-export const REASON_LABEL: Record<UnverifiedReason, string> = {
-  title_mismatch: 'Title does not match',
-  employer_mismatch: 'Employer does not match',
-  no_profile_found: 'No profile found',
-  title_missing: 'No title in the invite',
-  ambiguous: 'More than one possible profile',
-}
+import type { BriefView } from '../api/types'
 
 export interface SourceInfo {
   url: string

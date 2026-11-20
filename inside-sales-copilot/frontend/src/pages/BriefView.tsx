@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ApiError, type ApiClient } from '../api/client'
 import type { BriefContent, BriefView as View } from '../api/types'
-import { AttendeeBadge, Button, Card, EditableText, ErrorBanner, Pill, SourceChip } from '../components/ui'
+import { Button, Card, EditableText, ErrorBanner, Pill, SourceChip } from '../components/ui'
 import { buildSourceIndex, longDate, sourceFor } from '../lib/format'
 import { ApproveDialog, RulesReview } from './RulesReview'
 
@@ -38,7 +38,6 @@ export function BriefView({ view, api, setView, onRefresh }: { view: View; api: 
   const [error, setError] = useState<string | null>(null)
   const scores = new Map((view.caseStudyMatches?.matches ?? []).map((m) => [m.caseStudyId, m.score]))
   const invite = view.confirmedInvite ?? view.parsedInvite
-  const unverified = content.attendees.filter((a) => a.status !== 'verified').length
 
   async function save(mutate: (c: BriefContent) => void) {
     const next = structuredClone(content)
@@ -85,7 +84,7 @@ export function BriefView({ view, api, setView, onRefresh }: { view: View; api: 
             {SECTIONS.map(([id, label]) => (
               <a key={id} href={`#${id}`} className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-brand-soft">
                 <span>{label}</span>
-                {id === 'attendees' && unverified > 0 && <span className="text-xs font-semibold text-warn">{unverified} ⚠</span>}
+                {id === 'attendees' && <span className="text-xs text-muted">{content.attendees.length}</span>}
                 {id === 'cases' && <span className="text-xs text-muted">{content.caseStudies.length}</span>}
                 {id === 'sources' && <span className="text-xs text-muted">{content.sources.length}</span>}
               </a>
@@ -142,16 +141,16 @@ export function BriefView({ view, api, setView, onRefresh }: { view: View; api: 
           <Section id="attendees" n={2} title="Attendees">
             <ul className="space-y-2">
               {content.attendees.map((a) => (
-                <li key={a.email} data-testid="attendee" className={`flex flex-wrap items-center justify-between gap-3 rounded-lg px-4 py-3 ${a.status === 'verified' ? 'bg-ok-soft/60' : 'border border-warn-line bg-warn-soft/60'}`}>
+                <li key={a.email} data-testid="attendee" className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line px-4 py-3">
                   <div>
                     <p className="font-semibold">{a.name}</p>
-                    <p className="text-sm text-muted">{a.status === 'verified' ? a.title : <>Invite says: &ldquo;{a.title ?? 'no title'}&rdquo;</>}</p>
+                    <p className="text-sm text-muted">{a.title ?? 'Title not given'}</p>
                   </div>
-                  <AttendeeBadge attendee={a} />
+                  <span className="text-sm text-muted">{a.email}</span>
                 </li>
               ))}
             </ul>
-            {unverified > 0 && <p className="mt-3 text-xs text-muted">Unverified roles are not used as facts anywhere in this brief. Confirm them on the call.</p>}
+            {content.attendees.length === 0 && <p className="text-sm text-muted">No attendees listed in the invite.</p>}
           </Section>
 
           <Section id="pain" n={3} title="Pain-point hypotheses" tag={AI_TAG}>

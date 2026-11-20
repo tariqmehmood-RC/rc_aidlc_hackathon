@@ -4,7 +4,7 @@
 import fixture from './fixtures/allstate.json'
 import type { BriefContent, BriefStatus, BriefView, ParsedInvite, RuleProposal, Step } from '../api/types'
 
-const PIPELINE: Step[] = ['Researching', 'Checking attendees', 'Matching case studies', 'Writing brief']
+const PIPELINE: Step[] = ['Researching', 'Matching case studies', 'Writing brief']
 const FREE_MAIL = new Set(['gmail.com', 'outlook.com', 'yahoo.com', 'hotmail.com', 'icloud.com', 'proton.me', 'aol.com'])
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
 

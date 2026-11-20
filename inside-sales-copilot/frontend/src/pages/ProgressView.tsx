@@ -6,14 +6,12 @@ import { stepStates } from '../lib/flow'
 const LABEL: Record<Step, string> = {
   Parsing: 'Parsing',
   Researching: 'Researching',
-  'Checking attendees': 'Checking attendees',
   'Matching case studies': 'Matching case studies',
   'Writing brief': 'Writing brief',
 }
 const DETAIL: Record<Step, string> = {
   Parsing: 'Reading the invite',
   Researching: 'Company website, Wikipedia, and recent news',
-  'Checking attendees': 'Employer and title against the profile directory',
   'Matching case studies': 'Scoring case studies from your business unit',
   'Writing brief': 'Agenda, questions, and hypotheses',
 }

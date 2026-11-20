@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { BriefAttendee } from '../api/types'
-import { REASON_LABEL, shortDate, type SourceInfo } from '../lib/format'
+import { shortDate, type SourceInfo } from '../lib/format'
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`rounded-xl border border-line bg-white shadow-sm ${className}`}>{children}</div>
@@ -47,12 +46,6 @@ export function SourceChip({ source }: { source: SourceInfo }) {
       <span className="sr-only">(source: {source.title})</span>
     </a>
   )
-}
-
-export function AttendeeBadge({ attendee }: { attendee: BriefAttendee }) {
-  if (attendee.status === 'verified') return <Pill tone="green">✓ Verified</Pill>
-  const reason = attendee.reason ? REASON_LABEL[attendee.reason] : 'Not verified'
-  return <Pill tone="amber" title={reason}>⚠ Unverified · {reason}</Pill>
 }
 
 /** Click to edit a line in place. Saves through onSave, which may reject with a message. */

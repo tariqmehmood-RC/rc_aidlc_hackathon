@@ -33,11 +33,11 @@ export function LoginPage({ hint }: { hint?: string }) {
           <div className="mb-6 grid h-12 w-12 place-items-center rounded-xl bg-brand text-xl font-bold">IS</div>
           <h1 className="text-4xl font-bold leading-tight">Inside Sales Copilot</h1>
           <p className="mt-4 max-w-md text-lg text-blue-100">
-            Paste a meeting invite. Get a cited discovery brief, checked attendees, and the Royal Cyber case studies that fit, in about a minute.
+            Paste a meeting invite. Get a cited discovery brief, an agenda, and the Royal Cyber case studies that fit, in about a minute.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-blue-100">
             <li>✓ Every fact links to its source</li>
-            <li>✓ Attendees are verified, never guessed</li>
+            <li>✓ Discovery questions and agenda ready to edit</li>
             <li>✓ Case studies from your business unit</li>
           </ul>
         </div>

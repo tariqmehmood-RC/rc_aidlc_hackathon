@@ -46,44 +46,44 @@ Wave 4 can start as soon as Wave 1 is done, because the frontend is built agains
 
 Branch: `feature/wave-1`
 
-- [ ] **1.1 [MVP] Backend scaffold and `.gitignore`**
+- [x] **1.1 [MVP] Backend scaffold and `.gitignore`**
   - Files: `.gitignore`, `backend/pyproject.toml`, `backend/src/__init__.py`, `backend/src/{handlers,services,lib}/__init__.py`, `backend/tests/conftest.py`, `backend/tests/test_scaffold.py`
   - Do: ignore `backend/.venv`, `__pycache__`, `node_modules`, `cdk.out`, `dist`, `.env*`, `*.bundle`. Declare Python 3.12 and dev dependencies (pytest, moto, jsonschema, aws-lambda-powertools, boto3). No pydantic, to keep the Lambda package small and pure Python.
   - Test: `test_scaffold.py` checks `sys.version_info[:2] == (3, 12)` and that `backend.src.lib`, `services` and `handlers` import.
   - Needs: none. Requirements: R10.10, steering `structure.md`.
 
-- [ ] **1.2 [MVP] Infra scaffold with pinned region** [P]
+- [x] **1.2 [MVP] Infra scaffold with pinned region** [P]
   - Files: `infra/package.json`, `infra/tsconfig.json`, `infra/cdk.json`, `infra/bin/app.ts`, `infra/lib/{auth,data,api,web}-stack.ts` (empty stacks), `infra/test/app.test.ts`
   - Do: CDK v2 app with `AuthStack`, `DataStack`, `ApiStack`, `WebStack`. `env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-east-1' }`. Context defaults `haikuModelId` and `sonnetModelId` in `cdk.json` (D§9.4).
   - Test (Jest): every stack's region is `us-east-1`; `cdk.json` model IDs equal the tested IDs.
   - Needs: none. Requirements: R10.10, R10.25.
 
-- [ ] **1.3 [MVP] Frontend scaffold** [P]
+- [x] **1.3 [MVP] Frontend scaffold** [P]
   - Files: `frontend/` (Vite + React + TypeScript + Tailwind), `frontend/src/App.tsx`, `frontend/src/App.test.tsx`, `frontend/vitest.config.ts`
   - Do: standard Vite template, Tailwind, Vitest with Testing Library, `aws-amplify`. No starter content.
   - Test (Vitest): `App` renders without crashing and shows the app title.
   - Needs: none. Requirements: none (structure).
 
-- [ ] **1.4 [MVP] Case study seed from the real CSV**
+- [x] **1.4 [MVP] Case study seed from the real CSV**
   - Files: `data/royal_cyber_case_studies.csv` (27 real entries, provided by the team), `data/case_studies.json` (generated), `scripts/import_case_studies.py`, `backend/tests/test_case_studies_seed.py`
   - Do: run `scripts/import_case_studies.py data/royal_cyber_case_studies.csv` to write `data/case_studies.json`. The JSON holds only the real entries: no placeholders. The placeholder logic and `DEMO_MODE` are removed from the importer and tests. The importer keeps its schema validation (BU names, https royalcyber.com URL, summary length, tags, no duplicate id or URL).
   - Test: the generated JSON has 27 valid entries; at least 5 entries each for AWS and ServiceNow; every URL starts with `https://royalcyber.com` or `https://www.royalcyber.com`; importer tests for bad BU, bad URL, wrong header, wrong column count, and stable ids when rows are reordered.
   - Needs: the CSV file. Requirements: R5.12, R5.13, R5.14.
   - Note for README (task 6.2): the seed comes from the public site through the team, because the site blocks automated fetching.
 
-- [ ] **1.5 [MVP] Attendee profile directory** [P]
+- [x] **1.5 [MVP] Attendee profile directory** [P]
   - Files: `data/attendee_profiles.json`, `backend/src/lib/profiles.py`, `backend/tests/test_profiles.py`
   - Do: synthetic profiles keyed by lowercase email: `name`, `employer`, `employer_domain`, `title`, `source_url = "synthetic://profiles"`. Loader validates the schema and rejects duplicate emails.
   - Test: schema valid; every `source_url` is `synthetic://profiles`; duplicate email is rejected; lookup is case-insensitive.
   - Needs: none. Requirements: R4.1, R4.11.
 
-- [ ] **1.6 [MVP] Three sample invites and expected results**
+- [x] **1.6 [MVP] Three sample invites and expected results**
   - Files: `data/sample_invites/{01,02,03}-*.txt`, `data/sample_invites/expected.json`, extra entries in `data/attendee_profiles.json`, `backend/tests/test_sample_invites.py`
   - Do: three invites for real public companies with fictional attendees. Together they cover: a verified attendee, an unverified attendee for title mismatch, an unverified attendee for no profile, a free-mail attendee, a duplicate email, and one invite with no meeting date. `expected.json` lists the expected attendee status and reason, used by tasks 2.4 and 2.5.
   - Test: each invite is 1 to 10,000 characters; `expected.json` covers all three cases (R4.13); every attendee email in the invites is either in the profile file or listed as "no profile".
   - Needs: 1.5. Requirements: R4.13, R2.
 
-- [ ] **1.7 [MVP] Shared models and constants** [P]
+- [x] **1.7 [MVP] Shared models and constants** [P]
   - Files: `backend/src/lib/models.py`, `backend/src/lib/constants.py`, `backend/tests/test_models.py`
   - Do: dataclasses and JSON schemas for the objects in D§5 (parsed invite, research result, attendee check, case study match, brief content, brief view). Constants: statuses, steps, free-mail domain list, title abbreviation table, tier thresholds.
   - Test: sample objects validate against the schemas; invalid shapes are rejected; status and step names match the design.

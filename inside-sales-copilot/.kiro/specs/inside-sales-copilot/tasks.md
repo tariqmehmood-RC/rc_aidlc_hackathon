@@ -325,40 +325,40 @@ Branch: `feature/wave-5`. Needs Wave 3 and Wave 4 merged.
 - Group I: 5.1, 5.2, 5.3, 5.6 (independent of each other).
 - Then 5.4 (needs 5.1, 5.2, 5.3), then 5.5, then 5.7 to 5.11 in order.
 
-- [ ] **5.1 [MVP] AuthStack** [P, group I]
+- [x] **5.1 [MVP] AuthStack** [P, group I]
   - Files: `infra/lib/auth-stack.ts`, `infra/test/auth-stack.test.ts`
   - Test (CDK assertions): self sign-up disabled; custom attribute `custom:bu`; app client without secret that cannot write `custom:bu`; ID and access token validity 1 hour; email sign-in.
   - Needs: 1.2. Requirements: R1.
 
-- [ ] **5.2 [MVP] DataStack** [P, group I]
+- [x] **5.2 [MVP] DataStack** [P, group I]
   - Files: `infra/lib/data-stack.ts`, `infra/test/data-stack.test.ts`
   - Test: three on-demand tables with the right keys; TTL attributes (`expiresAt`); `byUser` and sparse `byQueue` indexes; standard queue with visibility timeout 1080 s; DLQ with `maxReceiveCount` 3.
   - Needs: 1.2. Requirements: R8.7, R10.11, R10.22, R10.23.
 
-- [ ] **5.3 [MVP] Backend packaging** [P, group I]
+- [x] **5.3 [MVP] Backend packaging** [P, group I]
   - Files: `infra/lib/backend-bundle.ts`, `scripts/build_backend.sh`, `infra/test/bundle.test.ts`
   - Do: build the Lambda asset for Python 3.12 on Linux (dependencies installed for the Lambda platform with uv, plus `data/*.json`). No Docker if avoidable.
   - Test: the built asset contains the handlers, `case_studies.json`, `attendee_profiles.json`, and no `.venv`, tests, or `.env` files.
   - Needs: Wave 3. Requirements: R10.25.
 
-- [ ] **5.4 [MVP] ApiStack** (needs 5.1, 5.2, 5.3)
+- [x] **5.4 [MVP] ApiStack** (needs 5.1, 5.2, 5.3)
   - Files: `infra/lib/api-stack.ts`, `infra/test/api-stack.test.ts`
   - Do: HTTP API with the 11 routes under `/api`, Cognito JWT authorizer on all routes, API Lambdas, worker Lambda (reserved concurrency 1, batch size 1, timeout 180 s, env vars incl. model IDs), alarms (DLQ depth above 0, worker errors, Bedrock throttling, API 5xx), dashboard, log retention 14 days.
   - Test: every route has the authorizer; worker reserved concurrency 1 and batch size 1; only the worker role has `bedrock:InvokeModel`; Bedrock resources are exactly the two inference profiles and two foundation models, no wildcards on the profile; no IAM statement has `Resource: *` except where AWS requires it (logs, X-Ray); log groups retain 14 days; DLQ alarm exists.
   - Needs: 5.1, 5.2, 5.3. Requirements: R1, R10.
 
-- [ ] **5.5 [MVP] WebStack** (needs 5.4)
+- [x] **5.5 [MVP] WebStack** (needs 5.4)
   - Files: `infra/lib/web-stack.ts`, `infra/test/web-stack.test.ts`
   - Test: bucket blocks all public access; CloudFront viewer protocol redirects to HTTPS, minimum TLS 1.2; `/api/*` behavior points to the HTTP API with caching off; security headers policy present; `config.json` contains only the pool id, client id and region.
   - Needs: 5.4, 1.3. Requirements: R10.18, R10.19.
 
-- [ ] **5.6 [MVP] Seed demo users script** [P, group I]
+- [x] **5.6 [MVP] Seed demo users script** [P, group I]
   - Files: `scripts/seed-demo-users`, `backend/tests/test_seed_demo_users.py`
   - Do: `scripts/seed-demo-users --user-pool-id <id> --password <value>` creates `se-aws@demo.local` (`custom:bu=AWS`) and `se-servicenow@demo.local` (`ServiceNow`) with a permanent password. The password is never printed or written to a file. Safe to run twice.
   - Test (moto Cognito): both users exist with the right BU; running twice causes no error; the password does not appear in stdout, stderr, or any file in the repo.
   - Needs: none (uses moto). Requirements: R1.8, R1.11.
 
-- [ ] **5.7 [MVP] First deploy to us-east-1** (needs your approval to create lasting resources)
+- [x] **5.7 [MVP] First deploy to us-east-1** (needs your approval to create lasting resources)
   - Do: `cdk synth`, show `cdk diff`, then after your approval `cdk deploy --all`. Check the worker role against the account's Bedrock allowlist. Run `scripts/seed-demo-users` with a password you provide on the command line.
   - Test: stack outputs exist; a manual check shows sign-in works for both users.
   - Needs: 5.1 to 5.6. Requirements: R10.25.

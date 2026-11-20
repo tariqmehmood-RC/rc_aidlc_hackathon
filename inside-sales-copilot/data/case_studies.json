@@ -1,0 +1,167 @@
+[
+  {
+    "id": "placeholder-01",
+    "title": "[PLACEHOLDER] AWS case study 1",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "AWS",
+    "client_industry": "Retail",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-02",
+    "title": "[PLACEHOLDER] AWS case study 2",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "AWS",
+    "client_industry": "Financial Services",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-03",
+    "title": "[PLACEHOLDER] AWS case study 3",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "AWS",
+    "client_industry": "Healthcare",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-04",
+    "title": "[PLACEHOLDER] AWS case study 4",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "AWS",
+    "client_industry": "Manufacturing",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-05",
+    "title": "[PLACEHOLDER] ServiceNow case study 1",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "ServiceNow",
+    "client_industry": "Financial Services",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-06",
+    "title": "[PLACEHOLDER] ServiceNow case study 2",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "ServiceNow",
+    "client_industry": "Healthcare",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-07",
+    "title": "[PLACEHOLDER] ServiceNow case study 3",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "ServiceNow",
+    "client_industry": "Telecommunications",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-08",
+    "title": "[PLACEHOLDER] ServiceNow case study 4",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "ServiceNow",
+    "client_industry": "Retail",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-09",
+    "title": "[PLACEHOLDER] Salesforce case study 1",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Salesforce",
+    "client_industry": "Retail",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-10",
+    "title": "[PLACEHOLDER] Salesforce case study 2",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Salesforce",
+    "client_industry": "Insurance",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-11",
+    "title": "[PLACEHOLDER] Salesforce case study 3",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Salesforce",
+    "client_industry": "Manufacturing",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-12",
+    "title": "[PLACEHOLDER] Data & AI case study 1",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Data & AI",
+    "client_industry": "Financial Services",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-13",
+    "title": "[PLACEHOLDER] Data & AI case study 2",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Data & AI",
+    "client_industry": "Healthcare",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-14",
+    "title": "[PLACEHOLDER] Data & AI case study 3",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Data & AI",
+    "client_industry": "Retail",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  },
+  {
+    "id": "placeholder-15",
+    "title": "[PLACEHOLDER] Data & AI case study 4",
+    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "bu": "Data & AI",
+    "client_industry": "Telecommunications",
+    "tags": [
+      "placeholder"
+    ],
+    "url": "https://www.royalcyber.com/"
+  }
+]

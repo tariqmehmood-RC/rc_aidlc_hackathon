@@ -1,0 +1,80 @@
+{
+  "documents": [
+    {
+      "url": "https://www.delta.com/",
+      "kind": "homepage",
+      "text": "",
+      "title": null
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQc0hzSUhQLXZIMk9JWHd3SGdkMkpOZWJIZmFqMmF6ZVdYSlhDQzR5b1dRUVJHNm5nVjA4OFVZV0dRXzFEN0pjX3g4SXM1SmdPWXJtVlkwRFRhaVZPSHRtZmw2cVYyeXhyMnJadk9oRkxfZFFic01GVE1xSTQycmZhZHl6UXN5UmtXZDNwZEk3RmFxMWYwcUxnQTVR?oc=5",
+      "kind": "news",
+      "text": "Delta cuts 10 international routes, including two from Atlanta - FOX 5 Atlanta",
+      "title": "Delta cuts 10 international routes, including two from Atlanta - FOX 5 Atlanta"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPVnl4SFUxNXlDQkZPXzYwVENMOUx3aHlCNHVpMFpzNlF6ckZxMHpQWHVxd0lzR3Nrdm9HbDdldWxlUkcydzlmZGlfMlZpZjdEckRtRUxjNGExR0Q5NDdWZXpmcXBVOU43ajdvbXllem9pczRtOW5DRVNBUjhROVFzUlZYV0kwbEhha3BQeW9Oaw?oc=5",
+      "kind": "news",
+      "text": "1 Simple Callout: The New Fix For The Error That Put An American 777 In A Delta 737’s Path - Simple Flying",
+      "title": "1 Simple Callout: The New Fix For The Error That Put An American 777 In A Delta 737’s Path - Simple Flying"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNQlFzVWtrQTdITi1wb1JPZDBuOEtxNnNqS2hxVm9ULW9pUFVlck55NGNRYzNiODVGTEpxZXI2dXBGQWtQUENtWVFPdUZyTzlRMGJwYVdnMjU4aktiQ1NvNm1kOHNmSHB5eVNINTRQbDlyVzVTb19OSWJVMUpFeHVPeUZ0ZUhUNGZIbExB?oc=5",
+      "kind": "news",
+      "text": "October was the busiest month ever at Charles M. Schulz–Sonoma County Airport - The Press Democrat",
+      "title": "October was the busiest month ever at Charles M. Schulz–Sonoma County Airport - The Press Democrat"
+    }
+  ],
+  "news": [
+    {
+      "title": "Delta cuts 10 international routes, including two from Atlanta - FOX 5 Atlanta",
+      "date": "2026-11-20",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQc0hzSUhQLXZIMk9JWHd3SGdkMkpOZWJIZmFqMmF6ZVdYSlhDQzR5b1dRUVJHNm5nVjA4OFVZV0dRXzFEN0pjX3g4SXM1SmdPWXJtVlkwRFRhaVZPSHRtZmw2cVYyeXhyMnJadk9oRkxfZFFic01GVE1xSTQycmZhZHl6UXN5UmtXZDNwZEk3RmFxMWYwcUxnQTVR?oc=5"
+    },
+    {
+      "title": "1 Simple Callout: The New Fix For The Error That Put An American 777 In A Delta 737’s Path - Simple Flying",
+      "date": "2026-11-20",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPVnl4SFUxNXlDQkZPXzYwVENMOUx3aHlCNHVpMFpzNlF6ckZxMHpQWHVxd0lzR3Nrdm9HbDdldWxlUkcydzlmZGlfMlZpZjdEckRtRUxjNGExR0Q5NDdWZXpmcXBVOU43ajdvbXllem9pczRtOW5DRVNBUjhROVFzUlZYV0kwbEhha3BQeW9Oaw?oc=5"
+    },
+    {
+      "title": "October was the busiest month ever at Charles M. Schulz–Sonoma County Airport - The Press Democrat",
+      "date": "2026-11-20",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNQlFzVWtrQTdITi1wb1JPZDBuOEtxNnNqS2hxVm9ULW9pUFVlck55NGNRYzNiODVGTEpxZXI2dXBGQWtQUENtWVFPdUZyTzlRMGJwYVdnMjU4aktiQ1NvNm1kOHNmSHB5eVNINTRQbDlyVzVTb19OSWJVMUpFeHVPeUZ0ZUhUNGZIbExB?oc=5"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=Delta%20Air%20Lines&limit=5",
+      "status": "failed"
+    },
+    {
+      "url": "https://delta.com/",
+      "status": "failed"
+    },
+    {
+      "url": "https://www.delta.com/",
+      "status": "ok"
+    },
+    {
+      "url": "https://www.delta.com/",
+      "status": "ok"
+    },
+    {
+      "url": "https://news.google.com/rss/search?q=Delta%20Air%20Lines&hl=en-US&gl=US&ceid=US:en",
+      "status": "ok"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQc0hzSUhQLXZIMk9JWHd3SGdkMkpOZWJIZmFqMmF6ZVdYSlhDQzR5b1dRUVJHNm5nVjA4OFVZV0dRXzFEN0pjX3g4SXM1SmdPWXJtVlkwRFRhaVZPSHRtZmw2cVYyeXhyMnJadk9oRkxfZFFic01GVE1xSTQycmZhZHl6UXN5UmtXZDNwZEk3RmFxMWYwcUxnQTVR?oc=5",
+      "status": "ok"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPVnl4SFUxNXlDQkZPXzYwVENMOUx3aHlCNHVpMFpzNlF6ckZxMHpQWHVxd0lzR3Nrdm9HbDdldWxlUkcydzlmZGlfMlZpZjdEckRtRUxjNGExR0Q5NDdWZXpmcXBVOU43ajdvbXllem9pczRtOW5DRVNBUjhROVFzUlZYV0kwbEhha3BQeW9Oaw?oc=5",
+      "status": "ok"
+    },
+    {
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNQlFzVWtrQTdITi1wb1JPZDBuOEtxNnNqS2hxVm9ULW9pUFVlck55NGNRYzNiODVGTEpxZXI2dXBGQWtQUENtWVFPdUZyTzlRMGJwYVdnMjU4aktiQ1NvNm1kOHNmSHB5eVNINTRQbDlyVzVTb19OSWJVMUpFeHVPeUZ0ZUhUNGZIbExB?oc=5",
+      "status": "ok"
+    }
+  ],
+  "match_confidence": "confirmed"
+}

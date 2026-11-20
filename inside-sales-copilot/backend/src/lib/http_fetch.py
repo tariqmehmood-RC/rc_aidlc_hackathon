@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import http.client
 import ipaddress
+import os
 import socket
 import ssl
 from dataclasses import dataclass
@@ -42,6 +43,7 @@ class FetchResult:
     content_type: str | None = None
     truncated: bool = False
     error: str | None = None
+    retry_after: float | None = None  # seconds, from a Retry-After header on 429 and 503
 
 
 def is_public_ip(address: str) -> bool:
@@ -155,7 +157,9 @@ class Fetcher:
         self.max_bytes = max_bytes
         self.max_redirects = max_redirects
         self.allowed_ports = allowed_ports
-        self.user_agent = user_agent
+        # RESEARCH_USER_AGENT lets a deployment set a User-Agent with a real contact address,
+        # as Wikimedia asks. Never put secrets in it.
+        self.user_agent = os.environ.get("RESEARCH_USER_AGENT") or user_agent
 
     def fetch(self, url: str) -> FetchResult:
         current = url
@@ -210,7 +214,12 @@ class Fetcher:
                     return fail("bad_redirect", status)
                 return urljoin(url, location)
             if status < 200 or status >= 300:
-                return fail(f"http_{status}", status)
+                failed = fail(f"http_{status}", status)
+                retry_after = resp.getheader("Retry-After")
+                if status in (429, 503) and retry_after and retry_after.strip().isdigit():
+                    return FetchResult(failed.url, failed.final_url, ok=False, status=status,
+                                       error=failed.error, retry_after=float(retry_after))
+                return failed
             content_type = resp.getheader("Content-Type")
             media = (content_type or "").split(";")[0].strip().lower()
             if media and not media.startswith(TEXT_TYPES) and media not in TEXT_TYPES:

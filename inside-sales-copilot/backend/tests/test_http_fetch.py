@@ -39,6 +39,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._send(200, b"late")
         elif path == "/forbidden":
             self._send(403, b"<html>Cloudflare</html>")
+        elif path == "/limited":
+            self._send(429, b"slow down", headers={"Retry-After": "7"})
         elif path == "/to-private":
             self._send(302, headers={"Location": "http://169.254.169.254/latest/meta-data/"})
         elif path == "/to-ok":
@@ -245,3 +247,16 @@ def test_html_to_text_handles_broken_markup():
 
 def test_html_to_text_drops_scripts_even_when_unclosed_tags_follow():
     assert "x=1" not in hf.html_to_text("<script>x=1</script><p>kept</p>")
+
+
+def test_retry_after_header_is_reported_on_429(fetcher):
+    f, port = fetcher
+    result = f.fetch(url(port, "/limited"))
+    assert not result.ok and result.error == "http_429" and result.retry_after == 7.0
+
+
+def test_user_agent_can_be_overridden_from_the_environment(monkeypatch):
+    monkeypatch.setenv("RESEARCH_USER_AGENT", "TeamBot/1.0 (+https://example.org/contact)")
+    assert hf.Fetcher().user_agent == "TeamBot/1.0 (+https://example.org/contact)"
+    monkeypatch.delenv("RESEARCH_USER_AGENT")
+    assert hf.Fetcher().user_agent == hf.USER_AGENT

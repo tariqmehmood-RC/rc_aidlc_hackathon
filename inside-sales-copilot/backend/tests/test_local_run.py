@@ -91,7 +91,8 @@ def test_the_research_user_agent_default_is_set(monkeypatch):
     local_run._configure_env(fake=True)
     import os
 
-    assert "@" not in os.environ["RESEARCH_USER_AGENT"]
+    assert os.environ["RESEARCH_USER_AGENT"].startswith("InsideSalesCopilot/0.1")
+    assert "@" not in os.environ["RESEARCH_USER_AGENT"]          # no personal email in the code
 
 
 def test_an_env_var_overrides_the_user_agent(monkeypatch):

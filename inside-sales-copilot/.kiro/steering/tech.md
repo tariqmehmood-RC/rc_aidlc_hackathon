@@ -86,7 +86,7 @@ Case study seed: if the Royal Cyber site blocks fetching, write the seed by hand
 ## IaC
 - AWS CDK v2 in TypeScript, one app in `infra/`.
 - Pin the environment explicitly in `infra/bin`: `env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-east-1' }`. Never read the region from the shell.
-- The account is already bootstrapped for `aws://<account-id>/us-east-1`.
+- The team's AWS account is already bootstrapped for us-east-1 (`cdk bootstrap`).
 - Stacks: `AuthStack`, `DataStack`, `ApiStack`, `WebStack`.
 - Least-privilege IAM per function (grant only the tables, queues, and actions it needs). Only the worker may call Bedrock.
 

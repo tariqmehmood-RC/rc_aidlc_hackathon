@@ -256,39 +256,39 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
 - Group G: 4.2, 4.3, 4.4, 4.5, 4.6 (after 4.1).
 - Group H (after 4.5 and 4.6): 4.7, 4.8, 4.9.
 
-- [ ] **4.1 [MVP] API client, types, and mock server**
+- [x] **4.1 [MVP] API client, types, and mock server**
   - Files: `frontend/src/api/{client,types}.ts`, `frontend/src/mocks/{handlers,server}.ts`, `frontend/src/api/client.test.ts`
   - Do: typed client for all 11 routes; sends the ID token as bearer; maps the error body; on 401 signals sign-out. MSW handlers simulate every status and a queue.
   - Test: sends `Authorization` header; 401 triggers the sign-out callback; error body becomes a typed error.
   - Needs: 1.3. Requirements: D§6.
 
-- [ ] **4.2 [MVP] Sign in** [P, group G]
+- [x] **4.2 [MVP] Sign in** [P, group G]
   - Files: `frontend/src/auth/{AuthProvider,LoginPage}.tsx`, `frontend/src/auth/*.test.tsx`
   - Do: custom login form with `aws-amplify` Auth, generic error message, sign-out button, return to sign-in when the token expires, no sign-up link, config read from `/config.json`.
   - Test: wrong password shows the generic message only; signed-out users see only the login page; sign-out clears the session; expired token returns to login.
   - Needs: 4.1. Requirements: R1.
 
-- [ ] **4.3 [MVP] Paste invite page** [P, group G]
+- [x] **4.3 [MVP] Paste invite page** [P, group G]
   - Files: `frontend/src/pages/NewBrief.tsx`, `NewBrief.test.tsx`
   - Test: submit disabled for empty or whitespace text; character counter; 10,001 characters blocked with the limit message; submit calls `POST /briefs` and moves to the progress view.
   - Needs: 4.1. Requirements: R2.1 to R2.3.
 
-- [ ] **4.4 [MVP] Parse preview and confirm** [P, group G]
+- [x] **4.4 [MVP] Parse preview and confirm** [P, group G]
   - Files: `frontend/src/pages/ParsePreview.tsx`, `ParsePreview.test.tsx`
   - Test: all parsed fields editable; invalid email blocked; mismatch warning requires an explicit confirmation checkbox; missing company or domain blocks confirm; free-mail warning shown; 21 attendees blocked; confirm calls `PUT` then `POST .../confirm`.
   - Needs: 4.1. Requirements: R2.6 to R2.12.
 
-- [ ] **4.5 [MVP] Progress view** [P, group G]
+- [x] **4.5 [MVP] Progress view** [P, group G]
   - Files: `frontend/src/pages/Progress.tsx`, `frontend/src/hooks/useBriefPolling.ts`, tests
   - Test (fake timers): polls every 2 s while `queued` or `processing`; stops on `awaiting_confirmation`, `ready`, `approved`, `failed`; shows the five steps with the current one marked; shows "Queued (position N)"; `failed` shows the message and a Retry button that calls `POST .../retry`; reloading shows the current progress of the same brief.
   - Needs: 4.1. Requirements: R9.
 
-- [ ] **4.6 [MVP] Brief view and inline editor** [P, group G]
+- [x] **4.6 [MVP] Brief view and inline editor** [P, group G]
   - Files: `frontend/src/pages/BriefView.tsx`, `frontend/src/components/{Section,EditableItem,SourceLink,AttendeeBadge}.tsx`, tests
   - Test: 7 sections in order; every fact shows its source link; unverified attendees show a flag and reason; size tier shows rule and source; case studies show reason and link; "No strong match" messages shown; editing one item saves with `PUT`; editing is disabled when not `ready`; `approved` is read-only.
   - Needs: 4.1. Requirements: R3.6, R4.12, R5.6 to R5.9, R6, R7.1 to R7.5.
 
-- [ ] **4.7 [MVP] Approve and rules review** (group H, needs 4.5, 4.6)
+- [x] **4.7 [MVP] Approve and rules review** (group H, needs 4.5, 4.6)
   - Files: `frontend/src/components/{ApproveDialog,RulesReview}.tsx`, tests
   - Test: approve asks for confirmation; after approve the page shows "checking for rules" while `rulesStatus` is `pending` and polls; proposals appear with Keep and Discard each; submitting calls `POST .../rules`; `none` and `failed` show the right message and the brief stays approved.
   - Needs: 4.5, 4.6. Requirements: R7.4 to R7.13.
@@ -298,7 +298,7 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
   - Test: newest first; shows company, meeting date, status, created time; failed rows show the error; empty state; "load more" uses the cursor for pages of 20; approved briefs open read-only.
   - Needs: 4.1. Requirements: R8.
 
-- [ ] **4.9 [MVP] BU badge** (group H)
+- [x] **4.9 [MVP] BU badge** (group H)
   - Files: `frontend/src/components/BuBadge.tsx`, `frontend/src/components/Header.tsx`, tests
   - Do: show the signed-in user's BU in the header, read from the ID token. There is **no "All" option** (G1). "Switching BU" in the demo means signing out and signing in as the other demo user.
   - Test: the badge shows the BU from the token; no BU selector is rendered anywhere.
@@ -310,7 +310,7 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
   - Test: delete removes the rule; the case studies page lists only the items returned by `GET /case-studies` and never renders a BU selector.
   - Needs: 4.1, 4.2. Requirements: R7.14.
 
-- [ ] **4.10 [MVP] App shell, routing, and Wave 4 gate**
+- [x] **4.10 [MVP] App shell, routing, and Wave 4 gate**
   - Files: `frontend/src/App.tsx`, `frontend/src/routes.tsx`, test
   - Do: routes for login, new brief, preview, progress, and brief (with approve and rules review). Stretch tasks add their routes (history, rules, case studies). Run the whole flow against the mock server. Show the diff and screenshots. After your approval: merge, create `inside-sales-copilot-wave-4.bundle`.
   - Test: a full mocked flow in Vitest from paste to approve reaches the rules review.

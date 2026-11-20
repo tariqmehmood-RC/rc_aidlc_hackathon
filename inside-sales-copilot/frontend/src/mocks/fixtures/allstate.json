@@ -1,0 +1,651 @@
+{
+  "inviteText": "Subject: Discovery call - Allstate - IT operations, vendor risk and asset visibility on ServiceNow\nDate: Thursday, December 10, 2026, 11:00-11:30 AM CT\nOrganizer: Royal Cyber presales team\nCompany: Allstate (allstate.com)\n\nAttendees:\n- Rowan Achterberg, VP, IT Service Management, rowan.achterberg@allstate.com\n- Tomas Whitlock-Abara, Chief Information Officer, tomas.whitlock-abara@allstate.com\n- Ulrike Papadakis, Manager, Vendor Risk and Compliance, ulrike.papadakis@allstate.com\n\nNotes: Warm introduction from a partner. They want faster incident resolution across IT operations, better visibility of IT assets, and a cleaner process for assessing third-party vendors. Ask which ServiceNow modules they already run and who owns the budget.\n",
+  "brief": {
+    "parsedInvite": {
+      "subject": "Discovery call - Allstate - IT operations, vendor risk and asset visibility on ServiceNow",
+      "company": {
+        "name": "Allstate",
+        "domain": "allstate.com"
+      },
+      "attendees": [
+        {
+          "name": "Rowan Achterberg",
+          "title": "VP, IT Service Management",
+          "email": "rowan.achterberg@allstate.com"
+        },
+        {
+          "name": "Tomas Whitlock-Abara",
+          "title": "Chief Information Officer",
+          "email": "tomas.whitlock-abara@allstate.com"
+        },
+        {
+          "name": "Ulrike Papadakis",
+          "title": "Manager, Vendor Risk and Compliance",
+          "email": "ulrike.papadakis@allstate.com"
+        }
+      ],
+      "meetingDate": "2026-12-10",
+      "notes": "Warm introduction from a partner. They want faster incident resolution across IT operations, better visibility of IT assets, and a cleaner process for assessing third-party vendors. Ask which ServiceNow modules they already run and who owns the budget.",
+      "warnings": []
+    },
+    "confirmedInvite": {
+      "subject": "Discovery call - Allstate - IT operations, vendor risk and asset visibility on ServiceNow",
+      "company": {
+        "name": "Allstate",
+        "domain": "allstate.com"
+      },
+      "attendees": [
+        {
+          "name": "Rowan Achterberg",
+          "title": "VP, IT Service Management",
+          "email": "rowan.achterberg@allstate.com"
+        },
+        {
+          "name": "Tomas Whitlock-Abara",
+          "title": "Chief Information Officer",
+          "email": "tomas.whitlock-abara@allstate.com"
+        },
+        {
+          "name": "Ulrike Papadakis",
+          "title": "Manager, Vendor Risk and Compliance",
+          "email": "ulrike.papadakis@allstate.com"
+        }
+      ],
+      "meetingDate": "2026-12-10",
+      "notes": "Warm introduction from a partner. They want faster incident resolution across IT operations, better visibility of IT assets, and a cleaner process for assessing third-party vendors. Ask which ServiceNow modules they already run and who owns the budget.",
+      "warnings": []
+    },
+    "research": {
+      "company": {
+        "name": "Allstate",
+        "domain": "allstate.com",
+        "matchConfidence": "confirmed"
+      },
+      "retrievedAt": 1795202253257,
+      "facts": [
+        {
+          "id": "f1",
+          "text": "The Allstate Corporation is an American insurance company.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f2",
+          "text": "Allstate is headquartered in Glenview, Illinois since 2022.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f3",
+          "text": "Allstate was founded on April 17, 1931 as part of Sears, Roebuck and Co.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f4",
+          "text": "Allstate was spun off from Sears in 1993 but remained partially owned by Sears until becoming completely independent in June 1995.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f5",
+          "text": "Allstate has personal line insurance operations in Canada.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f6",
+          "text": "Allstate's headquarters address is listed as Northbrook, Illinois, U.S.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f7",
+          "text": "Thomas J. Wilson is Allstate's chairman, president, and CEO.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f8",
+          "text": "Allstate offers Auto, Home, Life, Motorcycle, Renters, Boat, Landlord, Condo, Off-road vehicle, and Business Insurance products.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f9",
+          "text": "Allstate offers Retirement & Investment products and Banking services.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f10",
+          "text": "Allstate's revenue was US$64.11 billion in 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f11",
+          "text": "Allstate's operating income was US$5.76 billion in 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f12",
+          "text": "Allstate's net income was US$4.67 million in 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f13",
+          "text": "Allstate has approximately 55,000 employees as of 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f14",
+          "text": "Allstate's total assets were US$111.6 billion in 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f15",
+          "text": "Allstate's total equity was US$21.44 billion in 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f16",
+          "text": "Allstate is a publicly traded company on NYSE under ticker ALL and is an S&P 500 component.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f17",
+          "text": "Allstate's subsidiaries include Encompass Insurance Company, Esurance, SquareTrade, Allstate Identity Protection, Allstate India, Allstate Northern Ireland, and National General Insurance.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f18",
+          "text": "Allstate's advertising campaign 'Are you in good hands?' has been in use since 1950.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f19",
+          "text": "Allstate Insurance Company was named after Sears' tire line and began offering auto insurance by direct mail on April 17, 1931.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "f20",
+          "text": "Allstate faces concerns from shops regarding ADAS calibration pricing practices.",
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5"
+          ]
+        }
+      ],
+      "industry": {
+        "value": "Insurance",
+        "factId": "f1"
+      },
+      "headquarters": {
+        "value": "Glenview, Illinois, United States",
+        "factId": "f2"
+      },
+      "employees": {
+        "value": 55000,
+        "factId": "f13"
+      },
+      "revenueUsd": {
+        "value": 64110000000,
+        "factId": "f10"
+      },
+      "sizeTier": {
+        "tier": "Enterprise",
+        "rule": "Enterprise: 55,000 employees is more than 5,000 and revenue of $64.11B is more than $1B",
+        "basis": {
+          "employees": 55000,
+          "revenueUsd": 64110000000,
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        }
+      },
+      "news": [
+        {
+          "title": "Holiday scam alert! Allstate shares how to spot impersonation fraud - KEYE",
+          "date": "2026-11-20",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX09TR1BoWkJoOTRsbVlhRE1PT2ZhS1QxcjdPbTJJT3NNZWRuMnV2YmtQUmQyaTdEQzVCTktlaG14ZUprd0tOMnB0cWdjdjE5LUI1RGQ3bllVN2JwZ3NlMVA3VEtKSURrRmtCX25pSGFVUDQ2dFYwSGR2ZDhyekpXbW9nbTZQSjI4Ym9yNTl6aUFkaWZZNVU0Umhwa3FfRFcybzN5UXNtazZub0FvTFhYdw?oc=5"
+        },
+        {
+          "title": "Shops raise concerns over Allstate ADAS calibration pricing practices - Repairer Driven News",
+          "date": "2026-11-20",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5"
+        },
+        {
+          "title": "Allstate’s $700K auto award reversed – bad faith claim lives on - Insurance Business",
+          "date": "2026-11-20",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQZHp6cGNIeUpRQnRuOUxQWjVJQUx2RnpEZ3RQOUtRdE5JWmJEb0oyLVdEelJZRXBMVWo2clFEVGZJN3M0WDZzQnJ2NXBFRWR4UjdKMlBVb05fRnhoRUx4VWJncWRTNzBuandYby1wd0M5SVYwVVZnb0l6RTlHUUpKZEpLeHc2NXkwMEMzODFOeFNnZGVmQlVoUnlaYS1Edm5nM25RR2pMZFFuQVFRcktiS1dDX2JKT0lFV2N4bkNmWXJnLUU3aVFsRThScmZ1OHJtSFdzM3NR?oc=5"
+        }
+      ],
+      "painPoints": [
+        {
+          "id": "p2",
+          "hypothesis": "Allstate may face challenges with pricing transparency and stakeholder relations in the auto repair industry, particularly around ADAS calibration services where shops have raised concerns about pricing practices.",
+          "basedOnFactIds": [
+            "f20"
+          ]
+        },
+        {
+          "id": "p3",
+          "hypothesis": "As a large insurance company with diverse product lines and multiple subsidiaries, Allstate likely struggles with operational complexity and integration challenges across its various business units and geographic markets.",
+          "basedOnFactIds": [
+            "f8",
+            "f9",
+            "f17"
+          ]
+        }
+      ],
+      "sourcesFetched": [
+        {
+          "url": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=Allstate&limit=5",
+          "status": "ok"
+        },
+        {
+          "url": "https://en.wikipedia.org/api/rest_v1/page/html/Allstate",
+          "status": "ok"
+        },
+        {
+          "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Allstate",
+          "status": "ok"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Allstate",
+          "status": "ok"
+        },
+        {
+          "url": "https://allstate.com/",
+          "status": "failed"
+        },
+        {
+          "url": "https://www.allstate.com/",
+          "status": "failed"
+        },
+        {
+          "url": "https://news.google.com/rss/search?q=Allstate&hl=en-US&gl=US&ceid=US:en",
+          "status": "ok"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX09TR1BoWkJoOTRsbVlhRE1PT2ZhS1QxcjdPbTJJT3NNZWRuMnV2YmtQUmQyaTdEQzVCTktlaG14ZUprd0tOMnB0cWdjdjE5LUI1RGQ3bllVN2JwZ3NlMVA3VEtKSURrRmtCX25pSGFVUDQ2dFYwSGR2ZDhyekpXbW9nbTZQSjI4Ym9yNTl6aUFkaWZZNVU0Umhwa3FfRFcybzN5UXNtazZub0FvTFhYdw?oc=5",
+          "status": "ok"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5",
+          "status": "ok"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQZHp6cGNIeUpRQnRuOUxQWjVJQUx2RnpEZ3RQOUtRdE5JWmJEb0oyLVdEelJZRXBMVWo2clFEVGZJN3M0WDZzQnJ2NXBFRWR4UjdKMlBVb05fRnhoRUx4VWJncWRTNzBuandYby1wd0M5SVYwVVZnb0l6RTlHUUpKZEpLeHc2NXkwMEMzODFOeFNnZGVmQlVoUnlaYS1Edm5nM25RR2pMZFFuQVFRcktiS1dDX2JKT0lFV2N4bkNmWXJnLUU3aVFsRThScmZ1OHJtSFdzM3NR?oc=5",
+          "status": "ok"
+        }
+      ]
+    },
+    "attendeeChecks": [
+      {
+        "email": "rowan.achterberg@allstate.com",
+        "name": "Rowan Achterberg",
+        "invitedTitle": "VP, IT Service Management",
+        "status": "verified",
+        "reason": null,
+        "profile": {
+          "employer": "Allstate",
+          "title": "Vice President, IT Service Management",
+          "sourceUrl": "synthetic://profiles"
+        }
+      },
+      {
+        "email": "tomas.whitlock-abara@allstate.com",
+        "name": "Tomas Whitlock-Abara",
+        "invitedTitle": "Chief Information Officer",
+        "status": "unverified",
+        "reason": "title_mismatch",
+        "profile": {
+          "employer": "Allstate",
+          "title": "Senior Director, Infrastructure Operations",
+          "sourceUrl": "synthetic://profiles"
+        }
+      },
+      {
+        "email": "ulrike.papadakis@allstate.com",
+        "name": "Ulrike Papadakis",
+        "invitedTitle": "Manager, Vendor Risk and Compliance",
+        "status": "unverified",
+        "reason": "no_profile_found",
+        "profile": null
+      }
+    ],
+    "caseStudyMatches": {
+      "matches": [
+        {
+          "caseStudyId": "cs-5229ebec",
+          "title": "Accelerating IT Issue Resolution with ServiceNow ITOM",
+          "url": "https://royalcyber.com/resources/case-studies/servicenow-itom",
+          "score": 95,
+          "reason": "Stated need for faster incident resolution across IT operations directly matches this case study's focus on accelerating incident resolution with ServiceNow ITOM."
+        },
+        {
+          "caseStudyId": "cs-191bd229",
+          "title": "Vendor Risk Management with ServiceNow GRC",
+          "url": "https://royalcyber.com/blogs/servicenow/servicenow-vendor-risk-management",
+          "score": 92,
+          "reason": "Stated need for cleaner process for assessing third-party vendors aligns perfectly with this case study's implementation of ServiceNow Vendor Risk Management with automated assessments."
+        },
+        {
+          "caseStudyId": "cs-5395e0cc",
+          "title": "Connected IT and Asset Visibility with ServiceNow ITAM",
+          "url": "https://www.royalcyber.com/resources/case-studies/modernize-it-infrastructure-with-servicenow-to-eliminate-silos/",
+          "score": 88,
+          "reason": "Stated need for better visibility of IT assets matches this case study's focus on connected IT asset visibility using ServiceNow ITAM."
+        }
+      ],
+      "message": null
+    },
+    "content": {
+      "companySnapshot": [
+        {
+          "id": "b1",
+          "text": "Size tier: Enterprise. Rule used: Enterprise: 55,000 employees is more than 5,000 and revenue of $64.11B is more than $1B",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "b2",
+          "text": "Allstate is an S&P 500 insurance company with $64.11B revenue, 55,000 employees, and $111.6B in total assets as of 2024.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "b3",
+          "text": "Offers diverse product lines including auto, home, life, motorcycle, renters, boat insurance, plus retirement, investment, and banking services across multiple subsidiaries.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "b4",
+          "text": "Operates through subsidiaries including Encompass Insurance, Esurance, SquareTrade, Allstate Identity Protection, and National General Insurance with international presence.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "b5",
+          "text": "Headquartered in Glenview, Illinois with operations spanning the U.S. and Canada, managing complex multi-business unit operations.",
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "b6",
+          "text": "Recently faced industry scrutiny regarding ADAS calibration pricing practices and claims handling transparency.",
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5"
+          ]
+        },
+        {
+          "id": "b7",
+          "text": "Recent news: Holiday scam alert! Allstate shares how to spot impersonation fraud - KEYE (2026-11-20)",
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX09TR1BoWkJoOTRsbVlhRE1PT2ZhS1QxcjdPbTJJT3NNZWRuMnV2YmtQUmQyaTdEQzVCTktlaG14ZUprd0tOMnB0cWdjdjE5LUI1RGQ3bllVN2JwZ3NlMVA3VEtKSURrRmtCX25pSGFVUDQ2dFYwSGR2ZDhyekpXbW9nbTZQSjI4Ym9yNTl6aUFkaWZZNVU0Umhwa3FfRFcybzN5UXNtazZub0FvTFhYdw?oc=5"
+          ]
+        },
+        {
+          "id": "b8",
+          "text": "Recent news: Shops raise concerns over Allstate ADAS calibration pricing practices - Repairer Driven News (2026-11-20)",
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5"
+          ]
+        },
+        {
+          "id": "b9",
+          "text": "Recent news: Allstate’s $700K auto award reversed – bad faith claim lives on - Insurance Business (2026-11-20)",
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQZHp6cGNIeUpRQnRuOUxQWjVJQUx2RnpEZ3RQOUtRdE5JWmJEb0oyLVdEelJZRXBMVWo2clFEVGZJN3M0WDZzQnJ2NXBFRWR4UjdKMlBVb05fRnhoRUx4VWJncWRTNzBuandYby1wd0M5SVYwVVZnb0l6RTlHUUpKZEpLeHc2NXkwMEMzODFOeFNnZGVmQlVoUnlaYS1Edm5nM25RR2pMZFFuQVFRcktiS1dDX2JKT0lFV2N4bkNmWXJnLUU3aVFsRThScmZ1OHJtSFdzM3NR?oc=5"
+          ]
+        }
+      ],
+      "attendees": [
+        {
+          "email": "rowan.achterberg@allstate.com",
+          "name": "Rowan Achterberg",
+          "title": "VP, IT Service Management",
+          "status": "verified",
+          "reason": null
+        },
+        {
+          "email": "tomas.whitlock-abara@allstate.com",
+          "name": "Tomas Whitlock-Abara",
+          "title": "Chief Information Officer",
+          "status": "unverified",
+          "reason": "title_mismatch"
+        },
+        {
+          "email": "ulrike.papadakis@allstate.com",
+          "name": "Ulrike Papadakis",
+          "title": "Manager, Vendor Risk and Compliance",
+          "status": "unverified",
+          "reason": "no_profile_found"
+        }
+      ],
+      "painPointHypotheses": [
+        {
+          "id": "h1",
+          "text": "With 55,000 employees across multiple subsidiaries and geographic markets, Allstate likely experiences operational complexity and integration challenges in managing IT operations and asset visibility across diverse business units.",
+          "basedOnFactIds": [
+            "f13",
+            "f17"
+          ],
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "h2",
+          "text": "Managing vendor relationships and third-party risk assessment across a large enterprise with multiple insurance products and international operations requires streamlined processes and cleaner governance.",
+          "basedOnFactIds": [
+            "f8",
+            "f9",
+            "f17"
+          ],
+          "sourceUrls": [
+            "https://en.wikipedia.org/wiki/Allstate"
+          ]
+        },
+        {
+          "id": "h3",
+          "text": "Recent industry scrutiny around pricing practices and claims handling suggests Allstate may need improved operational transparency and faster incident resolution capabilities across IT operations.",
+          "basedOnFactIds": [
+            "f20"
+          ],
+          "sourceUrls": [
+            "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5"
+          ]
+        }
+      ],
+      "agenda": [
+        {
+          "id": "a1",
+          "minutes": 5,
+          "topic": "Welcome and introductions",
+          "note": "Brief overview of Royal Cyber and ServiceNow capabilities. Confirm attendees and their roles."
+        },
+        {
+          "id": "a2",
+          "minutes": 8,
+          "topic": "Current IT operations and incident resolution",
+          "note": "Understand existing ServiceNow modules in use, current incident resolution timelines, and pain points with speed and visibility."
+        },
+        {
+          "id": "a3",
+          "minutes": 7,
+          "topic": "Asset visibility and IT asset management needs",
+          "note": "Explore challenges with IT asset tracking across multiple business units and subsidiaries. Discuss current tooling and gaps."
+        },
+        {
+          "id": "a4",
+          "minutes": 6,
+          "topic": "Vendor risk management and third-party assessment",
+          "note": "Discuss current vendor assessment processes, governance challenges, and need for cleaner, more automated workflows."
+        },
+        {
+          "id": "a5",
+          "minutes": 2,
+          "topic": "Budget ownership and decision-making",
+          "note": "Identify budget owner and key stakeholders for potential ServiceNow expansion or optimization."
+        },
+        {
+          "id": "a6",
+          "minutes": 2,
+          "topic": "Next steps and case study review",
+          "note": "Share relevant case studies on ITOM, ITAM, and GRC. Schedule follow-up conversations with appropriate stakeholders."
+        }
+      ],
+      "discoveryQuestions": [
+        {
+          "id": "q1",
+          "text": "Which ServiceNow modules does Allstate currently have deployed, and how are they being utilized across your IT operations?"
+        },
+        {
+          "id": "q2",
+          "text": "What is your current average incident resolution time, and what are the primary bottlenecks preventing faster resolution?"
+        },
+        {
+          "id": "q3",
+          "text": "How do you currently track and maintain visibility of IT assets across your 55,000 employees and multiple subsidiaries?"
+        },
+        {
+          "id": "q4",
+          "text": "What challenges do you face when assessing third-party vendor risk, and how is that process currently managed?"
+        },
+        {
+          "id": "q5",
+          "text": "Who owns the budget for IT operations tools and ServiceNow platform investments, and what is the approval process?"
+        },
+        {
+          "id": "q6",
+          "text": "How are IT operations and asset management currently integrated or siloed across your different business units and geographic locations?"
+        },
+        {
+          "id": "q7",
+          "text": "What metrics or KPIs are most important to your leadership for measuring IT operations effectiveness?"
+        },
+        {
+          "id": "q8",
+          "text": "Are there specific compliance or governance requirements that impact how you manage vendor assessments and IT asset visibility?"
+        },
+        {
+          "id": "q9",
+          "text": "What would success look like for you in terms of faster incident resolution, better asset visibility, and vendor risk management?"
+        },
+        {
+          "id": "q10",
+          "text": "Beyond these three areas, are there other IT operational challenges where you see ServiceNow as a potential solution?"
+        }
+      ],
+      "caseStudies": [
+        {
+          "caseStudyId": "cs-5229ebec",
+          "title": "Accelerating IT Issue Resolution with ServiceNow ITOM",
+          "url": "https://royalcyber.com/resources/case-studies/servicenow-itom",
+          "reason": "Stated need for faster incident resolution across IT operations directly matches this case study's focus on accelerating incident resolution with ServiceNow ITOM."
+        },
+        {
+          "caseStudyId": "cs-191bd229",
+          "title": "Vendor Risk Management with ServiceNow GRC",
+          "url": "https://royalcyber.com/blogs/servicenow/servicenow-vendor-risk-management",
+          "reason": "Stated need for cleaner process for assessing third-party vendors aligns perfectly with this case study's implementation of ServiceNow Vendor Risk Management with automated assessments."
+        },
+        {
+          "caseStudyId": "cs-5395e0cc",
+          "title": "Connected IT and Asset Visibility with ServiceNow ITAM",
+          "url": "https://www.royalcyber.com/resources/case-studies/modernize-it-infrastructure-with-servicenow-to-eliminate-silos/",
+          "reason": "Stated need for better visibility of IT assets matches this case study's focus on connected IT asset visibility using ServiceNow ITAM."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Allstate",
+          "label": "Wikipedia"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZjFiSTc5d2tETHl6ZlA2UDdxV0hERmRmVUR5MGJwTy1La0RkUjdvUWNhWWk4Mk1rQ1FoSXRNUXM0ZzQ2OVN2dlRteHdudEljclhBZnBpRVVRNmVrRXo2d1RjNlFHeFFhcnE3Vk45eEVmS2xOY3h3YXdQdE04NFNhNmFoUWxhNndlV3E3NUV2VVFPWG5vYWNGcV80Yk1EQ2pQdUhOXzhLNXBHdDRtV0h5aHh0REJwT0U?oc=5",
+          "label": "News: Shops raise concerns over Allstate ADAS calibration pricing practices - Repairer Driven News"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX09TR1BoWkJoOTRsbVlhRE1PT2ZhS1QxcjdPbTJJT3NNZWRuMnV2YmtQUmQyaTdEQzVCTktlaG14ZUprd0tOMnB0cWdjdjE5LUI1RGQ3bllVN2JwZ3NlMVA3VEtKSURrRmtCX25pSGFVUDQ2dFYwSGR2ZDhyekpXbW9nbTZQSjI4Ym9yNTl6aUFkaWZZNVU0Umhwa3FfRFcybzN5UXNtazZub0FvTFhYdw?oc=5",
+          "label": "News: Holiday scam alert! Allstate shares how to spot impersonation fraud - KEYE"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQZHp6cGNIeUpRQnRuOUxQWjVJQUx2RnpEZ3RQOUtRdE5JWmJEb0oyLVdEelJZRXBMVWo2clFEVGZJN3M0WDZzQnJ2NXBFRWR4UjdKMlBVb05fRnhoRUx4VWJncWRTNzBuandYby1wd0M5SVYwVVZnb0l6RTlHUUpKZEpLeHc2NXkwMEMzODFOeFNnZGVmQlVoUnlaYS1Edm5nM25RR2pMZFFuQVFRcktiS1dDX2JKT0lFV2N4bkNmWXJnLUU3aVFsRThScmZ1OHJtSFdzM3NR?oc=5",
+          "label": "News: Allstate’s $700K auto award reversed – bad faith claim lives on - Insurance Business"
+        },
+        {
+          "url": "https://royalcyber.com/resources/case-studies/servicenow-itom",
+          "label": "Royal Cyber case study"
+        },
+        {
+          "url": "https://royalcyber.com/blogs/servicenow/servicenow-vendor-risk-management",
+          "label": "Royal Cyber case study"
+        },
+        {
+          "url": "https://www.royalcyber.com/resources/case-studies/modernize-it-infrastructure-with-servicenow-to-eliminate-silos/",
+          "label": "Royal Cyber case study"
+        }
+      ]
+    },
+    "rulesApplied": []
+  },
+  "generated": {
+    "briefModel": "haiku",
+    "totalSeconds": 42.1,
+    "steps": [
+      [
+        "Researching",
+        25.8
+      ],
+      [
+        "Checking attendees",
+        0.0
+      ],
+      [
+        "Matching case studies",
+        3.5
+      ],
+      [
+        "Writing brief",
+        10.6
+      ]
+    ]
+  }
+}

@@ -837,7 +837,7 @@ One dashboard shows brief count, failures by step, Bedrock calls and throttles, 
 | Region | `AWS_REGION` and `AWS_DEFAULT_REGION` were already `us-east-1` in the shell. Both are also in `~/.bashrc`. | CDK still pins the region explicitly. |
 | Python | 3.12.16 installed with uv. `backend/.venv` created with 3.12. | All backend tests run in that venv. |
 | Bedrock models | `haiku-5-5` and `sonnet-5-5` exist but are blocked by the account allowlist. `haiku-4-5` and `sonnet-5` work. | Section 9.4 model IDs. |
-| CDK bootstrap | `CDKToolkit` stack created in `aws://<account-id>/us-east-1`. | Deploy can start in Wave 5. |
+| CDK bootstrap | `CDKToolkit` stack created in the team account, us-east-1. | Deploy can start in Wave 5. |
 | Read access | Lambda, API Gateway v2, SQS, DynamoDB, S3, CloudFront, Cognito, CloudWatch, CloudWatch Logs, IAM, CloudFormation: all list calls succeeded. | None. Write access is checked at the first deploy. |
 | Wikipedia REST | HTTP 200. | Live research works. |
 | Google News RSS | 302 to the URL with locale parameters, then 200 (136 KB of RSS). | The provider follows redirects and sends the locale parameters. |

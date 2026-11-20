@@ -1,0 +1,16 @@
+{
+  "avery.lindqvist@delta.com": {
+    "name": "Avery Lindqvist",
+    "employer": "Delta Air Lines",
+    "employer_domain": "delta.com",
+    "title": "Vice President, Information Technology",
+    "source_url": "synthetic://profiles"
+  },
+  "bram.okonkwo-reyes@delta.com": {
+    "name": "Bram Okonkwo-Reyes",
+    "employer": "Delta Air Lines",
+    "employer_domain": "delta.com",
+    "title": "Director, Cloud Platforms",
+    "source_url": "synthetic://profiles"
+  }
+}

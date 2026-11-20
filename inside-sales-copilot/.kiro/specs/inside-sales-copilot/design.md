@@ -856,3 +856,7 @@ One dashboard shows brief count, failures by step, Bedrock calls and throttles, 
 | Research | Wikipedia, company site, and news are fetched in parallel (3 threads) and merged in a fixed order. No Bedrock call is involved, so the 1 request per second limit is not affected. | Research took 11 to 26 s one source after another. |
 | News | An item is kept only if its headline (outlet removed) names the company: full name, the name without corporate words, its first word, or the domain label, matched as whole words. Duplicates are removed by normalized headline and by URL. Max 3. | Unrelated stories appeared (a Sonoma airport story for Delta). |
 | Demo | `scripts/warm_cache.py` parses each demo invite and runs research only, storing results in ResearchCache (7 days). | On demo day research comes from the cache. |
+
+## 18. Attendee verification removed (Nov 20, 2026)
+
+Product owner decision. Removed: the `Checking attendees` pipeline step, `attendee_verifier`, `lib/profiles`, `data/attendee_profiles.json`, the `attendee_check` schema, `attendeeChecks` in the brief, and the verified or unverified badges in the UI. The brief's `attendees` section now lists `{email, name, title}` from the confirmed invite, built by code. P4 receives the attendees with their titles as listed in the invite. Steps are now Parsing, Researching, Matching case studies, Writing brief. Sections above that describe verification (5.5, 8.4, R4) are historical.

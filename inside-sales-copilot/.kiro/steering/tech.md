@@ -29,6 +29,7 @@ Keep it simple. All serverless. Region is `us-east-1` only, never configurable.
 - The worker keeps an in-process token bucket (1 request per second) as a second guard.
 - Dead-letter queue with `maxReceiveCount` 3 (decided, standard queue, no FIFO). A CloudWatch alarm fires when DLQ depth is above 0.
 - Worker steps are idempotent, because standard SQS can deliver a message more than once. Use conditional DynamoDB updates on status.
+- Steps: Parsing, Researching, Matching case studies, Writing brief (attendee verification was removed).
 - Statuses: `queued` -> `processing` (with current step) -> `ready` | `failed`. Also `awaiting_confirmation` after the invite is parsed, and `approved` after approval.
 - A brief with no progress for 120 seconds is marked `failed` and the UI shows a Retry button.
 
@@ -69,12 +70,10 @@ DynamoDB tables (on-demand billing):
 
 Static data bundled with the Lambda:
 - `data/case_studies.json`. Each item has: `id`, `title`, `summary` (1 to 2 sentences, in our own words), `bu`, `client_industry`, `tags`, `url` (the public case study page). No copied page text.
-- `data/attendee_profiles.json`. Synthetic, keyed by email. Each item has: `name`, `employer`, `employer_domain`, `title`, `source_url` (always `synthetic://profiles`).
 
 Case study seed: if the Royal Cyber site blocks fetching, write the seed by hand from the public pages and note this in the README.
 
 ## Matching rules
-- Attendee check is deterministic: lowercase, remove punctuation and extra spaces, expand a fixed abbreviation table (VP = Vice President, CTO = Chief Technology Officer, Sr = Senior, and similar). No fuzzy or AI matching.
 - Case study match: prefilter by BU (from the JWT) and industry/tags, then Haiku scores each candidate 0 to 100 with a reason. Show candidates scoring 60 or more, up to 3. No vector database (cost).
 
 ## Observability

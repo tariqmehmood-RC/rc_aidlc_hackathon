@@ -12,7 +12,6 @@ backend/
     services/             Business logic, no AWS event parsing
       invite_parser
       research
-      attendee_verifier
       case_study_matcher
       brief_writer
       rules
@@ -29,7 +28,6 @@ backend/
   local_run.py            run the backend locally on one invite
 data/
   case_studies.json       Seed library
-  attendee_profiles.json  Synthetic attendee directory
   sample_invites/         Synthetic sample invites
 scripts/                  seed-demo-users (post-deploy, password from command line)
 infra/                    AWS CDK v2 (TypeScript)
@@ -46,6 +44,6 @@ AGENTS.md
 - Handlers are thin: parse the event, validate input, call a service, return the response.
 - Services hold the logic and take their dependencies (Bedrock client, research provider, tables) as arguments, so tests can replace them.
 - Only `lib/bedrock_client` talks to Bedrock.
-- Tests for a module live in `backend/tests/`, named after the module (for example `test_attendee_verifier.py`).
+- Tests for a module live in `backend/tests/`, named after the module (for example `test_case_study_matcher.py`).
 - Sample invites in `data/sample_invites/` use synthetic attendees only.
 - Do not add top-level folders without updating this file.

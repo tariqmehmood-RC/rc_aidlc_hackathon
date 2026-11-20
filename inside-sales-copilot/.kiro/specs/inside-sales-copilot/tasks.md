@@ -71,7 +71,7 @@ Branch: `feature/wave-1`
   - Needs: the CSV file. Requirements: R5.12, R5.13, R5.14.
   - Note for README (task 6.2): the seed comes from the public site through the team, because the site blocks automated fetching.
 
-- [x] **1.5 [MVP] Attendee profile directory** [P]
+- [x] **1.5 [MVP] Attendee profile directory** (REMOVED Nov 20 with attendee verification) [P]
   - Files: `data/attendee_profiles.json`, `backend/src/lib/profiles.py`, `backend/tests/test_profiles.py`
   - Do: synthetic profiles keyed by lowercase email: `name`, `employer`, `employer_domain`, `title`, `source_url = "synthetic://profiles"`. Loader validates the schema and rejects duplicate emails.
   - Test: schema valid; every `source_url` is `synthetic://profiles`; duplicate email is rejected; lookup is case-insensitive.
@@ -130,7 +130,7 @@ Branch: `feature/wave-2` (from `main` after Wave 1). Each task is a service or l
   - Test (fake Bedrock returning canned JSON for the three sample invites): fields extracted; missing fields stay `null`; duplicate emails merged; free-mail-only invite flagged; 21 attendees rejected on confirm; mismatch rejected until confirmed; injected instruction text in the invite does not change the output shape (the fake receives it inside `<invite>` tags).
   - Needs: 2.2, 1.6, 1.7. Requirements: R2.4 to R2.14.
 
-- [x] **2.5 [MVP] Attendee verifier** [P, group C]
+- [x] **2.5 [MVP] Attendee verifier** (REMOVED Nov 20 by product owner decision) [P, group C]
   - Files: `backend/src/services/attendee_verifier.py`, `backend/tests/test_attendee_verifier.py`
   - Do: D§8.4, deterministic, no Bedrock.
   - Test: results match `data/sample_invites/expected.json`; each reason (`employer_mismatch`, `title_mismatch`, `no_profile_found`, `title_missing`, `ambiguous`); "VP Sales" equals "Vice President, Sales"; "Sr. Engineer" equals "Senior Engineer"; different titles never match; employer matches by name or by domain; no field is ever invented (profile is `null` when none).

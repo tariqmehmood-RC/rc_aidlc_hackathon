@@ -11,6 +11,7 @@ import email.utils
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Protocol
@@ -118,6 +119,43 @@ def _same_site(url: str, domain: str) -> bool:
     return host == domain or host.endswith("." + domain)
 
 
+_SUFFIX_WORDS = {"inc", "incorporated", "corp", "corporation", "company", "co", "llc", "ltd", "limited",
+                 "plc", "group", "holdings", "international", "the", "air", "lines", "airlines"}
+
+
+def company_terms(name: str | None, domain: str | None) -> list[str]:
+    """Names a news headline may use for the company: the full name, the name without corporate
+    words ("Marriott International" -> "Marriott"), the first word, and the domain label."""
+    terms: list[str] = []
+    if name:
+        words = re.findall(r"[A-Za-z0-9&']+", name)
+        terms.append(" ".join(words))
+        core = [w for w in words if w.lower() not in _SUFFIX_WORDS]
+        if core:
+            terms.append(" ".join(core))
+        if words and len(words[0]) >= 4:
+            terms.append(words[0])
+    if domain:
+        label = domain.lower().removeprefix("www.").split(".")[0]
+        if len(label) >= 4:
+            terms.append(label)
+    out: list[str] = []
+    for t in terms:
+        if t and t.lower() not in (x.lower() for x in out):
+            out.append(t)
+    return out
+
+
+def headline(title: str) -> str:
+    """Google News titles end with " - Outlet". The outlet is not part of the story."""
+    return title.rsplit(" - ", 1)[0] if " - " in title else title
+
+
+def mentions_company(text: str, terms: list[str]) -> bool:
+    low = text.lower()
+    return any(re.search(r"(?<![a-z0-9])" + re.escape(t.lower()) + r"(?![a-z0-9])", low) for t in terms)
+
+
 _RETRY_WITH_WWW = {"network_error", "dns_failure", "timeout", "tls_error"}
 _HREF_RE = re.compile(r"""<a\s[^>]*href\s*=\s*["']([^"']+)["']""", re.IGNORECASE)
 
@@ -133,11 +171,22 @@ class PublicWebProvider:
 
     # -- main entry ---------------------------------------------------------------------------
     def research(self, company_name: str | None, domain: str | None) -> RawResearch:
-        raw = RawResearch()
+        """Wikipedia, the company site, and the news are fetched at the same time (no Bedrock
+        here, so the 1 request per second limit is not involved). Results are merged in a fixed
+        order, so the output does not depend on which fetch finished first."""
         domain = domain.lower() if domain else None
-        wiki_confirmed = self._wikipedia(raw, company_name, domain)
-        site_ok = self._website(raw, domain)
-        self._news(raw, company_name or domain)
+        wiki_part, site_part, news_part = RawResearch(), RawResearch(), RawResearch()
+        with ThreadPoolExecutor(max_workers=3, thread_name_prefix="research") as pool:
+            wiki_job = pool.submit(self._wikipedia, wiki_part, company_name, domain)
+            site_job = pool.submit(self._website, site_part, domain)
+            news_job = pool.submit(self._news, news_part, company_name, domain)
+            wiki_confirmed, site_ok = wiki_job.result(), site_job.result()
+            news_job.result()
+        raw = RawResearch()
+        for part in (wiki_part, site_part, news_part):
+            raw.documents += part.documents
+            raw.sources += part.sources
+        raw.news = news_part.news
         wiki_found = any(d.kind in (KIND_WIKI_SUMMARY, KIND_WIKI_PAGE) for d in raw.documents)
         raw.match_confidence = (
             "confirmed" if wiki_confirmed or (not wiki_found and site_ok) else "unverified_match"
@@ -230,7 +279,8 @@ class PublicWebProvider:
         return None
 
     # -- Google News RSS (R3.9) -----------------------------------------------------------------------
-    def _news(self, raw: RawResearch, query: str | None) -> None:
+    def _news(self, raw: RawResearch, name: str | None, domain: str | None) -> None:
+        query = name or domain
         if not query:
             raw.sources.append(SourceStatus("skipped:no-company:news", "skipped"))
             return
@@ -241,12 +291,23 @@ class PublicWebProvider:
             root = SafeET.fromstring(feed.body.encode("utf-8"))
         except Exception:  # malformed or hostile XML
             return
+        terms = company_terms(name, domain)
         items: list[NewsItem] = []
+        seen_titles: set[str] = set()
+        seen_urls: set[str] = set()
         for item in root.iter("item"):
             title = (item.findtext("title") or "").strip()
             link = (item.findtext("link") or "").strip()
-            if title and urlsplit(link).scheme in ("http", "https"):
-                items.append(NewsItem(title, _rss_date(item.findtext("pubDate")), link))
+            if not title or urlsplit(link).scheme not in ("http", "https"):
+                continue
+            if not mentions_company(headline(title), terms):
+                continue  # an article that does not name the company is not news about it
+            key = _key(headline(title))
+            if key in seen_titles or link in seen_urls:
+                continue  # the same story from a second feed entry
+            seen_titles.add(key)
+            seen_urls.add(link)
+            items.append(NewsItem(title, _rss_date(item.findtext("pubDate")), link))
         items.sort(key=lambda n: n.date or "", reverse=True)
         raw.news = items[: c.MAX_NEWS_ITEMS]
         for n in raw.news:

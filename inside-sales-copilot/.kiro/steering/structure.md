@@ -4,17 +4,11 @@
 frontend/                 React app (Vite, TypeScript, Tailwind)
 backend/
   src/
-    handlers/             Lambda handlers
-      create_brief
-      get_brief
-      list_briefs
-      update_brief
-      confirm_brief
-      approve_brief
-      retry_brief
-      list_case_studies
-      rules              (list and delete saved rules, keep or discard proposals)
-      worker             (SQS consumer, the only handler that calls Bedrock)
+    handlers/             Lambda entry points (thin, no business logic)
+      briefs_read         create_brief, get_brief, list_briefs
+      briefs_write        update_brief, confirm_brief, approve_brief, retry_brief
+      rules_cases         rules (keep or discard, list, delete) and list_case_studies
+      worker              SQS consumer, the only handler that calls Bedrock
     services/             Business logic, no AWS event parsing
       invite_parser
       research
@@ -22,11 +16,17 @@ backend/
       case_study_matcher
       brief_writer
       rules
+      pipeline            worker jobs: parse, pipeline, extract_rules
+      offline_model       deterministic stand-in for Bedrock (tests, --fake-bedrock)
     lib/                  Shared helpers
       bedrock_client      Converse wrapper, rate limiter, retries
       http fetch          Safe HTTP fetch for research
       models              Shared data types
-  tests/                  pytest + moto
+      brief_store         Briefs table access, conditional transitions
+      api                 claims, body parsing, errors, job queue
+      observability       redacting logger, metrics
+  tests/                  pytest + moto (fixtures/ holds recorded research)
+  local_run.py            run the backend locally on one invite
 data/
   case_studies.json       Seed library
   attendee_profiles.json  Synthetic attendee directory

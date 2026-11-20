@@ -63,7 +63,22 @@ MODEL_SONNET = "sonnet"
 ENV_MODEL_HAIKU = "BEDROCK_MODEL_HAIKU"
 ENV_MODEL_SONNET = "BEDROCK_MODEL_SONNET"
 # max_tokens per prompt (design section 10)
-MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 4000, "rules": 800}
+MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 2500, "rules": 800}
+# Which model writes the brief (prompt P4). The CDK context `briefModel` sets it for Lambda;
+# the BRIEF_MODEL environment variable overrides it locally.
+ENV_BRIEF_MODEL = "BRIEF_MODEL"
+BRIEF_MODELS = (MODEL_HAIKU, MODEL_SONNET)
+DEFAULT_BRIEF_MODEL = MODEL_HAIKU  # decided after the Wave 3 rerun; Sonnet is available via config
+MAX_SNAPSHOT_ITEMS = 5
+
+# --- Research fetching -------------------------------------------------------------------
+# Default User-Agent for company research (Wikimedia asks for a contact). The same value is the
+# CDK context default `researchUserAgent`. A deployment or a shell can override it with the
+# RESEARCH_USER_AGENT environment variable.
+RESEARCH_USER_AGENT_DEFAULT = (
+    "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)"
+)
+ENV_RESEARCH_USER_AGENT = "RESEARCH_USER_AGENT"
 
 # --- Attendee profiles -------------------------------------------------------------------
 SYNTHETIC_SOURCE_URL = "synthetic://profiles"

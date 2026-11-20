@@ -33,12 +33,13 @@ Keep it simple. All serverless. Region is `us-east-1` only, never configurable.
 - A brief with no progress for 120 seconds is marked `failed` and the UI shows a Retry button.
 
 ## AI (Amazon Bedrock, us-east-1)
-- Claude Sonnet for brief writing.
-- Claude Haiku for extraction, classification, and scoring (cheap).
+- **Claude Haiku 4.5 for all five calls by default**: parse, research extraction, case study scoring, brief writing, rule extraction (decided after the Wave 3 rerun: Haiku wrote the Allstate brief in 7.5 s against 23.6 s for Sonnet, with close quality).
+- Claude Sonnet 5 stays available for brief writing only: set CDK context `briefModel` to `sonnet` (or `BRIEF_MODEL=sonnet` locally). Sonnet calls send no temperature (Sonnet 5 rejects it).
 - Model IDs (checked on 2026-11-20 with one real Converse call each; this account's allowlist blocks the newer `haiku-5-5` and `sonnet-5-5`). These are the CDK context defaults in `infra/cdk.json`:
   - `haikuModelId`: `us.anthropic.claude-haiku-4-5-20251001-v1:0`
   - `sonnetModelId`: `us.anthropic.claude-sonnet-5`
-  - CDK passes them to the worker as `BEDROCK_MODEL_HAIKU` and `BEDROCK_MODEL_SONNET`.
+  - `briefModel`: `haiku` (default) or `sonnet`. CDK passes it to the worker as `BRIEF_MODEL`.
+  - CDK passes the model IDs to the worker as `BEDROCK_MODEL_HAIKU` and `BEDROCK_MODEL_SONNET`.
 - Only the allowlisted models may be used. Do not try other models to get around an access denied error.
 - Use the Bedrock Converse API. Set `maxTokens` on every call.
 - All calls go through one shared client in `backend/src/lib/bedrock_client.py`. No other module calls Bedrock directly.

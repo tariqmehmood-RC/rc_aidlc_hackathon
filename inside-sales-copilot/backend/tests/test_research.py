@@ -301,7 +301,7 @@ def test_bedrock_errors_pass_through_and_nothing_is_cached(table):
     assert "Item" not in table.get_item(Key={"companyDomain": "duolingo.com"})
 
 
-@pytest.mark.parametrize("domain", ["delta.com", "duolingo.com", "marriott.com"])
+@pytest.mark.parametrize("domain", ["delta.com", "duolingo.com", "marriott.com", "allstate.com"])
 def test_works_with_every_recorded_sample_company(table, domain):
     raw = FixtureProvider(RECORDED).research(None, domain)
     svc, *_ = service(table, raw)

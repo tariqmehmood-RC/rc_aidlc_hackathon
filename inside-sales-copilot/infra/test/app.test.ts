@@ -41,6 +41,16 @@ describe('app', () => {
 describe('cdk.json context', () => {
   const cdkJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cdk.json'), 'utf-8'));
 
+  test('research user agent default names the project and a contact', () => {
+    expect(cdkJson.context.researchUserAgent).toBe(
+      'InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)',
+    );
+  });
+
+  test('brief model is haiku or sonnet', () => {
+    expect(['haiku', 'sonnet']).toContain(cdkJson.context.briefModel);
+  });
+
   test('model IDs are the tested defaults', () => {
     expect(cdkJson.context.haikuModelId).toBe('us.anthropic.claude-haiku-4-5-20251001-v1:0');
     expect(cdkJson.context.sonnetModelId).toBe('us.anthropic.claude-sonnet-5');

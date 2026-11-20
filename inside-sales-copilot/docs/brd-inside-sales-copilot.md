@@ -115,6 +115,7 @@ Inside Sales Copilot turns a pasted meeting invite into a cited discovery brief 
 ### Cost
 - Serverless services only.
 - Bedrock cost controls: choose a small, low-cost model where quality allows, set max output tokens, and cache research in DynamoDB.
+- Model choice (decided): Claude Haiku 4.5 for all five Bedrock calls, including writing the brief. Claude Sonnet 5 can be switched on for brief writing through configuration (`briefModel`). The cost estimate shows both: the default all-Haiku cost per brief and the cost with Sonnet writing the brief.
 - Deliver a monthly cost estimate (see below).
 
 ### Reliability and performance

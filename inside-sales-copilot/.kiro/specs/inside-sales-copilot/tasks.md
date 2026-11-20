@@ -180,13 +180,13 @@ Branch: `feature/wave-3`.
 - Group E (after 3.6): 3.7, 3.8, 3.9 run in parallel.
 - Group F (after 3.4): 3.5 and 3.10 run in parallel.
 
-- [ ] **3.1 [MVP] Brief store** [P, group D]
+- [x] **3.1 [MVP] Brief store** [P, group D]
   - Files: `backend/src/lib/brief_store.py`, `backend/tests/test_brief_store.py`
   - Do: Briefs table access from D§5.1: create, conditional status transitions (jobId and expected status), `queueKey` set only while `queued`, `queuePosition`, history query by user with pages of 20, TTL `expiresAt` = created + 30 days, owner-checked get that returns "not found" for other users, stuck check (120 s).
   - Test (moto): a transition with a stale `jobId` fails; a duplicate delivery does not overwrite a newer status; queue position counts earlier queued briefs only; another user's brief returns not found; a `processing` brief older than 120 s becomes `failed` with `STUCK` and a `queued` brief does not; `expiresAt` is 30 days after creation; 25 briefs paginate 20 + 5 newest first.
   - Needs: 1.7. Requirements: R7.16, R8, R9.8, R9.9, R9.13.
 
-- [ ] **3.2 [MVP] Observability helpers** [P, group D]
+- [x] **3.2 [MVP] Observability helpers** [P, group D]
   - Files: `backend/src/lib/observability.py`, `backend/tests/test_observability.py`
   - Do: Powertools logger with a redaction filter, metrics helper for `BriefGenerated`, `BedrockCalls`, and `BedrockThrottled` only; a Powertools implementation of the Bedrock client's metrics sink.
   - Test: a log line containing an email or the invite text is redacted; every log line carries `briefId`; the three metric names match the design.
@@ -198,46 +198,46 @@ Branch: `feature/wave-3`.
   - Test: a cache miss emits `ResearchLatencyMs`, a cache hit does not; a failed step emits `BriefFailed` with the step.
   - Needs: 3.2, 3.4. Requirements: R10.16.
 
-- [ ] **3.3 [MVP] Brief writer** (needs 2.5, 2.9, 2.10)
+- [x] **3.3 [MVP] Brief writer** (needs 2.5, 2.9, 2.10)
   - Files: `backend/src/services/brief_writer.py`, `backend/tests/test_brief_writer.py`
   - Do: P4 with the 7 sections in fixed order. Code fills `attendees`, `caseStudies`, `sources`. Validation: agenda adds up to 30, 8 to 10 questions, every URL was fetched, every `basedOnFactIds` exists, ids assigned by code, rules applied listed.
   - Test (fake Bedrock): section order; agenda totals 29 triggers the repair retry; second failure raises; 7 questions rejected; an unknown URL removed or rejected; unverified attendee shown flagged and its title not used in other sections; unknown inputs say "unknown"; the 10 newest rules are sent and listed in `rulesApplied`.
   - Needs: 2.2, 2.5, 2.9, 2.10, 1.7. Requirements: R6.
 
-- [ ] **3.4 [MVP] Worker: parse job and pipeline job**
+- [x] **3.4 [MVP] Worker: parse job and pipeline job**
   - Files: `backend/src/handlers/worker.py`, `backend/src/services/pipeline.py`, `backend/tests/test_worker_pipeline.py`
   - Do: D§7.1. `parse` job: Parsing, then `awaiting_confirmation`. `pipeline` job: Researching, Checking attendees, Matching case studies, Writing brief, then `ready`. Records step before and after each step, skips steps in `stepsCompleted`, ignores stale `jobId`, marks `failed` with a code and step on handled errors, re-raises on crash.
   - Test (moto, fake Bedrock, fixture provider): happy path from `queued` to `ready` with steps in order; redelivered message does not run steps twice; stale job ignored; each handled error gives the code in D§11; retry after failure reuses finished steps and cached research; an unhandled crash re-raises; the BU used is the one stored on the brief.
   - Needs: 3.1, 2.4, 2.5, 2.8, 2.9, 3.3. Requirements: R9, R2.6, R3, R4, R5, R6.
 
-- [ ] **3.5 [MVP] Worker: rule extraction job** [P, group E]
+- [x] **3.5 [MVP] Worker: rule extraction job** [P, group E]
   - Files: `backend/src/handlers/worker.py` (add the job type), `backend/tests/test_worker_rules.py`
   - Do: `extract_rules` job after approve: sets `rulesStatus` to `ready`, `none`, or `failed`; brief stays `approved` on failure.
   - Test: edited draft produces up to 3 proposals; identical text sets `none` with no Bedrock call; Bedrock failure sets `failed` and the brief stays `approved`.
   - Needs: 3.4, 2.10. Requirements: R7.6 to R7.13.
 
-- [ ] **3.6 [MVP] API common layer** [P, group E]
+- [x] **3.6 [MVP] API common layer** [P, group E]
   - Files: `backend/src/lib/api.py`, `backend/tests/test_api_common.py`
   - Do: claims extraction (`sub`, `custom:bu`) from the authorizer context, JSON body parsing with size cap, error body `{error:{code,message}}`, standard 400, 404, 409 responses, no stack traces, UUID and ULID path validation, SQS send helper.
   - Test: body or query `userId` and `bu` are ignored; missing claims give 401; oversized body gives 400; an unexpected exception returns a generic 500 body without a traceback.
   - Needs: 3.1. Requirements: R1.9, R10.20.
 
-- [ ] **3.7 [MVP] Handlers: create, get, list** (needs 3.6)
+- [x] **3.7 [MVP] Handlers: create, get, list** (needs 3.6)
   - Files: `backend/src/handlers/{create_brief,get_brief,list_briefs}.py`, `backend/tests/test_handlers_read_create.py`
   - Test (moto SQS and DynamoDB): empty, whitespace and 10,001-character text give 400 and nothing is queued; valid text gives 202, a `queued` brief and one message; `get` returns the brief view with `queuePosition`; another user gets 404; stuck brief returns `failed`; `list` returns only the caller's briefs, newest first, 20 per page.
   - Needs: 3.6. Requirements: R2.1 to R2.3, R8, R9.
 
-- [ ] **3.8 [MVP] Handlers: confirm, update, approve, retry** (group F, needs 3.6)
+- [x] **3.8 [MVP] Handlers: confirm, update, approve, retry** (group F, needs 3.6)
   - Files: `backend/src/handlers/{confirm_brief,update_brief,approve_brief,retry_brief}.py`, `backend/tests/test_handlers_write.py`
   - Test: confirm without company or domain gives 400 `COMPANY_REQUIRED`; mismatch without `companyConfirmed` gives 400; 21 attendees gives 400; confirm in the wrong status gives 409; `PUT` edits only in `ready` and keeps the draft unchanged; agenda minutes must still sum to 30; approve sets `approved`, queues one rules job, calls no Bedrock; second approve gives 409; retry only from `failed`; another user's brief gives 404 on every route.
   - Needs: 3.6, 2.4. Requirements: R2.6 to R2.12, R7.1 to R7.5, R7.16, R9.10, R9.11.
 
-- [ ] **3.9 [MVP] Handlers: rules and case studies** [P, group E]
+- [x] **3.9 [MVP] Handlers: rules and case studies** [P, group E]
   - Files: `backend/src/handlers/{rules,list_case_studies}.py`, `backend/tests/test_handlers_rules_cases.py`
   - Test: keep or discard saves only kept proposals; duplicate not saved twice; list and delete are scoped to the caller; `GET /case-studies` returns only the caller's BU and ignores a `bu` query parameter; a user with no `custom:bu` gets 403 `NO_BU`; two users with different BUs get different lists.
   - Needs: 3.6, 2.10. Requirements: R5.2, R5.3, R5.10, R5.11, R7.10 to R7.15.
 
-- [ ] **3.10 [MVP] Local runner**
+- [x] **3.10 [MVP] Local runner**
   - Files: `backend/local_run.py` (module `backend.local_run`), `backend/tests/test_local_run.py`
   - Do: D§13.4. `python -m backend.local_run data/sample_invites/<file>.txt --bu AWS [--fake-bedrock] [--fixtures]`. Runs the worker job handlers directly against an in-memory store, auto-confirms the parse, prints the brief sections and attendee statuses.
   - Test: with `--fake-bedrock --fixtures`, each sample invite finishes `ready`, prints the 7 sections, shows the expected attendee statuses, and `--bu ServiceNow` prints different case studies from `--bu AWS`.
@@ -440,7 +440,7 @@ Branch: `feature/wave-6`.
 
 - [ ] **6.5 [MVP] Cost estimate**
   - Files: `docs/cost-estimate.md`
-  - Do: R10.24 content. Assumptions (briefs per month, tokens per call measured from the smoke test, cache hit rate, users), per-service pricing table with current us-east-1 prices (looked up and linked), Bedrock token cost with and without the research cache, monthly total for the demo and for an example team, hours saved per SE per week with the baseline stated as an estimate.
+  - Do: R10.24 content. Model story: Haiku 4.5 for all five calls by default, Sonnet 5 optional for brief writing; show the cost per brief for both. Assumptions (briefs per month, tokens per call measured from the smoke test, cache hit rate, users), per-service pricing table with current us-east-1 prices (looked up and linked), Bedrock token cost with and without the research cache, monthly total for the demo and for an example team, hours saved per SE per week with the baseline stated as an estimate.
   - Test [MVP]: manual checklist: every pricing row has a source link; totals equal the sum of the rows; token counts come from the smoke test.
   - Needs: 5.8.
 

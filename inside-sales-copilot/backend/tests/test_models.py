@@ -115,7 +115,7 @@ def test_missing_required_fields_are_rejected(name):
     ("case_study_matches", lambda d: d["matches"][0].update(score=59)),
     ("case_study_matches", lambda d: d.update(matches=d["matches"] * 4)),
     ("brief_content", lambda d: d["agenda"][0].update(minutes=31)),
-    ("brief_content", lambda d: d["companySnapshot"][0].update(sourceUrls=[])),
+    ("brief_content", lambda d: d["companySnapshot"][0].update(sourceUrls="https://x")),
     ("case_study", lambda d: d.update(bu="Oracle")),
     ("case_study", lambda d: d.update(url="http://www.royalcyber.com/x")),
     ("queue_message", lambda d: d.update(type="delete_everything")),
@@ -197,7 +197,8 @@ def test_tier_thresholds():
 
 
 def test_every_prompt_has_a_max_tokens_value():
-    assert c.MAX_TOKENS == {"parse": 1500, "research": 2500, "score": 1500, "write": 4000, "rules": 800}
+    assert c.MAX_TOKENS == {"parse": 1500, "research": 2500, "score": 1500, "write": 2500, "rules": 800}
+    assert c.BRIEF_MODELS == ("haiku", "sonnet")
 
 
 def test_free_mail_domains_are_lowercase_and_include_the_common_ones():
@@ -219,3 +220,20 @@ def test_model_ids_are_read_from_the_environment_only():
     assert c.ENV_MODEL_HAIKU == "BEDROCK_MODEL_HAIKU" and c.ENV_MODEL_SONNET == "BEDROCK_MODEL_SONNET"
     source = (ROOT / "backend" / "src" / "lib" / "constants.py").read_text(encoding="utf-8")
     assert "anthropic." not in source
+
+
+def test_research_user_agent_default_matches_the_cdk_context():
+    cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
+    assert c.RESEARCH_USER_AGENT_DEFAULT == cdk["context"]["researchUserAgent"]
+    assert "contact:" in c.RESEARCH_USER_AGENT_DEFAULT and c.ENV_RESEARCH_USER_AGENT == "RESEARCH_USER_AGENT"
+
+
+
+def test_cdk_brief_model_is_a_known_model():
+    cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
+    assert cdk["context"]["briefModel"] in c.BRIEF_MODELS
+
+
+def test_haiku_is_the_default_brief_model_in_code_and_in_cdk():
+    cdk = json.loads((ROOT / "infra" / "cdk.json").read_text(encoding="utf-8"))
+    assert cdk["context"]["briefModel"] == "haiku" == c.DEFAULT_BRIEF_MODEL

@@ -121,7 +121,8 @@ def test_homepage_text_is_plain_text():
 def test_news_is_limited_to_three_newest_first_with_real_links_only():
     raw, _ = run()
     assert [n.title for n in raw.news] == [
-        "Newest story - The Journal", "Second newest - Biz Times", "Middle story - Aviation Weekly"]
+        "Example Air newest story - The Journal", "Example Air second newest - Biz Times",
+        "Example Air middle story - Aviation Weekly"]
     assert [n.date for n in raw.news] == ["2026-11-19", "2026-11-18", "2026-11-10"]
     assert all(n.url.startswith("https://") for n in raw.news)
     news_docs = [d for d in raw.documents if d.kind == "news"]
@@ -297,3 +298,58 @@ def test_recorded_fixtures_exist_for_the_sample_invites(name):
     assert all(d.url.startswith("https://") for d in raw.documents)
     assert raw.usable_urls
     assert len(raw.news) <= 3
+
+
+# --- news quality ------------------------------------------------------------------------------
+def test_news_that_does_not_name_the_company_is_dropped_even_if_the_outlet_does():
+    raw, _ = run()
+    assert all("regional airport" not in n.title for n in raw.news)
+
+
+def test_duplicate_stories_are_removed_by_headline():
+    raw, _ = run()
+    titles = [rp.headline(n.title) for n in raw.news]
+    assert titles.count("Example Air newest story") == 1
+
+
+@pytest.mark.parametrize("name,domain,expected", [
+    ("Marriott International", "marriott.com", ["Marriott International", "Marriott"]),
+    ("Delta Air Lines", "delta.com", ["Delta Air Lines", "Delta"]),
+    ("Allstate", "allstate.com", ["Allstate"]),
+    (None, "duolingo.com", ["duolingo"]),
+    ("3M", "3m.com", ["3M"]),
+])
+def test_company_terms(name, domain, expected):
+    assert rp.company_terms(name, domain) == expected
+
+
+@pytest.mark.parametrize("text,ok", [
+    ("Delta cuts 10 international routes", True),
+    ("A plane in a Delta 737's path", True),
+    ("Busiest month ever at Sonoma County Airport", False),
+    ("Deltamax launches new product", False),            # whole words only
+    ("DELTA shares rise", True),
+])
+def test_mentions_company_matches_whole_words(text, ok):
+    assert rp.mentions_company(text, rp.company_terms("Delta Air Lines", "delta.com")) is ok
+
+
+def test_sources_are_fetched_in_parallel_but_merged_in_a_fixed_order():
+    import threading
+    import time as _time
+
+    started = []
+
+    class Slow(FakeFetcher):
+        def fetch(self, url):
+            started.append((_time.monotonic(), threading.current_thread().name))
+            _time.sleep(0.05)
+            return super().fetch(url)
+
+    t0 = _time.monotonic()
+    raw = rp.PublicWebProvider(Slow(full_routes()), sleep=lambda s: None).research(NAME, DOMAIN)
+    elapsed = _time.monotonic() - t0
+    assert len({name for _, name in started}) >= 2          # more than one thread did work
+    assert elapsed < 0.05 * len(started)                      # faster than one fetch after another
+    kinds_order = [d.kind for d in raw.documents]
+    assert kinds_order.index("wikipedia_summary") < kinds_order.index("homepage") < kinds_order.index("news")

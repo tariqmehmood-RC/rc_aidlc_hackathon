@@ -1,0 +1,5 @@
+{"pages": [
+  {"id": 1, "key": "Example_Air_(band)", "title": "Example Air (band)", "description": "Rock band"},
+  {"id": 2, "key": "Example_Air", "title": "Example Air", "description": "American airline"},
+  {"id": 3, "key": "Unrelated_Topic", "title": "Unrelated Topic", "description": "Something else"}
+]}

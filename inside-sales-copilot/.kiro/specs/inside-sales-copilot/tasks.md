@@ -106,61 +106,61 @@ Branch: `feature/wave-2` (from `main` after Wave 1). Each task is a service or l
 - Group C: 2.5 and 2.7 start immediately (they only need Wave 1). 2.9 and 2.10 start once 2.2 is done.
 - Groups A, B and C run in parallel with each other.
 
-- [ ] **2.1 [MVP] Token bucket** [P, group A]
+- [x] **2.1 [MVP] Token bucket** [P, group A]
   - Files: `backend/src/lib/rate_limiter.py`, `backend/tests/test_rate_limiter.py`
   - Do: D§9.2. Capacity 1, 1 token per second, starts empty, injectable clock and sleep.
   - Test: with a fake clock, 20 consecutive `acquire()` calls start at least 1.0 s apart; first call waits 1 s; no call is allowed after a long idle time to burst more than 1 token.
   - Needs: 1.1. Requirements: R10.1, R10.2.
 
-- [ ] **2.2 [MVP] Bedrock client** (group A)
+- [x] **2.2 [MVP] Bedrock client** (group A)
   - Files: `backend/src/lib/bedrock_client.py`, `backend/tests/test_bedrock_client.py`
   - Do: D§9. `converse_json(model, system, user, max_tokens, schema)`. `max_tokens` is required. Every attempt takes a token. Retry on throttling-type errors with exponential backoff and full jitter, 4 attempts. JSON schema validation with one repair retry. Metrics sink interface (`BedrockCalls`, `BedrockThrottled`). Model IDs from `BEDROCK_MODEL_HAIKU` and `BEDROCK_MODEL_SONNET`.
   - Test (stubbed boto3 client, fake clock): throttle then success (retries, 2 attempts counted); throttle 4 times raises `BedrockUnavailable`; `ValidationException` is not retried; invalid JSON then valid JSON succeeds with one repair; invalid twice raises `InvalidModelOutput`; every call sets `maxTokens`; 20 calls including retries never start less than 1 s apart; a repo-wide test fails if any other module under `backend/src` imports the Bedrock runtime client.
   - Needs: 2.1, 1.7. Requirements: R10.2, R10.5 to R10.9.
 
-- [ ] **2.3 [MVP] Safe HTTP fetch** [P, group B]
+- [x] **2.3 [MVP] Safe HTTP fetch** [P, group B]
   - Files: `backend/src/lib/http_fetch.py`, `backend/tests/test_http_fetch.py`
   - Do: D§8.1 fetch rules. http/https only; resolve host and refuse private, loopback and link-local addresses, also after redirects; 8 s timeout; 500 KB cap; 3 redirects max; honest `User-Agent`; HTML to text.
   - Test (local test server and a stubbed resolver): `file://` and `ftp://` refused; `127.0.0.1`, `10.x`, `169.254.169.254` refused; redirect to a private address refused; oversized body cut off; timeout returns a failure; HTML tags, scripts and styles removed; 403 returns a failure, not an exception.
   - Needs: 1.1. Requirements: R3.16, R3.17.
 
-- [ ] **2.4 [MVP] Invite parser** (needs 2.2)
+- [x] **2.4 [MVP] Invite parser** (needs 2.2)
   - Files: `backend/src/services/invite_parser.py`, `backend/tests/test_invite_parser.py`
   - Do: P1 prompt and schema (D§10). Post-processing: lowercase emails, merge duplicates, add warnings (`only_free_email_domains`, `company_domain_mismatch`). A separate `validate_confirmation(parsed, company_confirmed)` implements R2.7 to R2.12 (company or non-free domain required, mismatch needs confirmation, max 20 attendees).
   - Test (fake Bedrock returning canned JSON for the three sample invites): fields extracted; missing fields stay `null`; duplicate emails merged; free-mail-only invite flagged; 21 attendees rejected on confirm; mismatch rejected until confirmed; injected instruction text in the invite does not change the output shape (the fake receives it inside `<invite>` tags).
   - Needs: 2.2, 1.6, 1.7. Requirements: R2.4 to R2.14.
 
-- [ ] **2.5 [MVP] Attendee verifier** [P, group C]
+- [x] **2.5 [MVP] Attendee verifier** [P, group C]
   - Files: `backend/src/services/attendee_verifier.py`, `backend/tests/test_attendee_verifier.py`
   - Do: D§8.4, deterministic, no Bedrock.
   - Test: results match `data/sample_invites/expected.json`; each reason (`employer_mismatch`, `title_mismatch`, `no_profile_found`, `title_missing`, `ambiguous`); "VP Sales" equals "Vice President, Sales"; "Sr. Engineer" equals "Senior Engineer"; different titles never match; employer matches by name or by domain; no field is ever invented (profile is `null` when none).
   - Needs: 1.5, 1.6, 1.7. Requirements: R4.1 to R4.12.
 
-- [ ] **2.6 [MVP] Research providers and fixtures** (group B)
+- [x] **2.6 [MVP] Research providers and fixtures** (group B)
   - Files: `backend/src/services/research_provider.py` (the `ResearchProvider` interface and `PublicWebProvider`), `scripts/record_fixtures.py`, `backend/tests/fixtures/<company>/*`, `backend/tests/test_research_provider.py`
   - Do: D§8.1. Wikipedia REST (summary, page), company home and about page, Google News RSS (send locale parameters, follow redirects, newest 3). Fixture recorder fetches the live pages once for the sample invite companies and saves trimmed copies. A `FixtureProvider` reads them for tests and the local runner.
   - Test (fixtures, no network): documents carry `sourceUrl` and `kind`; news is limited to 3 and sorted newest first; one failing source does not stop the others; all sources failing returns an empty result; Wikipedia candidate is chosen by matching the domain, otherwise `unverified_match`.
   - Needs: 2.3, 1.6. Requirements: R3.1, R3.9, R3.13, R3.15.
 
-- [ ] **2.7 [MVP] Size tier** [P, group C]
+- [x] **2.7 [MVP] Size tier** [P, group C]
   - Files: `backend/src/services/size_tier.py`, `backend/tests/test_size_tier.py`
   - Do: D§8.3.
   - Test (table of cases): 5,001 employees is Enterprise; 5,000 is Mid-market; 500 is Mid-market; 499 is SMB; 50 is SMB; 49 is Boutique; revenue $1.01B with 100 employees is Enterprise; revenue $1B exactly does not trigger Enterprise; employees unknown and revenue below $1B is Unknown; both unknown is Unknown; the rule text and basis are returned.
   - Needs: 1.7. Requirements: R3.5 to R3.8.
 
-- [ ] **2.8 [MVP] Research service** (needs 2.2, 2.6, 2.7)
+- [x] **2.8 [MVP] Research service** (needs 2.2, 2.6, 2.7)
   - Files: `backend/src/services/research.py`, `backend/tests/test_research.py`
   - Do: cache read and write (ResearchCache table, 7 days, `retrievedAt` check), P2 extraction, source integrity check (D§8.2), size tier from extracted numbers, news from RSS entries, "unknown" handling, `NO_PUBLIC_INFO` error.
   - Test (moto DynamoDB, fake Bedrock, fixture provider): every fact has at least one URL; a URL the provider did not fetch is removed; a fact left with no URL is dropped; a pain point whose facts were dropped is dropped; second call within 7 days makes no provider or Bedrock call; entry older than 7 days is refreshed; all sources empty raises `NO_PUBLIC_INFO`; model output claiming `employees` without a fact is rejected.
   - Needs: 2.2, 2.6, 2.7. Requirements: R3.2 to R3.14.
 
-- [ ] **2.9 [MVP] Case study matcher** [P, group C after 2.2]
+- [x] **2.9 [MVP] Case study matcher** [P, group C after 2.2]
   - Files: `backend/src/services/case_study_matcher.py`, `backend/tests/test_case_study_matcher.py`
   - Do: D§8.5 and P3. BU is a function argument supplied by the caller from the stored brief. Prefilter by BU, then industry and tags, top 8. Keep scores of 60 or more, top 3. Messages for fewer than 3 and for none. Title and URL always come from the JSON file.
   - Test (fake Bedrock): candidates never include another BU; a score of 59 is dropped and 60 is kept; sorted by score; 2 qualifying results carry "No strong match for <need>"; none qualifying gives "No strong match in your BU's library"; an id the model invented is ignored; a user with no BU gets no case studies.
   - Needs: 2.2, 1.4, 1.7. Requirements: R5.1 to R5.12.
 
-- [ ] **2.10 [MVP] Rules service** [P, group C; the extraction part needs 2.2]
+- [x] **2.10 [MVP] Rules service** [P, group C; the extraction part needs 2.2]
   - Files: `backend/src/services/rules.py`, `backend/tests/test_rules.py`
   - Do: Rules table access: list newest 10, add with duplicate check on `textKey`, delete, all scoped to `userId`. `extract_rules(draft, final, existing)` with P5; skips the call when draft equals final.
   - Test (moto, fake Bedrock): user A cannot see or delete user B's rules; the 11th rule is not returned in the newest 10; same text with different case or spacing is not saved twice; identical draft and final makes no Bedrock call and returns none; more than 3 proposals are cut to 3; proposals equal to saved rules are removed.

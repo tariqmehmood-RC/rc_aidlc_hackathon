@@ -564,7 +564,7 @@ The code then adds `warnings` (free-mail only, name and domain mismatch), merges
 
 ### P2. Extract company facts (Haiku, `maxTokens` 2500)
 
-System: "You are given numbered documents about one company, each with its URL. Extract only facts stated in the documents. Every fact must list the URLs of the documents that state it, using only the URLs provided. Return `employees` and `revenueUsd` as plain numbers only if a document states them, otherwise null. Write pain points as hypotheses about what this kind of company in this situation likely struggles with. Each hypothesis must cite the ids of the facts it is based on. Do not write a hypothesis you cannot tie to a fact."
+System: "You are given numbered documents about one company, each with its URL. Extract only facts stated in the documents. Every fact must list the URLs of the documents that state it, using only the URLs provided. Return `industry` and `headquarters` as a short value with the id of the fact that states it, or null. Return `employees` and `revenueUsd` as plain numbers with the id of the fact that states them, only if a document states them, otherwise null. Write pain points as hypotheses about what this kind of company in this situation likely struggles with. Each hypothesis must cite the ids of the facts it is based on. Do not write a hypothesis you cannot tie to a fact."
 
 User: `<company name="..." domain="..."/>` then `<document id="d1" url="https://...">text</document>` for each document.
 
@@ -573,7 +573,7 @@ Output schema:
 ```json
 {
   "type": "object",
-  "required": ["facts", "industryFactId", "hqFactId", "employees", "revenueUsd", "painPoints"],
+  "required": ["facts", "industry", "headquarters", "employees", "revenueUsd", "painPoints"],
   "properties": {
     "facts": {
       "type": "array", "maxItems": 25,
@@ -586,8 +586,14 @@ Output schema:
         }
       }
     },
-    "industryFactId": { "type": ["string", "null"] },
-    "hqFactId": { "type": ["string", "null"] },
+    "industry": {
+      "type": ["object", "null"], "required": ["value", "factId"],
+      "properties": { "value": { "type": "string", "maxLength": 200 }, "factId": { "type": "string" } }
+    },
+    "headquarters": {
+      "type": ["object", "null"], "required": ["value", "factId"],
+      "properties": { "value": { "type": "string", "maxLength": 200 }, "factId": { "type": "string" } }
+    },
     "employees": {
       "type": ["object", "null"], "required": ["value", "factId"],
       "properties": { "value": { "type": "number" }, "factId": { "type": "string" } }
@@ -689,9 +695,9 @@ Code checks after the call: agenda minutes sum to 30, question count 8 to 10, ev
 
 ### P5. Extract rules from edits (Haiku, `maxTokens` 800)
 
-System: "You are given the draft and the final version of a sales brief, as lists of items with ids. Find the changes the user made. Propose 0 to 3 short, reusable instructions (each under 200 characters, imperative, not tied to this company) that would make future drafts match the user's edits, for example 'Always ask about the budget cycle'. If the changes are only company-specific corrections or typos, return none. Do not repeat the existing rules."
+System: "You are given the changes a sales engineer made to a draft discovery brief, as before and after values. Propose 0 to 3 short, reusable instructions (each under 200 characters, imperative, not tied to this company) that would make future drafts match the user's edits, for example 'Always ask about the budget cycle'. If the changes are only company-specific corrections or typos, return none. Do not repeat the existing rules."
 
-User: `<existing_rules>`, `<draft>` and `<final>` as JSON (only the changed items plus 1 item of context each), wrapped in tags.
+User: `<existing_rules>` and `<changes>`. `<changes>` is a JSON list of the items the SE edited, added, or removed, each with `before` and `after` values for the editable fields only (text, agenda minutes, topic, and note). Whitespace-only edits are not changes. Both blocks are wrapped in tags, and a closing tag inside the text is neutralized.
 
 Output schema:
 

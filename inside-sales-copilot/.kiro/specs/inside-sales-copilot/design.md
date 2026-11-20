@@ -48,7 +48,7 @@ Static data is bundled in the Lambda packages: `data/case_studies.json` and `dat
 | `ApiStack` | HTTP API, JWT authorizer, API Lambdas, worker Lambda and its SQS event source, DLQ alarm, other alarms, dashboard. |
 | `WebStack` | Private S3 bucket, CloudFront distribution (HTTPS redirect, `/api/*` behavior to the HTTP API, security headers), deployment of the built SPA plus a generated `config.json` with the pool id, client id, and region. None of these is a secret. |
 
-All stacks are pinned to `us-east-1`. The region is not a parameter (R10.10).
+All stacks are pinned to `us-east-1`, set explicitly in `infra/bin` (`env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-east-1' }`). The region is not a parameter and is not read from the shell (R10.10). The account is already bootstrapped for `us-east-1`.
 
 ## 3. Brief lifecycle
 
@@ -412,7 +412,7 @@ class ResearchProvider(Protocol):
 
 Fetch rules (R3.16, R3.17): http and https only, resolve the host and refuse private, loopback, and link-local addresses (also after redirects), timeout 8 s per request, body cap 500 KB, at most 3 redirects, HTML stripped to text, text truncated to a fixed length per document before it goes to the model. A swap to AgentCore Browser or a search API means a new class with the same method.
 
-Google News RSS is not an official API and may change or block requests. If it fails, news is "unknown" (R3.13).
+Google News RSS is not an official API and may change or block requests. If it fails, news is "unknown" (R3.13). The fetcher sends an honest `User-Agent` that names the app, follows redirects (Google News redirects to a URL with `hl=en-US&gl=US&ceid=US:en`, which the provider sends directly), and does not try to get around bot protection: a 403 gives "unknown" facts.
 
 ### 8.2 Source integrity
 
@@ -505,7 +505,14 @@ Clock and sleep are injected, so the test uses a fake clock: 20 calls made in a 
 
 Every call sets `inferenceConfig.maxTokens` (R10.6) and a low temperature (0.2 for extraction and scoring, 0.4 for writing). The reply is parsed as JSON and validated against the call's schema. If invalid, the client retries once with a short repair note appended to the user message ("Your last reply was not valid JSON for the schema. Reply with JSON only."). A second failure raises `InvalidModelOutput` (R6.9). The repair attempt also takes a token.
 
-Model IDs come from environment variables (`BEDROCK_MODEL_HAIKU`, `BEDROCK_MODEL_SONNET`). The IAM policy allows only those models. Some current Claude models in us-east-1 are called through a cross-region inference profile ID. In that case the policy must allow the profile and the foundation models behind it. This is checked when the stack is written.
+Model IDs come from environment variables (`BEDROCK_MODEL_HAIKU`, `BEDROCK_MODEL_SONNET`), set by CDK from context defaults in `infra/cdk.json`. Both were tested with one real Converse call on 2026-11-20 (`maxTokens` 20, reply "ok"):
+
+| Role | Model ID (CDK context default) | Test result |
+|---|---|---|
+| Haiku (extract, score, rules) | `us.anthropic.claude-haiku-4-5-20251001-v1:0` | OK, 511 ms |
+| Sonnet (write brief) | `us.anthropic.claude-sonnet-5` | OK, 1071 ms |
+
+These are `us.` cross-region inference profiles. The account's allowlist blocks the newer `haiku-5-5` and `sonnet-5-5`, so they are not used. This Claude generation lists only the inference-profile type in us-east-1, not on-demand direct invocation, so the profile is required. The IAM policy therefore allows `InvokeModel` on the two inference profile ARNs in us-east-1 and on the two underlying foundation-model ARNs (`arn:aws:bedrock:*::foundation-model/<id>`), and nothing else.
 
 ## 10. Prompts
 
@@ -749,7 +756,7 @@ All errors are logged with the brief id, step, error class, and a short message.
 | get, list, update | Briefs: `GetItem`, `UpdateItem`, `Query` (including `byUser` and `byQueue` indexes) | none | none | logs |
 | rules (keep, list, delete) | Rules: `PutItem`, `Query`, `DeleteItem`. Briefs: `GetItem`, `UpdateItem` | none | none | logs |
 | list_case_studies | none | none | none | logs |
-| worker | Briefs: `GetItem`, `UpdateItem`. Rules: `Query`. ResearchCache: `GetItem`, `PutItem` | `ReceiveMessage`, `DeleteMessage`, `GetQueueAttributes` | `InvokeModel` and `InvokeModelWithResponseStream` only on the two configured models (and inference profile if used) | logs, X-Ray |
+| worker | Briefs: `GetItem`, `UpdateItem`. Rules: `Query`. ResearchCache: `GetItem`, `PutItem` | `ReceiveMessage`, `DeleteMessage`, `GetQueueAttributes` | `InvokeModel` only on the two `us.` inference profiles in us-east-1 and their two foundation models (section 9.4). The Converse API needs no extra action. | logs, X-Ray |
 | seed script (run by a person) | none | none | none | Cognito admin actions on the one user pool |
 
 Each statement names exact table, index, queue, and model ARNs. No wildcard resources.
@@ -790,16 +797,16 @@ One dashboard shows brief count, failures by step, Bedrock calls and throttles, 
 
 ### 13.4 Local runner
 
-`python -m backend.local_run data/sample_invites/<file>.txt --bu AWS` runs the same service functions the worker uses, in order, against an in-memory store (moto) and the real shared Bedrock client with the rate limiter. It auto-confirms the parse, then prints the brief and the attendee statuses. A `--fake-bedrock` flag uses canned replies, so tests and offline runs need no AWS access. The local runner does not use SQS. It calls the job handler directly with synthetic messages, so the code path of the worker is exercised.
+`python -m backend.local_run data/sample_invites/<file>.txt --bu AWS` runs the same service functions the worker uses, in order, against an in-memory store (moto) and the real shared Bedrock client with the rate limiter. It auto-confirms the parse, then prints the brief and the attendee statuses. A `--fake-bedrock` flag uses canned replies, so tests and offline runs need no AWS access. A `--fixtures` flag makes the research provider read recorded pages from `backend/tests/fixtures/` instead of fetching live sites. Unit tests always use fixtures. It runs in `backend/.venv` (Python 3.12). The local runner does not use SQS. It calls the job handler directly with synthetic messages, so the code path of the worker is exercised.
 
 ## 14. Risks and decisions needed
 
-1. **SQS with reserved concurrency 1.** The Lambda SQS poller starts several concurrent invocations. With reserved concurrency 1, extra invocations are throttled, and the messages return to the queue and count as a receive. AWS recommends setting `maxReceiveCount` to at least 5 for this reason ([AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html)). The design keeps your value of 3. With 3, a message can reach the DLQ after throttling alone while the queue is busy. Options: (a) set `maxReceiveCount` to 5; (b) switch to a FIFO queue with one message group, which gives one job at a time without relying on throttling. I added an early spike task (3 briefs submitted together) to measure this. Please pick (a), (b), or keep 3.
+1. **SQS with reserved concurrency 1 (decided: standard queue, `maxReceiveCount` 3, no FIFO).** The Lambda SQS poller starts several concurrent invocations. With reserved concurrency 1, extra invocations are throttled, and the messages return to the queue and count as a receive. AWS recommends a `maxReceiveCount` of at least 5 for this reason ([AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html)). We keep 3. The risk is that a busy queue sends a message to the DLQ after throttling alone, and a message that was throttled can also wait for the visibility timeout. We accept this and measure it: a spike task submits 3 briefs together after the worker exists, and the result (time to ready for each, DLQ depth) goes into the README. If a message reaches the DLQ in that test, we report it and the team decides what to change.
 2. **ID token, not access token, for the API.** `custom:bu` is only in the ID token by default. Alternatives are a pre-token-generation trigger to add it to the access token, or a Cognito lookup per request. The ID token is simpler and cheaper. Both tokens are set to 1 hour.
 3. **Five extra endpoints** (`confirm`, `retry`, `POST /briefs/{id}/rules`, `GET /rules`, `DELETE /rules/{id}`), beyond your list of six. The requirements need them.
 4. **Company check moved to confirmation.** The "names a company or domain" check happens after the parse, because a name can only be found by parsing, and API Lambdas do not call Bedrock.
 5. **Google News RSS and website fetching are best effort.** Sites can block the fetcher. Missing facts show as "unknown", and a brief for a company with no usable source fails with `NO_PUBLIC_INFO`. The demo companies should be tested in advance.
-6. **Model access and IDs.** Haiku and Sonnet access must be enabled in the account for us-east-1, and current model or inference profile IDs must be chosen when the stack is written. They are set through environment variables.
+6. **Model access and IDs (resolved, with two notes).** Both models work (section 9.4). First, a `us.` inference profile is called in us-east-1, but AWS may process the request in another US region (us-east-2 or us-west-2). This is the only way to call these models here, and it is a point to state clearly against the "us-east-1 only" rule: every resource and every API call is in us-east-1. Second, the account has an explicit-deny allowlist for Bedrock models. It applies to the workshop role, and the deployed worker role must be checked against it at the first deploy.
 7. **Approval is not blocked by rule extraction.** The brief is approved and locked first. Rules arrive a few seconds later, or are skipped if extraction fails.
 
 ## 15. Requirement coverage
@@ -816,3 +823,17 @@ One dashboard shows brief count, failures by step, Bedrock calls and throttles, 
 | R8 History | 5.1 (`byUser`, TTL), 6 (`GET /briefs`) |
 | R9 Progress | 3, 6 (stuck check), 7, 13.3 |
 | R10 Ops, security, cost | 2, 7.3, 9, 11, 12, 13 |
+
+## 16. Environment check (2026-11-20)
+
+| Check | Result | Effect on the design |
+|---|---|---|
+| Region | `AWS_REGION` and `AWS_DEFAULT_REGION` were already `us-east-1` in the shell. Both are also in `~/.bashrc`. | CDK still pins the region explicitly. |
+| Python | 3.12.16 installed with uv. `backend/.venv` created with 3.12. | All backend tests run in that venv. |
+| Bedrock models | `haiku-5-5` and `sonnet-5-5` exist but are blocked by the account allowlist. `haiku-4-5` and `sonnet-5` work. | Section 9.4 model IDs. |
+| CDK bootstrap | `CDKToolkit` stack created in `aws://<account-id>/us-east-1`. | Deploy can start in Wave 5. |
+| Read access | Lambda, API Gateway v2, SQS, DynamoDB, S3, CloudFront, Cognito, CloudWatch, CloudWatch Logs, IAM, CloudFormation: all list calls succeeded. | None. Write access is checked at the first deploy. |
+| Wikipedia REST | HTTP 200. | Live research works. |
+| Google News RSS | 302 to the URL with locale parameters, then 200 (136 KB of RSS). | The provider follows redirects and sends the locale parameters. |
+| royalcyber.com | HTTP 403 on every page including `/` and `/robots.txt`. The page is a Cloudflare block. | The case study seed is written by hand from the public pages, and the README says so (R5.13, G18). No attempt to get around the block. |
+| Playwright | Not installed. The npm registry and download CDN are reachable. Google Chrome 158 is installed at `/usr/bin/google-chrome`. The OS is Amazon Linux 2023, which Playwright does not officially support. | Wave 6 can run Playwright against the installed Chrome (`channel: 'chrome'`) if `playwright install chromium` fails. |

@@ -1,0 +1,33 @@
+{
+  "01-delta-air-lines.txt": {
+    "company": { "name": "Delta Air Lines", "domain": "delta.com" },
+    "meetingDate": "2026-12-03",
+    "duplicateEmailsMerged": 0,
+    "attendees": [
+      { "email": "avery.lindqvist@delta.com", "name": "Avery Lindqvist", "invitedTitle": "VP, Information Technology", "status": "verified", "reason": null },
+      { "email": "bram.okonkwo-reyes@delta.com", "name": "Bram Okonkwo-Reyes", "invitedTitle": "Chief Technology Officer", "status": "unverified", "reason": "title_mismatch" },
+      { "email": "cleo.vantongeren@delta.com", "name": "Cleo Vantongeren", "invitedTitle": "Sr. Manager, Service Management", "status": "unverified", "reason": "no_profile_found" }
+    ]
+  },
+  "02-duolingo.txt": {
+    "company": { "name": "Duolingo", "domain": "duolingo.com" },
+    "meetingDate": null,
+    "duplicateEmailsMerged": 0,
+    "attendees": [
+      { "email": "dara.whitcombe@duolingo.com", "name": "Dara Whitcombe", "invitedTitle": "CTO", "status": "verified", "reason": null },
+      { "email": "emil.haverford@duolingo.com", "name": "Emil Haverford", "invitedTitle": "Head of Data", "status": "verified", "reason": null },
+      { "email": "faye.marlowe@duolingo.com", "name": "Faye Marlowe", "invitedTitle": "Principal Consultant", "status": "unverified", "reason": "employer_mismatch" },
+      { "email": "gio.parisi@gmail.com", "name": "Gio Parisi", "invitedTitle": "Engineering Manager", "status": "unverified", "reason": "no_profile_found" }
+    ]
+  },
+  "03-marriott-international.txt": {
+    "company": { "name": "Marriott International", "domain": "marriott.com" },
+    "meetingDate": "2026-12-08",
+    "duplicateEmailsMerged": 1,
+    "attendees": [
+      { "email": "hana.delacroix-ng@marriott.com", "name": "Hana Delacroix-Ng", "invitedTitle": "Sr. Director, Enterprise Architecture", "status": "verified", "reason": null },
+      { "email": "ivor.castellanos@marriott.com", "name": "Ivor Castellanos", "invitedTitle": "VP Digital", "status": "unverified", "reason": "title_mismatch" },
+      { "email": "jonas.pemberton@marriott.com", "name": "Jonas Pemberton", "invitedTitle": null, "status": "unverified", "reason": "title_missing" }
+    ]
+  }
+}

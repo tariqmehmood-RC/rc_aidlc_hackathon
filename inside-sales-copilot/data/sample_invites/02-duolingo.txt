@@ -1,0 +1,10 @@
+Subject: Intro call: Duolingo and Royal Cyber (data platform)
+Company: Duolingo, domain duolingo.com
+
+Who is joining from their side:
+  Dara Whitcombe - CTO - dara.whitcombe@duolingo.com
+  Emil Haverford - Head of Data - emil.haverford@duolingo.com
+  Faye Marlowe - Principal Consultant - faye.marlowe@duolingo.com
+  Gio Parisi - Engineering Manager - gio.parisi@gmail.com
+
+Notes: Date still to be confirmed by their assistant. Gio is joining from a personal email address. Topic: analytics and machine learning on AWS.

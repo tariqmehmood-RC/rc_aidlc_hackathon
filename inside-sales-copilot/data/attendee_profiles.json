@@ -1,0 +1,58 @@
+{
+  "avery.lindqvist@delta.com": {
+    "name": "Avery Lindqvist",
+    "employer": "Delta Air Lines",
+    "employer_domain": "delta.com",
+    "title": "Vice President, Information Technology",
+    "source_url": "synthetic://profiles"
+  },
+  "bram.okonkwo-reyes@delta.com": {
+    "name": "Bram Okonkwo-Reyes",
+    "employer": "Delta Air Lines",
+    "employer_domain": "delta.com",
+    "title": "Director, Cloud Platforms",
+    "source_url": "synthetic://profiles"
+  },
+  "dara.whitcombe@duolingo.com": {
+    "name": "Dara Whitcombe",
+    "employer": "Duolingo",
+    "employer_domain": "duolingo.com",
+    "title": "Chief Technology Officer",
+    "source_url": "synthetic://profiles"
+  },
+  "emil.haverford@duolingo.com": {
+    "name": "Emil Haverford",
+    "employer": "Duolingo",
+    "employer_domain": "duolingo.com",
+    "title": "Head of Data",
+    "source_url": "synthetic://profiles"
+  },
+  "faye.marlowe@duolingo.com": {
+    "name": "Faye Marlowe",
+    "employer": "Brightwave Consulting",
+    "employer_domain": "brightwave-consulting.com",
+    "title": "Principal Consultant",
+    "source_url": "synthetic://profiles"
+  },
+  "hana.delacroix-ng@marriott.com": {
+    "name": "Hana Delacroix-Ng",
+    "employer": "Marriott International",
+    "employer_domain": "marriott.com",
+    "title": "Senior Director, Enterprise Architecture",
+    "source_url": "synthetic://profiles"
+  },
+  "ivor.castellanos@marriott.com": {
+    "name": "Ivor Castellanos",
+    "employer": "Marriott International",
+    "employer_domain": "marriott.com",
+    "title": "Vice President, Digital Commerce",
+    "source_url": "synthetic://profiles"
+  },
+  "jonas.pemberton@marriott.com": {
+    "name": "Jonas Pemberton",
+    "employer": "Marriott International",
+    "employer_domain": "marriott.com",
+    "title": "Director, Infrastructure",
+    "source_url": "synthetic://profiles"
+  }
+}

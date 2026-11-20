@@ -21,8 +21,8 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.lower()).strip()
 
 
-def test_there_are_three_invites_and_each_has_expected_results():
-    assert len(INVITE_FILES) == 3
+def test_there_are_four_invites_and_each_has_expected_results():
+    assert len(INVITE_FILES) == 4
     assert {f.name for f in INVITE_FILES} == set(EXPECTED)
 
 
@@ -108,9 +108,9 @@ def test_invites_cover_free_mail_duplicate_and_missing_date_cases():
     assert any(exp["meetingDate"] is None for exp in EXPECTED.values())
 
 
-def test_the_three_invites_name_three_different_real_public_companies():
+def test_the_invites_name_four_different_real_public_companies():
     names = {exp["company"]["name"] for exp in EXPECTED.values()}
-    assert names == {"Delta Air Lines", "Duolingo", "Marriott International"}
+    assert names == {"Delta Air Lines", "Duolingo", "Marriott International", "Allstate"}
 
 
 def test_every_profile_is_synthetic():

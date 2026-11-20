@@ -54,5 +54,19 @@
     "employer_domain": "marriott.com",
     "title": "Director, Infrastructure",
     "source_url": "synthetic://profiles"
+  },
+  "rowan.achterberg@allstate.com": {
+    "name": "Rowan Achterberg",
+    "employer": "Allstate",
+    "employer_domain": "allstate.com",
+    "title": "Vice President, IT Service Management",
+    "source_url": "synthetic://profiles"
+  },
+  "tomas.whitlock-abara@allstate.com": {
+    "name": "Tomas Whitlock-Abara",
+    "employer": "Allstate",
+    "employer_domain": "allstate.com",
+    "title": "Senior Director, Infrastructure Operations",
+    "source_url": "synthetic://profiles"
   }
 }

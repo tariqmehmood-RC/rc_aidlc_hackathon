@@ -1,0 +1,367 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Create the branch, install dependencies, and set up server build and test config": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209337846
+      },
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209639063
+      }
+    ],
+    "1.2 Write the connectivity spike script and its parsing helpers": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209344513
+      }
+    ],
+    "2.1 Define shared domain types and implement `validateInvite`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209350252
+      }
+    ],
+    "2.2 Write property test for invite validation": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209357226
+      }
+    ],
+    "2.3 Implement `validateFacts`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209362929
+      }
+    ],
+    "2.4 Write property test for fact validation": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209368622
+      }
+    ],
+    "2.5 Implement `sizeTierFor`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209374316
+      }
+    ],
+    "2.6 Write property test for size tier mapping": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209380011
+      }
+    ],
+    "2.7 Implement `decideAttendee`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209385712
+      }
+    ],
+    "2.8 Write property test for attendee status decision": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209391380
+      }
+    ],
+    "2.9 Write property test for attendee match normalization": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209397106
+      }
+    ],
+    "2.10 Implement `selectCaseStudies`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209402795
+      }
+    ],
+    "2.11 Write property test for case study selection": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209408606
+      }
+    ],
+    "3.1 Implement the brief state machine": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209414347
+      }
+    ],
+    "3.2 Write property test for saving an edit": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209420074
+      }
+    ],
+    "3.3 Write property test for blank edits": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209425806
+      }
+    ],
+    "3.4 Write property test for approved briefs": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209431566
+      }
+    ],
+    "3.5 Implement `exportMarkdown`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209437280
+      }
+    ],
+    "3.6 Write property test for export gating": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209442964
+      }
+    ],
+    "3.7 Write property test for export content": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209448694
+      }
+    ],
+    "3.8 Implement `assembleSections`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209454426
+      }
+    ],
+    "3.9 Write property test for partial results": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209460122
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209465796
+      }
+    ],
+    "5.1 Implement the rate limiter": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209471473
+      }
+    ],
+    "5.2 Write property test for request spacing": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209477246
+      }
+    ],
+    "5.3 Implement `ModelGateway`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209482975
+      }
+    ],
+    "5.4 Write property test for masked content": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209488680
+      }
+    ],
+    "5.5 Write property test for fail-closed masking": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209494383
+      }
+    ],
+    "5.6 Write property test for bounded retry": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209500109
+      }
+    ],
+    "5.7 Implement `BriefStore` and `RunCache`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209505870
+      }
+    ],
+    "5.8 Write property test for storage round trip": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209511559
+      }
+    ],
+    "5.9 Implement `WebSearchClient`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209517283
+      }
+    ],
+    "5.10 Implement the case study scraper and snapshot loader": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209523001
+      }
+    ],
+    "6. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209529205
+      }
+    ],
+    "7.1 Implement `parseInvite`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209534909
+      }
+    ],
+    "7.2 Implement `researchCompany`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209540613
+      }
+    ],
+    "7.3 Write property test for size tier presence": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209546349
+      }
+    ],
+    "7.4 Implement `verifyAttendees`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209552044
+      }
+    ],
+    "7.5 Implement `matchCaseStudies`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209557759
+      }
+    ],
+    "7.6 Implement `generateBrief`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209563584
+      }
+    ],
+    "7.7 Implement `runPipeline`": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209569264
+      }
+    ],
+    "8.1 Implement the HTTP routes": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209574950
+      }
+    ],
+    "8.2 Add the server entry and the one-command start script": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209580653
+      }
+    ],
+    "9.1 Build the invite form, progress indicator and page shell": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209586952
+      }
+    ],
+    "9.2 Build the brief view, source links and attendee list": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209592666
+      }
+    ],
+    "9.3 Add inline section editing": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209598368
+      }
+    ],
+    "9.4 Build the approve and export bar": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209604116
+      }
+    ],
+    "9.5 Wire the Copilot page into the app": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209609860
+      }
+    ],
+    "9.6 Extend the browser check for the full sequence": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209615719
+      }
+    ],
+    "10.1 Update README and steering for the new server": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209621409
+      }
+    ],
+    "11. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "aa1c5b94-743c-4895-9289-4f905faf3936",
+        "chatSessionId": "sess_e7aa39ab-178f-4982-b239-feecafa93904",
+        "timestamp": 1795209627110
+      }
+    ]
+  }
+}

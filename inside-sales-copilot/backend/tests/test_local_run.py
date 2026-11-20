@@ -28,13 +28,13 @@ def test_every_sample_invite_finishes_ready_and_prints_the_seven_sections(name):
 
 
 @pytest.mark.parametrize("name", sorted(EXPECTED))
-def test_attendee_statuses_match_the_expected_results(name):
+def test_attendees_are_printed_as_written_without_any_verification(name):
     result, text = run(name, "AWS")
-    got = [(a["email"], a["status"], a["reason"]) for a in result["brief"]["content"]["attendees"]]
-    assert got == [(a["email"], a["status"], a["reason"]) for a in EXPECTED[name]["attendees"]]
+    got = [(a["email"], a["name"]) for a in result["brief"]["content"]["attendees"]]
+    assert got == [(a["email"], a["name"]) for a in EXPECTED[name]["attendees"]]
     for a in EXPECTED[name]["attendees"]:
-        flag = "VERIFIED  " if a["status"] == "verified" else "UNVERIFIED"
-        assert f"[{flag}] {a['name']}" in text
+        assert f"  - {a['name']}," in text
+    assert "VERIFIED" not in text.upper().replace("UNVERIFIED_MATCH", "")
 
 
 def test_aws_and_servicenow_get_different_case_studies():
@@ -61,7 +61,7 @@ def test_the_insurance_invite_gives_three_strong_servicenow_matches():
 def test_timing_and_usage_are_reported():
     result, text = run("02-duolingo.txt", "Data & AI")
     assert result["timing"]["totalSeconds"] >= 0
-    assert [name for name, _ in result["steps"]] == ["Researching", "Checking attendees", "Matching case studies", "Writing brief"]
+    assert [name for name, _ in result["steps"]] == ["Researching", "Matching case studies", "Writing brief"]
     assert "Time: parse" in text and "Bedrock haiku: 4 calls" in text and "Brief model: haiku" in text
     assert "Bedrock sonnet:" not in text          # Haiku writes the brief by default
 

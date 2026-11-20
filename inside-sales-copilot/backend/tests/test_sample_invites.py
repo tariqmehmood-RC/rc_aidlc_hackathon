@@ -6,15 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from backend.src.lib.profiles import load_profiles, lookup
 
 ROOT = Path(__file__).resolve().parents[2]
 INVITES = ROOT / "data" / "sample_invites"
 EXPECTED = json.loads((INVITES / "expected.json").read_text(encoding="utf-8"))
-PROFILES = load_profiles()
 INVITE_FILES = sorted(INVITES.glob("*.txt"))
 
-ALL_REASONS = {"title_mismatch", "no_profile_found", "employer_mismatch", "title_missing"}
+
 
 
 def _norm(s: str) -> str:
@@ -68,39 +66,6 @@ def test_duplicate_emails_in_the_invite_match_the_expected_merge_count():
         assert len(emails) - len(distinct) == exp["duplicateEmailsMerged"]
 
 
-def test_expected_results_are_consistent_with_the_profile_file():
-    """Each expected reason must be possible given the profile data (without running the verifier)."""
-    for name, exp in EXPECTED.items():
-        company = _norm(exp["company"]["name"])
-        for a in exp["attendees"]:
-            profile = lookup(PROFILES, a["email"])
-            reason = a["reason"]
-            if reason == "no_profile_found":
-                assert profile is None, (name, a["email"])
-                continue
-            assert profile is not None, (name, a["email"])
-            if reason == "employer_mismatch":
-                assert _norm(profile.employer) != company
-                assert profile.employer_domain != exp["company"]["domain"]
-            else:
-                assert _norm(profile.employer) == company
-            if reason == "title_missing":
-                assert a["invitedTitle"] is None
-            if reason == "title_mismatch":
-                assert a["invitedTitle"]
-                assert _norm(profile.title) != _norm(a["invitedTitle"])
-            if a["status"] == "verified":
-                assert reason is None and a["invitedTitle"]
-
-
-def test_demo_cases_are_covered_across_the_invites():
-    """R4.13: at least one verified, one title mismatch, one no profile found."""
-    attendees = [a for exp in EXPECTED.values() for a in exp["attendees"]]
-    assert any(a["status"] == "verified" for a in attendees)
-    reasons = {a["reason"] for a in attendees if a["reason"]}
-    assert ALL_REASONS <= reasons
-
-
 def test_invites_cover_free_mail_duplicate_and_missing_date_cases():
     texts = {f.name: f.read_text(encoding="utf-8").lower() for f in INVITE_FILES}
     assert any("@gmail.com" in t for t in texts.values())
@@ -113,5 +78,7 @@ def test_the_invites_name_four_different_real_public_companies():
     assert names == {"Delta Air Lines", "Duolingo", "Marriott International", "Allstate"}
 
 
-def test_every_profile_is_synthetic():
-    assert all(p.source_url == "synthetic://profiles" for p in PROFILES.values())
+def test_expected_attendees_have_no_verification_fields():
+    for exp in EXPECTED.values():
+        for a in exp["attendees"]:
+            assert set(a) == {"email", "name", "invitedTitle"}

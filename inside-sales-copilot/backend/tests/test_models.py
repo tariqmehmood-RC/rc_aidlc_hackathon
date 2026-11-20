@@ -37,21 +37,13 @@ RESEARCH = {
     "painPoints": [{"id": "p1", "hypothesis": "Legacy IT.", "basedOnFactIds": ["f1"]}],
     "sourcesFetched": [{"url": "https://delta.com/", "status": "ok"}],
 }
-VERIFIED = {
-    "email": "a.b@delta.com", "name": "A B", "invitedTitle": "VP", "status": "verified", "reason": None,
-    "profile": {"employer": "Delta Air Lines", "title": "Vice President", "sourceUrl": "synthetic://profiles"},
-}
-UNVERIFIED = {
-    "email": "x@delta.com", "name": "X", "invitedTitle": "CTO", "status": "unverified",
-    "reason": "no_profile_found", "profile": None,
-}
 MATCHES = {
     "matches": [{"caseStudyId": "cs-1", "title": "T", "url": "https://www.royalcyber.com/x", "score": 80, "reason": "Fits."}],
     "message": None,
 }
 CONTENT = {
     "companySnapshot": [{"id": "b1", "text": "x", "sourceUrls": ["https://delta.com/"]}],
-    "attendees": [{"email": "a@b.com", "name": "A", "title": "VP", "status": "verified", "reason": None}],
+    "attendees": [{"email": "a@b.com", "name": "A", "title": "VP"}],
     "painPointHypotheses": [{"id": "h1", "text": "x", "basedOnFactIds": ["f1"], "sourceUrls": ["https://delta.com/"]}],
     "agenda": [{"id": "a1", "minutes": 30, "topic": "All", "note": "n"}],
     "discoveryQuestions": [{"id": "q1", "text": "Why?"}],
@@ -65,7 +57,7 @@ CASE_STUDY = {
 QUEUE = {"type": "parse", "briefId": "b", "jobId": "j"}
 
 GOOD = {
-    "parsed_invite": PARSED, "research_result": RESEARCH, "attendee_check": VERIFIED,
+    "parsed_invite": PARSED, "research_result": RESEARCH,
     "case_study_matches": MATCHES, "brief_content": CONTENT, "case_study": CASE_STUDY, "queue_message": QUEUE,
 }
 
@@ -78,10 +70,6 @@ def test_every_schema_has_a_good_sample():
 def test_good_samples_validate(name):
     m.validate(name, GOOD[name])
     assert m.is_valid(name, GOOD[name])
-
-
-def test_second_attendee_sample_validates():
-    m.validate("attendee_check", UNVERIFIED)
 
 
 @pytest.mark.parametrize("name", sorted(GOOD))
@@ -109,9 +97,7 @@ def test_missing_required_fields_are_rejected(name):
     ("research_result", lambda d: d.update(news=[d["news"][0]] * 4)),
     ("research_result", lambda d: d["facts"][0].update(sourceUrls=[])),
     ("research_result", lambda d: d["painPoints"][0].update(basedOnFactIds=[])),
-    ("attendee_check", lambda d: d.update(reason="because")),
-    ("attendee_check", lambda d: d["profile"].update(sourceUrl="https://linkedin.com/in/x")),
-    ("attendee_check", lambda d: d.update(status="maybe")),
+    ("brief_content", lambda d: d["attendees"][0].update(status="verified")),
     ("case_study_matches", lambda d: d["matches"][0].update(score=59)),
     ("case_study_matches", lambda d: d.update(matches=d["matches"] * 4)),
     ("brief_content", lambda d: d["agenda"][0].update(minutes=31)),
@@ -125,15 +111,6 @@ def test_invalid_shapes_are_rejected(name, mutate):
     mutate(bad)
     with pytest.raises(m.ModelValidationError):
         m.validate(name, bad)
-
-
-def test_verified_attendee_cannot_have_a_reason_and_unverified_must_have_one():
-    bad = copy.deepcopy(VERIFIED)
-    bad["reason"] = "title_mismatch"
-    assert not m.is_valid("attendee_check", bad)
-    bad = copy.deepcopy(UNVERIFIED)
-    bad["reason"] = None
-    assert not m.is_valid("attendee_check", bad)
 
 
 def test_validation_error_does_not_echo_values():
@@ -166,7 +143,7 @@ def test_real_case_study_file_matches_the_schema():
 # --- constants match the design and requirements ---------------------------------------------
 def test_statuses_and_steps_match_the_design():
     assert c.STATUSES == ("queued", "processing", "awaiting_confirmation", "ready", "approved", "failed")
-    assert c.STEPS == ("Parsing", "Researching", "Checking attendees", "Matching case studies", "Writing brief")
+    assert c.STEPS == ("Parsing", "Researching", "Matching case studies", "Writing brief")
     for name in c.STATUSES:
         assert f"`{name}`" in DESIGN, name
     for step in c.STEPS:
@@ -205,15 +182,6 @@ def test_free_mail_domains_are_lowercase_and_include_the_common_ones():
     assert all(d == d.lower() and "." in d for d in c.FREE_MAIL_DOMAINS)
     assert {"gmail.com", "outlook.com", "yahoo.com", "hotmail.com", "icloud.com"} <= c.FREE_MAIL_DOMAINS
     assert "delta.com" not in c.FREE_MAIL_DOMAINS
-
-
-def test_title_abbreviations():
-    assert c.TITLE_ABBREVIATIONS["vp"] == "vice president"
-    assert c.TITLE_ABBREVIATIONS["cto"] == "chief technology officer"
-    assert c.TITLE_ABBREVIATIONS["sr"] == "senior"
-    for key, expansion in c.TITLE_ABBREVIATIONS.items():
-        assert key == key.lower() and re.fullmatch(r"[a-z]+", key)
-        assert expansion == expansion.lower() and key not in expansion.split()
 
 
 def test_model_ids_are_read_from_the_environment_only():

@@ -17,9 +17,9 @@ from ..lib import models
 
 P4_SYSTEM = (
     "Write a discovery call brief for a Royal Cyber sales engineer. Use only the research facts, "
-    "attendee checks, and case studies provided. Every statement of fact must cite sourceUrls "
-    "taken from the facts. Where information is unknown, say it is unknown. Never use an "
-    "unverified attendee's claimed role as a fact. Write exactly 8 to 10 discovery questions and "
+    "the attendee list, and case studies provided. Every statement of fact must cite sourceUrls "
+    "taken from the facts. Where information is unknown, say it is unknown. Attendee titles are as "
+    "written in the invite. Write exactly 8 to 10 discovery questions and "
     "an agenda of time blocks that add up to exactly 30 minutes. Apply the user's rules where "
     "they fit. Write at most 5 company snapshot items, the most useful for the call; do not "
     "repeat news headlines there, they are added separately. Keep each item short. Do not add "
@@ -103,7 +103,7 @@ def _esc(text: str) -> str:
     return re.sub(r"</\s*(research|attendees|case_studies|rules|notes|meeting)\s*>", r"&lt;/\1&gt;", text, flags=re.IGNORECASE)
 
 
-def build_user_message(research: dict[str, Any], attendee_checks: Sequence[dict[str, Any]],
+def build_user_message(research: dict[str, Any], attendees: Sequence[dict[str, Any]],
                        case_matches: dict[str, Any], rules: Sequence[dict[str, Any]],
                        meeting: dict[str, Any]) -> str:
     lines = ["<research>"]
@@ -130,12 +130,10 @@ def build_user_message(research: dict[str, Any], attendee_checks: Sequence[dict[
     lines.append("</research>")
 
     lines.append("<attendees>")
-    for a in attendee_checks:
-        if a["status"] == c.VERDICT_VERIFIED:
-            lines.append(f"- {_esc(a['name'])}: verified, {_esc(a['invitedTitle'] or '')}")
-        else:
-            # the claimed title is deliberately NOT given to the model for unverified attendees
-            lines.append(f"- {_esc(a['name'])}: unverified ({a['reason']}), role not confirmed")
+    for a in attendees:
+        lines.append(f"- {_esc(a.get('name') or '')}: {_esc(a.get('title') or 'title not given')}")
+    if not attendees:
+        lines.append("- none listed")
     lines.append("</attendees>")
 
     lines.append("<case_studies>")
@@ -156,7 +154,7 @@ def build_user_message(research: dict[str, Any], attendee_checks: Sequence[dict[
 
 
 # --- checks on the model's answer ------------------------------------------------------------------
-def check_draft(draft: dict[str, Any], research: dict[str, Any], attendee_checks: Sequence[dict[str, Any]]) -> list[str]:
+def check_draft(draft: dict[str, Any], research: dict[str, Any]) -> list[str]:
     """Problems the model must fix. An empty list means the draft is acceptable."""
     problems: list[str] = []
     total = sum(item["minutes"] for item in draft["agenda"])
@@ -166,17 +164,10 @@ def check_draft(draft: dict[str, Any], research: dict[str, Any], attendee_checks
     if not c.QUESTIONS_MIN <= n <= c.QUESTIONS_MAX:
         problems.append(f"There are {n} discovery questions. Write {c.QUESTIONS_MIN} to {c.QUESTIONS_MAX}.")
 
-    texts = [i["text"] for i in draft["companySnapshot"]] + [i["text"] for i in draft["painPointHypotheses"]] \
-        + [f"{i['topic']} {i['note']}" for i in draft["agenda"]] + [i["text"] for i in draft["discoveryQuestions"]]
-    blob = " ".join(texts).lower()
-    for a in attendee_checks:
-        title = (a.get("invitedTitle") or "").strip()
-        if a["status"] != c.VERDICT_VERIFIED and len(title) >= 4 and title.lower() in blob:
-            problems.append(f"Do not use the unverified attendee's claimed title \"{title}\". Their role is not confirmed.")
     return problems
 
 
-def _assemble(draft: dict[str, Any], research: dict[str, Any], attendee_checks: Sequence[dict[str, Any]],
+def _assemble(draft: dict[str, Any], research: dict[str, Any], attendees_in: Sequence[dict[str, Any]],
               case_matches: dict[str, Any]) -> dict[str, Any]:
     allowed = known_urls(research)
     fact_urls = {f["id"]: f["sourceUrls"] for f in research.get("facts", [])}
@@ -202,9 +193,8 @@ def _assemble(draft: dict[str, Any], research: dict[str, Any], attendee_checks: 
     for i, item in enumerate(snapshot, 1):
         item["id"] = f"b{i}"
 
-    # 2. Attendees: straight from the attendee check, never from the model.
-    attendees = [{"email": a["email"], "name": a["name"], "title": a["invitedTitle"],
-                  "status": a["status"], "reason": a["reason"]} for a in attendee_checks]
+    # 2. Attendees: as written in the confirmed invite, never from the model.
+    attendees = [{"email": a["email"], "name": a["name"], "title": a.get("title")} for a in attendees_in]
 
     # 3. Pain-point hypotheses: keep only those tied to real facts; sources come from those facts.
     hypotheses: list[dict[str, Any]] = []
@@ -262,7 +252,7 @@ def brief_model_from_env(env: dict[str, str] | None = None) -> str:
     return value if value in c.BRIEF_MODELS else c.DEFAULT_BRIEF_MODEL
 
 
-def write_brief(bedrock, *, research: dict[str, Any], attendee_checks: Sequence[dict[str, Any]],
+def write_brief(bedrock, *, research: dict[str, Any], attendees: Sequence[dict[str, Any]],
                 case_matches: dict[str, Any], rules: Sequence[dict[str, Any]],
                 meeting: dict[str, Any], model: str = c.DEFAULT_BRIEF_MODEL,
                 log=None) -> WrittenBrief:
@@ -270,25 +260,25 @@ def write_brief(bedrock, *, research: dict[str, Any], attendee_checks: Sequence[
     if model not in c.BRIEF_MODELS:
         raise ValueError(f"unknown brief model {model!r}")
     applied = [{"ruleId": r.get("ruleId", ""), "text": r["text"]} for r in list(rules)[: c.MAX_RULES_APPLIED]]
-    user = build_user_message(research, attendee_checks, case_matches, applied, meeting)
+    user = build_user_message(research, attendees, case_matches, applied, meeting)
 
     def ask(message: str) -> dict[str, Any]:
         return bedrock.converse_json(model=model, system=P4_SYSTEM, user=message,
                                      max_tokens=c.MAX_TOKENS["write"], schema=P4_SCHEMA)
 
     draft = ask(user)
-    problems = check_draft(draft, research, attendee_checks)
+    problems = check_draft(draft, research)
     first_problems = list(problems)
     if problems:  # one correction, no more (R6.9)
         if log:
             log("brief_check_failed", {"model": model, "checks": [_check_name(p) for p in problems]})
         draft = ask(user + "\n\nYour previous answer had these problems. Fix them and return the full JSON again:\n"
                     + "\n".join(f"- {p}" for p in problems))
-        problems = check_draft(draft, research, attendee_checks)
+        problems = check_draft(draft, research)
         if problems:
             raise BriefWriteError("the brief did not pass the checks: " + " ".join(problems))
 
-    content = _assemble(draft, research, attendee_checks, case_matches)
+    content = _assemble(draft, research, attendees, case_matches)
     models.validate("brief_content", content)
     return WrittenBrief(content=content, rules_applied=applied, model=model,
                         repairs=1 if first_problems else 0,
@@ -301,6 +291,4 @@ def _check_name(problem: str) -> str:
         return "agenda_minutes"
     if problem.startswith("There are"):
         return "question_count"
-    if "unverified attendee" in problem:
-        return "unverified_title_used"
     return "other"

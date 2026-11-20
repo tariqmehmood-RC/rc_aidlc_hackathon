@@ -10,15 +10,14 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any, Callable, Sequence
 
 from ..lib import constants as c
 from ..lib import models
 from ..lib.bedrock_client import BedrockUnavailable, InvalidModelOutput
 from ..lib.brief_store import BriefStore
 from ..lib.models import CaseStudy
-from ..lib.profiles import Profile
-from . import attendee_verifier, brief_writer, case_study_matcher, invite_parser
+from . import brief_writer, case_study_matcher, invite_parser
 from . import rules as rules_mod
 from .research import NoPublicInfo, ResearchService
 
@@ -49,7 +48,6 @@ class Deps:
     bedrock: Any
     rules: rules_mod.RulesStore
     studies: Sequence[CaseStudy]
-    profiles: Mapping[str, Profile]
     metrics: Any = None
     log: Callable[[str, dict[str, Any]], None] = field(default=lambda event, data: None)
     brief_model: str = c.DEFAULT_BRIEF_MODEL
@@ -93,7 +91,7 @@ def _parse_job(brief: dict[str, Any], job_id: str, deps: Deps) -> str:
 
 
 # --- pipeline -----------------------------------------------------------------------------------------
-PIPELINE_STEPS = (c.STEP_RESEARCHING, c.STEP_ATTENDEES, c.STEP_MATCHING, c.STEP_WRITING)
+PIPELINE_STEPS = (c.STEP_RESEARCHING, c.STEP_MATCHING, c.STEP_WRITING)
 
 
 def _pipeline_job(brief: dict[str, Any], job_id: str, deps: Deps) -> str:
@@ -130,7 +128,7 @@ def _pipeline_job(brief: dict[str, Any], job_id: str, deps: Deps) -> str:
     return "ready"  # pragma: no cover (the loop always returns at the writing step)
 
 
-RESULT_FIELD = {c.STEP_RESEARCHING: "research", c.STEP_ATTENDEES: "attendeeChecks", c.STEP_MATCHING: "caseStudyMatches"}
+RESULT_FIELD = {c.STEP_RESEARCHING: "research", c.STEP_MATCHING: "caseStudyMatches"}
 
 
 def _has_result(step: str, data: dict[str, Any]) -> bool:
@@ -147,8 +145,6 @@ def _run_step(step: str, data: dict[str, Any], invite: dict[str, Any], deps: Dep
             raise _Fail("BEDROCK_UNAVAILABLE", step, str(exc)) from None
         deps.log("research_done", {"cacheHit": hit})
         return "research", research
-    if step == c.STEP_ATTENDEES:
-        return "attendeeChecks", attendee_verifier.verify_attendees(invite, deps.profiles)
     if step == c.STEP_MATCHING:
         try:
             # The BU stored on the brief came from the creator's verified token (R5.1).
@@ -169,7 +165,7 @@ def _write(data: dict[str, Any], deps: Deps) -> brief_writer.WrittenBrief:
         return brief_writer.write_brief(
             deps.bedrock,
             research=data["research"],
-            attendee_checks=data["attendeeChecks"],
+            attendees=invite.get("attendees", []),
             case_matches=data["caseStudyMatches"],
             rules=deps.rules.list_newest(data["userId"]),
             meeting={"subject": invite.get("subject"), "meetingDate": invite.get("meetingDate"), "notes": invite.get("notes")},

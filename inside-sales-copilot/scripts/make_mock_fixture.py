@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 
 from backend import local_run  # noqa: E402
 
-VIEW_KEYS = ("parsedInvite", "confirmedInvite", "research", "attendeeChecks", "caseStudyMatches", "content", "rulesApplied")
+VIEW_KEYS = ("parsedInvite", "confirmedInvite", "research", "caseStudyMatches", "content", "rulesApplied")
 OUT = ROOT / "frontend" / "src" / "mocks" / "fixtures" / "allstate.json"
 
 

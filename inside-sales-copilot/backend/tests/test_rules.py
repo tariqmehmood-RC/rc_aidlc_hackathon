@@ -123,7 +123,7 @@ def test_a_kept_proposal_equal_to_a_saved_rule_is_not_saved_twice(store):
 # --- diffing the edits -----------------------------------------------------------------------------------
 DRAFT = {
     "companySnapshot": [{"id": "b1", "text": "Delta is an airline.", "sourceUrls": ["https://x/"]}],
-    "attendees": [{"email": "a@b.com", "name": "A", "title": "VP", "status": "verified", "reason": None}],
+    "attendees": [{"email": "a@b.com", "name": "A", "title": "VP"}],
     "painPointHypotheses": [{"id": "h1", "text": "Legacy IT.", "basedOnFactIds": ["f1"], "sourceUrls": []}],
     "agenda": [{"id": "a1", "minutes": 10, "topic": "Intro", "note": "Say hello"},
                {"id": "a2", "minutes": 20, "topic": "Discovery", "note": "Ask questions"}],

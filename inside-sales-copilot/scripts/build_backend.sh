@@ -25,7 +25,7 @@ uv pip install --quiet \
 
 cp "$ROOT/backend/__init__.py" "$OUT/backend/__init__.py"
 rsync -a --exclude '__pycache__' --exclude '*.pyc' "$ROOT/backend/src/" "$OUT/backend/src/"
-cp "$ROOT/data/case_studies.json" "$ROOT/data/attendee_profiles.json" "$OUT/data/"
+cp "$ROOT/data/case_studies.json" "$OUT/data/"
 
 # Remove what Lambda does not need.
 find "$OUT" -type d -name '__pycache__' -prune -exec rm -rf {} +

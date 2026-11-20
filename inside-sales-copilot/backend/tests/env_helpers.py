@@ -11,7 +11,6 @@ import boto3
 from moto import mock_aws
 
 from backend.src.lib.brief_store import BRIEFS_TABLE_DEFINITION, BriefStore
-from backend.src.lib.profiles import load_profiles
 from backend.src.services import pipeline
 from backend.src.services.case_study_matcher import load_case_studies
 from backend.src.services.offline_model import OfflineModel
@@ -82,7 +81,6 @@ def backend(model: Any | None = None, provider: Any | None = None) -> Iterator[E
             bedrock=model,
             rules=RulesStore(tables["Rules"], clock=clock.time),
             studies=load_case_studies(),
-            profiles=load_profiles(),
             log=lambda event, data: events.append((event, data)),
         )
         yield Env(store, deps, clock, model, tables, queue_url, sqs, events)

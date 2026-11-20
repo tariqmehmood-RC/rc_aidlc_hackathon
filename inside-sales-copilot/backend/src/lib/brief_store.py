@@ -19,7 +19,7 @@ from botocore.exceptions import ClientError
 from . import constants as c
 
 JSON_FIELDS = (
-    "parsedInvite", "confirmedInvite", "research", "attendeeChecks", "caseStudyMatches",
+    "parsedInvite", "confirmedInvite", "research", "attendeeChecks", "caseStudyMatches",  # attendeeChecks: old briefs only
     "draft", "content", "rulesApplied", "ruleProposals", "error",
 )
 QUEUE_KEY = "Q"
@@ -383,7 +383,7 @@ class BriefStore:
             out["step"] = brief["step"]
         if position is not None:
             out["queuePosition"] = position
-        for key in ("parsedInvite", "confirmedInvite", "research", "attendeeChecks", "caseStudyMatches",
+        for key in ("parsedInvite", "confirmedInvite", "research", "caseStudyMatches",
                     "content", "rulesApplied", "ruleProposals", "error"):
             if key in brief:
                 out[key] = brief[key]

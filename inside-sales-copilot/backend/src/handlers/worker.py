@@ -12,7 +12,6 @@ from typing import Any
 from ..lib.bedrock_client import BedrockClient
 from ..lib.brief_store import BriefStore
 from ..lib.observability import PowertoolsMetrics, bind_brief, bind_request, get_logger
-from ..lib.profiles import load_profiles
 from ..services import pipeline
 from ..services.brief_writer import brief_model_from_env
 from ..services.case_study_matcher import load_case_studies
@@ -41,7 +40,6 @@ def _build_deps() -> pipeline.Deps:
         bedrock=bedrock,
         rules=RulesStore(ddb.Table(os.environ["RULES_TABLE"])),
         studies=load_case_studies(),
-        profiles=load_profiles(),
         metrics=_metrics,
         log=lambda event, data: logger.info(event, extra=data),
         brief_model=brief_model_from_env(),

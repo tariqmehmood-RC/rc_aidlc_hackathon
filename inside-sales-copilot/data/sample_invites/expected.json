@@ -10,23 +10,17 @@
       {
         "email": "avery.lindqvist@delta.com",
         "name": "Avery Lindqvist",
-        "invitedTitle": "VP, Information Technology",
-        "status": "verified",
-        "reason": null
+        "invitedTitle": "VP, Information Technology"
       },
       {
         "email": "bram.okonkwo-reyes@delta.com",
         "name": "Bram Okonkwo-Reyes",
-        "invitedTitle": "Chief Technology Officer",
-        "status": "unverified",
-        "reason": "title_mismatch"
+        "invitedTitle": "Chief Technology Officer"
       },
       {
         "email": "cleo.vantongeren@delta.com",
         "name": "Cleo Vantongeren",
-        "invitedTitle": "Sr. Manager, Service Management",
-        "status": "unverified",
-        "reason": "no_profile_found"
+        "invitedTitle": "Sr. Manager, Service Management"
       }
     ]
   },
@@ -41,30 +35,22 @@
       {
         "email": "dara.whitcombe@duolingo.com",
         "name": "Dara Whitcombe",
-        "invitedTitle": "CTO",
-        "status": "verified",
-        "reason": null
+        "invitedTitle": "CTO"
       },
       {
         "email": "emil.haverford@duolingo.com",
         "name": "Emil Haverford",
-        "invitedTitle": "Head of Data",
-        "status": "verified",
-        "reason": null
+        "invitedTitle": "Head of Data"
       },
       {
         "email": "faye.marlowe@duolingo.com",
         "name": "Faye Marlowe",
-        "invitedTitle": "Principal Consultant",
-        "status": "unverified",
-        "reason": "employer_mismatch"
+        "invitedTitle": "Principal Consultant"
       },
       {
         "email": "gio.parisi@gmail.com",
         "name": "Gio Parisi",
-        "invitedTitle": "Engineering Manager",
-        "status": "unverified",
-        "reason": "no_profile_found"
+        "invitedTitle": "Engineering Manager"
       }
     ]
   },
@@ -79,23 +65,17 @@
       {
         "email": "hana.delacroix-ng@marriott.com",
         "name": "Hana Delacroix-Ng",
-        "invitedTitle": "Sr. Director, Enterprise Architecture",
-        "status": "verified",
-        "reason": null
+        "invitedTitle": "Sr. Director, Enterprise Architecture"
       },
       {
         "email": "ivor.castellanos@marriott.com",
         "name": "Ivor Castellanos",
-        "invitedTitle": "VP Digital",
-        "status": "unverified",
-        "reason": "title_mismatch"
+        "invitedTitle": "VP Digital"
       },
       {
         "email": "jonas.pemberton@marriott.com",
         "name": "Jonas Pemberton",
-        "invitedTitle": null,
-        "status": "unverified",
-        "reason": "title_missing"
+        "invitedTitle": null
       }
     ]
   },
@@ -110,23 +90,17 @@
       {
         "email": "rowan.achterberg@allstate.com",
         "name": "Rowan Achterberg",
-        "invitedTitle": "VP, IT Service Management",
-        "status": "verified",
-        "reason": null
+        "invitedTitle": "VP, IT Service Management"
       },
       {
         "email": "tomas.whitlock-abara@allstate.com",
         "name": "Tomas Whitlock-Abara",
-        "invitedTitle": "Chief Information Officer",
-        "status": "unverified",
-        "reason": "title_mismatch"
+        "invitedTitle": "Chief Information Officer"
       },
       {
         "email": "ulrike.papadakis@allstate.com",
         "name": "Ulrike Papadakis",
-        "invitedTitle": "Manager, Vendor Risk and Compliance",
-        "status": "unverified",
-        "reason": "no_profile_found"
+        "invitedTitle": "Manager, Vendor Risk and Compliance"
       }
     ]
   }

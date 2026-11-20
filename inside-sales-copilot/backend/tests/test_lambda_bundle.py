@@ -33,7 +33,7 @@ def test_handlers_and_data_files_are_in_the_bundle(bundle):
         source = (bundle / "backend" / "src" / "handlers" / f"{module}.py").read_text(encoding="utf-8")
         assert f"{func} =" in source or f"def {func}(" in source, name
     assert (bundle / "data" / "case_studies.json").is_file()
-    assert (bundle / "data" / "attendee_profiles.json").is_file()
+    assert not (bundle / "data" / "attendee_profiles.json").exists()   # attendee verification was removed
     assert (bundle / "backend" / "__init__.py").is_file()
 
 
@@ -55,9 +55,9 @@ def test_nothing_that_must_stay_out_is_bundled(bundle):
 
 
 def test_data_paths_resolve_like_in_the_repo(bundle):
-    # profiles.py and case_study_matcher.py find data/ three levels up from their own folder.
-    profiles = bundle / "backend" / "src" / "lib" / "profiles.py"
-    assert (profiles.resolve().parents[3] / "data" / "attendee_profiles.json").is_file()
+    # case_study_matcher.py finds data/ three levels up from its own folder.
+    matcher = bundle / "backend" / "src" / "services" / "case_study_matcher.py"
+    assert (matcher.resolve().parents[3] / "data" / "case_studies.json").is_file()
 
 
 def test_bundle_is_small(bundle):

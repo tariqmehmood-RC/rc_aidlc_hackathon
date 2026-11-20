@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* Royal Cyber-style palette: navy header, blue accents, white cards on a light grey page. */
+@theme {
+  --color-navy: #1f2a44;
+  --color-navy-soft: #2c3a5c;
+  --color-brand: #2f6fde;
+  --color-brand-dark: #2459b8;
+  --color-brand-soft: #e8f0fd;
+  --color-page: #f4f6fa;
+  --color-line: #dde2ea;
+  --color-ink: #1f2a44;
+  --color-muted: #5b6478;
+  --color-ok: #2e8b57;
+  --color-ok-soft: #e7f4ec;
+  --color-warn: #b7791f;
+  --color-warn-soft: #fff6e0;
+  --color-warn-line: #f0c36d;
+  --color-bad: #b42318;
+  --color-bad-soft: #fdecea;
+  --font-sans: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}

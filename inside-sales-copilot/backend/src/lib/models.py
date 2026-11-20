@@ -218,17 +218,19 @@ SCHEMAS["case_study_matches"] = {
     },
 }
 
+# A block states a sourced fact (at least one URL) or says something is unknown (no URL).
 _BLOCK = {
     "type": "object",
     "required": ["id", "text", "sourceUrls"],
     "additionalProperties": False,
-    "properties": {"id": _STR, "text": {"type": "string", "maxLength": 400}, "sourceUrls": _URL_LIST},
+    "properties": {"id": _STR, "text": {"type": "string", "maxLength": 400},
+                   "sourceUrls": {"type": "array", "items": _STR}},
 }
 
 SCHEMAS["brief_content"] = {
     "type": "object",
     "required": ["companySnapshot", "attendees", "painPointHypotheses", "agenda",
-                 "discoveryQuestions", "caseStudies", "sources"],
+                 "discoveryQuestions", "caseStudies", "sources"],  # caseStudiesNote is optional
     "additionalProperties": False,
     "properties": {
         "companySnapshot": {"type": "array", "items": _BLOCK},
@@ -254,7 +256,7 @@ SCHEMAS["brief_content"] = {
                 "properties": {
                     "id": _STR,
                     "text": {"type": "string", "maxLength": 400},
-                    "basedOnFactIds": {"type": "array", "minItems": 1, "items": _STR},
+                    "basedOnFactIds": {"type": "array", "items": _STR},   # empty for the "none found" note
                     "sourceUrls": {"type": "array", "items": _STR},
                 },
             },
@@ -292,6 +294,7 @@ SCHEMAS["brief_content"] = {
                 "properties": {"caseStudyId": _STR, "title": _STR, "url": _STR, "reason": _STR},
             },
         },
+        "caseStudiesNote": {"type": ["string", "null"], "maxLength": 300},
         "sources": {
             "type": "array",
             "items": {

@@ -115,7 +115,7 @@ def test_missing_required_fields_are_rejected(name):
     ("case_study_matches", lambda d: d["matches"][0].update(score=59)),
     ("case_study_matches", lambda d: d.update(matches=d["matches"] * 4)),
     ("brief_content", lambda d: d["agenda"][0].update(minutes=31)),
-    ("brief_content", lambda d: d["companySnapshot"][0].update(sourceUrls=[])),
+    ("brief_content", lambda d: d["companySnapshot"][0].update(sourceUrls="https://x")),
     ("case_study", lambda d: d.update(bu="Oracle")),
     ("case_study", lambda d: d.update(url="http://www.royalcyber.com/x")),
     ("queue_message", lambda d: d.update(type="delete_everything")),

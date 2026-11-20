@@ -190,14 +190,15 @@ class BriefStore:
             cond_values={":job": job_id, ":processing": c.STATUS_PROCESSING},
         )
 
-    def finish(self, brief_id: str, job_id: str, new_status: str, fields: dict[str, Any] | None = None) -> bool:
-        """processing -> awaiting_confirmation or ready."""
+    def finish(self, brief_id: str, job_id: str, new_status: str, fields: dict[str, Any] | None = None,
+               completed_step: str | None = None) -> bool:
+        """processing -> awaiting_confirmation or ready. Optionally records the last step as done."""
         if new_status not in (c.STATUS_AWAITING_CONFIRMATION, c.STATUS_READY):
             raise ValueError(f"finish() cannot set status {new_status!r}")
         sets = dict(fields or {})
         sets.update({"status": new_status, "updatedAt": self._now_ms()})
         return self._update(
-            brief_id, sets=sets, removes=("step",),
+            brief_id, sets=sets, removes=("step",), append_steps=[completed_step] if completed_step else None,
             condition="#currentJobId = :job AND #status = :processing",
             cond_values={":job": job_id, ":processing": c.STATUS_PROCESSING},
         )

@@ -447,3 +447,11 @@ def test_view_shows_the_error_only_for_failed_briefs(env):
     assert store.view(store.get(brief["briefId"]))["error"]["code"] == "STUCK"
     new_job = store.requeue(brief["briefId"], "failed")                  # error kept in the row until cleared
     assert "error" not in store.view(store.get(brief["briefId"]))
+
+
+def test_finish_can_record_the_last_step_in_the_same_write(env):
+    store, clock, _ = env
+    brief, job = make(store, clock)
+    to_processing(store, brief, job)
+    assert store.finish(brief["briefId"], job, "awaiting_confirmation", {"parsedInvite": {"a": 1}}, completed_step="Parsing")
+    assert store.get(brief["briefId"])["stepsCompleted"] == ["Parsing"]

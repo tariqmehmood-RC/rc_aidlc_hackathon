@@ -33,9 +33,9 @@ MESSAGES = {
 
 
 class _Fail(Exception):
-    def __init__(self, code: str, step: str | None):
+    def __init__(self, code: str, step: str | None, detail: str | None = None):
         super().__init__(code)
-        self.code, self.step = code, step
+        self.code, self.step, self.detail = code, step, detail
 
 
 class _Superseded(Exception):
@@ -124,7 +124,7 @@ def _pipeline_job(brief: dict[str, Any], job_id: str, deps: Deps) -> str:
             data[field_name] = value
             _ok(deps.store.complete_step(brief["briefId"], job_id, step, {field_name: value}))
     except _Fail as failure:
-        return _fail(deps, brief, job_id, failure.code, failure.step)
+        return _fail(deps, brief, job_id, failure.code, failure.step, failure.detail)
     return "ready"  # pragma: no cover (the loop always returns at the writing step)
 
 
@@ -141,10 +141,8 @@ def _run_step(step: str, data: dict[str, Any], invite: dict[str, Any], deps: Dep
             research, hit = deps.research.get_research(invite["company"]["name"], invite["company"]["domain"])
         except NoPublicInfo:
             raise _Fail("NO_PUBLIC_INFO", step) from None
-        except BedrockUnavailable:
-            raise _Fail("BEDROCK_UNAVAILABLE", step) from None
-        except InvalidModelOutput:
-            raise _Fail("BEDROCK_UNAVAILABLE", step) from None
+        except (BedrockUnavailable, InvalidModelOutput) as exc:
+            raise _Fail("BEDROCK_UNAVAILABLE", step, str(exc)) from None
         deps.log("research_done", {"cacheHit": hit})
         return "research", research
     if step == c.STEP_ATTENDEES:
@@ -153,10 +151,10 @@ def _run_step(step: str, data: dict[str, Any], invite: dict[str, Any], deps: Dep
         try:
             # The BU stored on the brief came from the creator's verified token (R5.1).
             matches = case_study_matcher.match_case_studies(deps.bedrock, data.get("bu"), data["research"], deps.studies)
-        except BedrockUnavailable:
-            raise _Fail("BEDROCK_UNAVAILABLE", step) from None
-        except InvalidModelOutput:
-            raise _Fail("MATCH_FAILED", step) from None
+        except BedrockUnavailable as exc:
+            raise _Fail("BEDROCK_UNAVAILABLE", step, str(exc)) from None
+        except InvalidModelOutput as exc:
+            raise _Fail("MATCH_FAILED", step, str(exc)) from None
         return "caseStudyMatches", matches
     raise AssertionError(step)  # pragma: no cover
 
@@ -172,10 +170,10 @@ def _write(data: dict[str, Any], deps: Deps) -> brief_writer.WrittenBrief:
             rules=deps.rules.list_newest(data["userId"]),
             meeting={"subject": invite.get("subject"), "meetingDate": invite.get("meetingDate"), "notes": invite.get("notes")},
         )
-    except BedrockUnavailable:
-        raise _Fail("BEDROCK_UNAVAILABLE", c.STEP_WRITING) from None
-    except (InvalidModelOutput, brief_writer.BriefWriteError, models.ModelValidationError):
-        raise _Fail("WRITE_FAILED", c.STEP_WRITING) from None
+    except BedrockUnavailable as exc:
+        raise _Fail("BEDROCK_UNAVAILABLE", c.STEP_WRITING, str(exc)) from None
+    except (InvalidModelOutput, brief_writer.BriefWriteError, models.ModelValidationError) as exc:
+        raise _Fail("WRITE_FAILED", c.STEP_WRITING, type(exc).__name__) from None
 
 
 # --- rules after approval ---------------------------------------------------------------------------------
@@ -200,7 +198,9 @@ def _ok(written: bool) -> None:
         raise _Superseded()
 
 
-def _fail(deps: Deps, brief: dict[str, Any], job_id: str, code: str, step: str | None) -> str:
-    deps.log("job_failed", {"code": code, "step": step})
+def _fail(deps: Deps, brief: dict[str, Any], job_id: str, code: str, step: str | None,
+          detail: str | None = None) -> str:
+    # `detail` is the error class and code only (for example "ValidationException"), never user data.
+    deps.log("job_failed", {"code": code, "step": step, "detail": detail})
     deps.store.fail(brief["briefId"], job_id, code, step, MESSAGES[code])
     return "failed"

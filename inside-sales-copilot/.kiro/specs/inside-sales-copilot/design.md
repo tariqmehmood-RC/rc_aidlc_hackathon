@@ -503,7 +503,7 @@ Clock and sleep are injected, so the test uses a fake clock: 20 calls made in a 
 
 ### 9.4 Output handling
 
-Every call sets `inferenceConfig.maxTokens` (R10.6) and a low temperature (0.2 for extraction and scoring, 0.4 for writing). The reply is parsed as JSON and validated against the call's schema. If invalid, the client retries once with a short repair note appended to the user message ("Your last reply was not valid JSON for the schema. Reply with JSON only."). A second failure raises `InvalidModelOutput` (R6.9). The repair attempt also takes a token.
+Every call sets `inferenceConfig.maxTokens` (R10.6). Haiku calls also set temperature 0.2. Sonnet calls send no temperature, because Claude Sonnet 5 rejects the parameter (found in the 3.11 gate run). The reply is parsed as JSON and validated against the call's schema. If invalid, the client retries once with a short repair note appended to the user message ("Your last reply was not valid JSON for the schema. Reply with JSON only."). A second failure raises `InvalidModelOutput` (R6.9). The repair attempt also takes a token.
 
 Model IDs come from environment variables (`BEDROCK_MODEL_HAIKU`, `BEDROCK_MODEL_SONNET`), set by CDK from context defaults in `infra/cdk.json`. Both were tested with one real Converse call on 2026-11-20 (`maxTokens` 20, reply "ok"):
 

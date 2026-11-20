@@ -100,6 +100,14 @@ def test_request_uses_the_right_model_system_and_max_tokens():
     assert "Do it." in system_text
 
 
+def test_sonnet_gets_no_temperature_and_haiku_gets_a_low_one():
+    client, runtime, *_ = make([reply('{"answer": "a"}'), reply('{"answer": "b"}')])
+    call(client, model="sonnet")
+    call(client, model="haiku")
+    assert "temperature" not in runtime.calls[0]["inferenceConfig"]   # Sonnet 5 rejects it
+    assert runtime.calls[1]["inferenceConfig"]["temperature"] == 0.2
+
+
 def test_every_call_sets_max_tokens():
     client, runtime, *_ = make([reply("not json"), reply('{"answer": "ok"}')])
     call(client)

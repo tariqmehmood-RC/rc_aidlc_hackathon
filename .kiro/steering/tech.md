@@ -19,6 +19,15 @@
 | Secret scan | `npm run scan:secrets` (gitleaks 8.30.1, config `.gitleaks.toml`) |
 | Static analysis | `npm run scan:sast` (Semgrep 1.186.0, metrics off in the script) |
 | All pre-review checks | `npm run check` (lint, secrets, SAST) |
+| Browser end-to-end check | `npm run test:browser` (needs `npm run dev` running) |
+| Install machine-level tools | `npm run setup:tools` (gitleaks, Semgrep, Chrome; pinned in `scripts/setup-dev-tools.sh`) |
+
+## Vendored Kiro config
+- `.kiro/skills/` holds the project skills (`code-review`, `skill-creator`) and 25 AWS Agent Toolkit skills (`aws-*`, `amazon-bedrock`, `launch-with-aws`, `signing-in-to-aws`) moved here from `~/.kiro/skills` on 2026-11-20. They are not auto-updated any more. Do not edit the AWS ones by hand.
+- `.kiro/settings/mcp.json` defines `playwright` and `aws-mcp`. There is no global MCP config.
+- ESLint and gitleaks ignore the vendored AWS skills.
+
+gitleaks, Semgrep and Chrome are binaries, not npm packages. If a check fails with "command not found", run `npm run setup:tools`. Do not install them another way.
 
 Do not start the dev server from the agent shell. Ask the user to run it, or check whether it is already running on 5173.
 

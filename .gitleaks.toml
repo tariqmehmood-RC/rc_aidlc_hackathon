@@ -8,5 +8,8 @@ paths = [
   '''(^|/)node_modules/''',
   '''(^|/)dist/''',
   '''(^|/)\.kiro/skills/skill-creator/''',
+  # Vendored AWS Agent Toolkit skills (copied from ~/.kiro/skills). Docs only;
+  # the one hit was a pagination token in an example using account 123456789012.
+  '''(^|/)\.kiro/skills/(amazon-bedrock|aws-[a-z0-9-]+|launch-with-aws|signing-in-to-aws)/''',
   '''(^|/)package-lock\.json$''',
 ]

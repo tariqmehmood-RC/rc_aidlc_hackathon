@@ -11,6 +11,8 @@
     "scan:secrets": "gitleaks dir . --config .gitleaks.toml --no-banner --redact",
     "scan:sast": "SEMGREP_SEND_METRICS=off semgrep scan --metrics=off --disable-version-check --config p/javascript --config p/typescript --config p/react --error src",
     "check": "npm run lint && npm run scan:secrets && npm run scan:sast",
+    "test:browser": "node scripts/browser-check.mjs",
+    "setup:tools": "bash scripts/setup-dev-tools.sh",
     "preview": "vite preview"
   },
   "dependencies": {

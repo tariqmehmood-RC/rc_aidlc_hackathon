@@ -6,7 +6,8 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // .kiro/skills holds vendored third-party skills, not app code.
+  globalIgnores(['dist', '.kiro/skills']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

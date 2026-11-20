@@ -22,6 +22,11 @@
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/aws-iam:minimizePolicies": true,
     "researchUserAgent": "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)",
-    "briefModel": "haiku"
+    "briefModel": "haiku",
+    "bedrockRegions": [
+      "us-east-1",
+      "us-east-2",
+      "us-west-2"
+    ]
   }
 }

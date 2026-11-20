@@ -158,41 +158,6 @@ SCHEMAS["research_result"] = {
     },
 }
 
-SCHEMAS["attendee_check"] = {
-    "type": "object",
-    "required": ["email", "name", "invitedTitle", "status", "reason", "profile"],
-    "additionalProperties": False,
-    "properties": {
-        "email": _STR,
-        "name": _STR,
-        "invitedTitle": _NULL_STR,
-        "status": {"enum": [c.VERDICT_VERIFIED, c.VERDICT_UNVERIFIED]},
-        "reason": {"anyOf": [{"type": "null"}, {"enum": list(c.UNVERIFIED_REASONS)}]},
-        "profile": {
-            "anyOf": [
-                {"type": "null"},
-                {
-                    "type": "object",
-                    "required": ["employer", "title", "sourceUrl"],
-                    "additionalProperties": False,
-                    "properties": {
-                        "employer": _STR,
-                        "title": _STR,
-                        "sourceUrl": {"const": c.SYNTHETIC_SOURCE_URL},
-                    },
-                },
-            ]
-        },
-    },
-    # verified means no reason; unverified always has a reason
-    "allOf": [
-        {"if": {"properties": {"status": {"const": c.VERDICT_VERIFIED}}},
-         "then": {"properties": {"reason": {"type": "null"}, "profile": {"type": "object"}}}},
-        {"if": {"properties": {"status": {"const": c.VERDICT_UNVERIFIED}}},
-         "then": {"properties": {"reason": {"type": "string"}}}},
-    ],
-}
-
 SCHEMAS["case_study_matches"] = {
     "type": "object",
     "required": ["matches", "message"],
@@ -238,13 +203,9 @@ SCHEMAS["brief_content"] = {
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["email", "name", "title", "status", "reason"],
+                "required": ["email", "name", "title"],
                 "additionalProperties": False,
-                "properties": {
-                    "email": _STR, "name": _STR, "title": _NULL_STR,
-                    "status": {"enum": [c.VERDICT_VERIFIED, c.VERDICT_UNVERIFIED]},
-                    "reason": _NULL_STR,
-                },
+                "properties": {"email": _STR, "name": _STR, "title": _NULL_STR},  # as written in the invite
             },
         },
         "painPointHypotheses": {

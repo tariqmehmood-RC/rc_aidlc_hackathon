@@ -29,13 +29,10 @@ RESEARCH = {
     "painPoints": [{"id": "p1", "hypothesis": "Legacy IT slows change.", "basedOnFactIds": ["f1", "f2"]}],
     "sourcesFetched": [],
 }
-CHECKS = [
-    {"email": "dara@example-air.com", "name": "Dara Whitcombe", "invitedTitle": "Chief Technology Officer",
-     "status": "verified", "reason": None, "profile": {"employer": "Example Air", "title": "Chief Technology Officer", "sourceUrl": "synthetic://profiles"}},
-    {"email": "faye@example-air.com", "name": "Faye Marlowe", "invitedTitle": "Principal Consultant",
-     "status": "unverified", "reason": "employer_mismatch", "profile": {"employer": "Other", "title": "Principal Consultant", "sourceUrl": "synthetic://profiles"}},
-    {"email": "gio@gmail.com", "name": "Gio Parisi", "invitedTitle": "Engineering Manager",
-     "status": "unverified", "reason": "no_profile_found", "profile": None},
+ATTENDEES = [
+    {"email": "dara@example-air.com", "name": "Dara Whitcombe", "title": "Chief Technology Officer"},
+    {"email": "faye@example-air.com", "name": "Faye Marlowe", "title": "Principal Consultant"},
+    {"email": "gio@gmail.com", "name": "Gio Parisi", "title": None},
 ]
 MATCHES = {
     "matches": [
@@ -63,9 +60,9 @@ def good_draft():
     }
 
 
-def write(replies, research=RESEARCH, checks=CHECKS, matches=MATCHES, rules=RULES, meeting=MEETING):
+def write(replies, research=RESEARCH, attendees=ATTENDEES, matches=MATCHES, rules=RULES, meeting=MEETING):
     fake = FakeBedrock(replies)
-    out = bw.write_brief(fake, research=research, attendee_checks=checks, case_matches=matches, rules=rules, meeting=meeting)
+    out = bw.write_brief(fake, research=research, attendees=attendees, case_matches=matches, rules=rules, meeting=meeting)
     return out, fake
 
 
@@ -163,30 +160,27 @@ def test_a_hypothesis_citing_a_fact_that_does_not_exist_is_dropped():
     assert out.content["painPointHypotheses"][0]["basedOnFactIds"] == ["f3"]
 
 
-# --- attendees -----------------------------------------------------------------------------------------
-def test_attendees_come_from_the_check_with_status_and_reason():
+# --- attendees ---------------------------------------------------------------------------------------
+def test_attendees_are_listed_as_written_in_the_invite_without_any_status():
     out, _ = write([good_draft()])
-    by_email = {a["email"]: a for a in out.content["attendees"]}
-    assert by_email["dara@example-air.com"]["status"] == "verified"
-    assert (by_email["faye@example-air.com"]["status"], by_email["faye@example-air.com"]["reason"]) == ("unverified", "employer_mismatch")
-    assert by_email["gio@gmail.com"]["reason"] == "no_profile_found"
+    assert out.content["attendees"] == ATTENDEES
+    for a in out.content["attendees"]:
+        assert "status" not in a and "reason" not in a
 
 
-def test_the_model_is_never_told_the_claimed_title_of_an_unverified_attendee():
+def test_the_model_gets_each_attendee_with_the_title_from_the_invite():
     _, fake = write([good_draft()])
     user = fake.calls[0]["user"]
-    assert "Dara Whitcombe: verified, Chief Technology Officer" in user
-    assert "Faye Marlowe: unverified (employer_mismatch), role not confirmed" in user
-    assert "Principal Consultant" not in user and "Engineering Manager" not in user
+    assert "- Dara Whitcombe: Chief Technology Officer" in user
+    assert "- Faye Marlowe: Principal Consultant" in user
+    assert "- Gio Parisi: title not given" in user
+    assert "verified" not in user.lower()
+    assert "verified" not in bw.P4_SYSTEM.lower()
 
 
-def test_using_an_unverified_title_as_a_fact_triggers_one_correction():
-    bad = good_draft()
-    bad["discoveryQuestions"][0] = {"text": "As Principal Consultant, how do you see the cloud plan?"}
-    out, fake = write([bad, good_draft()])
-    assert len(fake.calls) == 2
-    assert "Principal Consultant" in fake.calls[1]["user"] and "claimed title" in fake.calls[1]["user"]
-    assert not any("Principal Consultant" in q["text"] for q in out.content["discoveryQuestions"])
+def test_no_attendees_is_fine():
+    out, fake = write([good_draft()], attendees=[])
+    assert out.content["attendees"] == [] and "- none listed" in fake.calls[0]["user"]
 
 
 # --- checks and the single correction ---------------------------------------------------------------------
@@ -203,7 +197,7 @@ def test_a_second_failure_raises_and_no_third_call_is_made():
     bad["agenda"][3]["minutes"] = 4
     fake = FakeBedrock([bad, copy.deepcopy(bad), good_draft()])
     with pytest.raises(bw.BriefWriteError) as err:
-        bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=RULES, meeting=MEETING)
+        bw.write_brief(fake, research=RESEARCH, attendees=ATTENDEES, case_matches=MATCHES, rules=RULES, meeting=MEETING)
     assert err.value.code == "WRITE_FAILED" and len(fake.calls) == 2
 
 
@@ -301,13 +295,13 @@ def test_model_errors_pass_through():
 # --- model choice and repair reporting -------------------------------------------------------------------
 def test_haiku_can_write_the_brief():
     fake = FakeBedrock([good_draft()])
-    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="haiku")
+    out = bw.write_brief(fake, research=RESEARCH, attendees=ATTENDEES, case_matches=MATCHES, rules=[], meeting=MEETING, model="haiku")
     assert fake.calls[0]["model"] == "haiku" and out.model == "haiku" and out.repairs == 0
 
 
 def test_an_unknown_model_is_refused():
     with pytest.raises(ValueError):
-        bw.write_brief(FakeBedrock([]), research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="opus")
+        bw.write_brief(FakeBedrock([]), research=RESEARCH, attendees=ATTENDEES, case_matches=MATCHES, rules=[], meeting=MEETING, model="opus")
 
 
 def test_a_failed_check_is_logged_by_name_and_counted():
@@ -315,7 +309,7 @@ def test_a_failed_check_is_logged_by_name_and_counted():
     bad["agenda"][3]["minutes"] = 4
     logged = []
     fake = FakeBedrock([bad, good_draft()])
-    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING,
+    out = bw.write_brief(fake, research=RESEARCH, attendees=ATTENDEES, case_matches=MATCHES, rules=[], meeting=MEETING,
                          log=lambda e, d: logged.append((e, d)))
     assert out.repairs == 1 and out.repair_problems == ["agenda_minutes"]
     assert logged == [("brief_check_failed", {"model": "haiku", "checks": ["agenda_minutes"]})]
@@ -334,5 +328,5 @@ def test_brief_model_from_env(env, expected):
 
 def test_sonnet_is_still_available():
     fake = FakeBedrock([good_draft()])
-    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="sonnet")
+    out = bw.write_brief(fake, research=RESEARCH, attendees=ATTENDEES, case_matches=MATCHES, rules=[], meeting=MEETING, model="sonnet")
     assert fake.calls[0]["model"] == "sonnet" and out.model == "sonnet"

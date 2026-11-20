@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext'
 import { GENERIC_SIGN_IN_ERROR } from '../auth/auth'
 import { Button, Card } from '../components/ui'
 
-export function LoginPage({ mockMode = false }: { mockMode?: boolean }) {
+export function LoginPage({ hint }: { hint?: string }) {
   const { user, signIn, expired } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,11 +33,11 @@ export function LoginPage({ mockMode = false }: { mockMode?: boolean }) {
           <div className="mb-6 grid h-12 w-12 place-items-center rounded-xl bg-brand text-xl font-bold">IS</div>
           <h1 className="text-4xl font-bold leading-tight">Inside Sales Copilot</h1>
           <p className="mt-4 max-w-md text-lg text-blue-100">
-            Paste a meeting invite. Get a cited discovery brief, checked attendees, and the Royal Cyber case studies that fit, in about a minute.
+            Paste a meeting invite. Get a cited discovery brief, an agenda, and the Royal Cyber case studies that fit, in about a minute.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-blue-100">
             <li>✓ Every fact links to its source</li>
-            <li>✓ Attendees are verified, never guessed</li>
+            <li>✓ Discovery questions and agenda ready to edit</li>
             <li>✓ Case studies from your business unit</li>
           </ul>
         </div>
@@ -60,11 +60,7 @@ export function LoginPage({ mockMode = false }: { mockMode?: boolean }) {
             <Button type="submit" className="w-full" disabled={busy || !email || !password}>{busy ? 'Signing in…' : 'Sign in'}</Button>
           </form>
           <p className="mt-6 text-xs text-muted">Accounts are created by an administrator. There is no self sign-up.</p>
-          {mockMode && (
-            <p className="mt-3 rounded-md bg-page px-3 py-2 text-xs text-muted">
-              Mock mode: se-servicenow@demo.local or se-aws@demo.local with any password of 8+ characters.
-            </p>
-          )}
+          {hint && <p className="mt-3 rounded-md bg-page px-3 py-2 text-xs text-muted">{hint}</p>}
         </Card>
       </div>
     </div>

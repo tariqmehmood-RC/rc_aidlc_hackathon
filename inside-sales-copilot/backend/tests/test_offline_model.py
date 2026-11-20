@@ -67,9 +67,8 @@ def test_the_whole_chain_runs_for_the_insurance_invite(table):
     models.validate("case_study_matches", matches)
     assert len(matches["matches"]) == 3, "the insurance invite should give 3 strong ServiceNow matches"
     assert all(m["score"] >= 60 for m in matches["matches"])
-    checks = [{"email": a["email"], "name": a["name"], "invitedTitle": a["invitedTitle"], "status": a["status"],
-               "reason": a["reason"], "profile": None} for a in exp["attendees"]]
-    written = brief_writer.write_brief(model, research=research, attendee_checks=checks, case_matches=matches,
+    attendees = [{"email": a["email"], "name": a["name"], "title": a["invitedTitle"]} for a in exp["attendees"]]
+    written = brief_writer.write_brief(model, research=research, attendees=attendees, case_matches=matches,
                                        rules=[], meeting={"subject": "s", "meetingDate": "2026-12-10", "notes": None})
     models.validate("brief_content", written.content)
     assert 8 <= len(written.content["discoveryQuestions"]) <= 10
@@ -82,7 +81,7 @@ def test_a_budget_rule_changes_the_questions():
             "industry": None, "headquarters": None, "employees": None, "revenueUsd": None,
             "sizeTier": {"tier": "Unknown", "rule": "r", "basis": {"employees": None, "revenueUsd": None, "sourceUrls": []}},
             "news": [], "painPoints": [], "sourcesFetched": []}
-    out = brief_writer.write_brief(model, research=base, attendee_checks=[], case_matches={"matches": [], "message": None},
+    out = brief_writer.write_brief(model, research=base, attendees=[], case_matches={"matches": [], "message": None},
                                    rules=[{"ruleId": "r1", "text": "Always ask about the budget cycle."}], meeting={})
     assert any("budget cycle" in q["text"] for q in out.content["discoveryQuestions"])
 

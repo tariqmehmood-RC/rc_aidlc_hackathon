@@ -309,40 +309,6 @@
         }
       ]
     },
-    "attendeeChecks": [
-      {
-        "email": "rowan.achterberg@allstate.com",
-        "name": "Rowan Achterberg",
-        "invitedTitle": "VP, IT Service Management",
-        "status": "verified",
-        "reason": null,
-        "profile": {
-          "employer": "Allstate",
-          "title": "Vice President, IT Service Management",
-          "sourceUrl": "synthetic://profiles"
-        }
-      },
-      {
-        "email": "tomas.whitlock-abara@allstate.com",
-        "name": "Tomas Whitlock-Abara",
-        "invitedTitle": "Chief Information Officer",
-        "status": "unverified",
-        "reason": "title_mismatch",
-        "profile": {
-          "employer": "Allstate",
-          "title": "Senior Director, Infrastructure Operations",
-          "sourceUrl": "synthetic://profiles"
-        }
-      },
-      {
-        "email": "ulrike.papadakis@allstate.com",
-        "name": "Ulrike Papadakis",
-        "invitedTitle": "Manager, Vendor Risk and Compliance",
-        "status": "unverified",
-        "reason": "no_profile_found",
-        "profile": null
-      }
-    ],
     "caseStudyMatches": {
       "matches": [
         {
@@ -439,23 +405,17 @@
         {
           "email": "rowan.achterberg@allstate.com",
           "name": "Rowan Achterberg",
-          "title": "VP, IT Service Management",
-          "status": "verified",
-          "reason": null
+          "title": "VP, IT Service Management"
         },
         {
           "email": "tomas.whitlock-abara@allstate.com",
           "name": "Tomas Whitlock-Abara",
-          "title": "Chief Information Officer",
-          "status": "unverified",
-          "reason": "title_mismatch"
+          "title": "Chief Information Officer"
         },
         {
           "email": "ulrike.papadakis@allstate.com",
           "name": "Ulrike Papadakis",
-          "title": "Manager, Vendor Risk and Compliance",
-          "status": "unverified",
-          "reason": "no_profile_found"
+          "title": "Manager, Vendor Risk and Compliance"
         }
       ],
       "painPointHypotheses": [
@@ -633,10 +593,6 @@
       [
         "Researching",
         25.8
-      ],
-      [
-        "Checking attendees",
-        0.0
       ],
       [
         "Matching case studies",

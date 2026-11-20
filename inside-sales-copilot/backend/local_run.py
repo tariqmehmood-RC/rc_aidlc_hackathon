@@ -93,7 +93,6 @@ def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "l
     from .src.lib import constants as c
     from .src.lib.bedrock_client import BedrockClient
     from .src.lib.brief_store import BRIEFS_TABLE_DEFINITION, BriefStore
-    from .src.lib.profiles import load_profiles
     from .src.services import invite_parser, pipeline
     from .src.services.brief_writer import brief_model_from_env
     from .src.services.case_study_matcher import load_case_studies
@@ -126,7 +125,7 @@ def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "l
         store.set_step = timed_set_step  # type: ignore[method-assign]
         events: list[tuple[str, dict[str, Any]]] = []
         deps = pipeline.Deps(store=store, research=ResearchService(model, provider, cache), bedrock=model,
-                             rules=RulesStore(rules_table), studies=load_case_studies(), profiles=load_profiles(),
+                             rules=RulesStore(rules_table), studies=load_case_studies(),
                              log=lambda e, d: events.append((e, d)), brief_model=brief_model_from_env())
         for rule in rules or []:
             deps.rules.add(user, rule)
@@ -195,9 +194,7 @@ def _print_brief(brief: dict[str, Any], bu: str, summary: dict[str, Any], out) -
 
     p("\n2. ATTENDEES")
     for a in content["attendees"]:
-        flag = "VERIFIED  " if a["status"] == "verified" else "UNVERIFIED"
-        reason = f"  ({a['reason'].replace('_', ' ')})" if a["reason"] else ""
-        p(f"  [{flag}] {a['name']}, {a['title'] or '(no title given)'}{reason}")
+        p(f"  - {a['name']}, {a['title'] or '(no title given)'} <{a['email']}>")
 
     p("\n3. PAIN-POINT HYPOTHESES")
     for h in content["painPointHypotheses"]:

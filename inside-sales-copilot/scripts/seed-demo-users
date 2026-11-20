@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Create the two demo users in the Cognito user pool (task 5.6, requirement R1.11).
+
+    backend/.venv/bin/python scripts/seed-demo-users
+    backend/.venv/bin/python scripts/seed-demo-users --user-pool-id us-east-1_XXXX
+    echo "$PASSWORD" | backend/.venv/bin/python scripts/seed-demo-users --password-stdin
+
+- The password is typed at a hidden prompt (or read from stdin). It is never a command-line
+  argument, so it does not end up in shell history or the process list. It is never printed,
+  logged, or written to a file.
+- The user pool id is read from the InsideSalesCopilot-Auth stack output if not given.
+- Safe to run again: existing users get their BU and password set again.
+- Password rules (Cognito): at least 12 characters with upper case, lower case, a digit, and a symbol.
+"""
+from __future__ import annotations
+
+import argparse
+import getpass
+import sys
+from typing import Any
+
+REGION = "us-east-1"
+AUTH_STACK = "InsideSalesCopilot-Auth"
+DEMO_USERS = {
+    "se-aws@demo.local": "AWS",
+    "se-servicenow@demo.local": "ServiceNow",
+}
+
+
+def pool_id_from_stack(cfn: Any) -> str:
+    outputs = cfn.describe_stacks(StackName=AUTH_STACK)["Stacks"][0].get("Outputs", [])
+    for o in outputs:
+        if o["OutputKey"] == "UserPoolId":
+            return o["OutputValue"]
+    raise SystemExit(f"UserPoolId output not found on stack {AUTH_STACK}")
+
+
+def seed(cognito: Any, user_pool_id: str, password: str, users: dict[str, str] = DEMO_USERS, out=sys.stdout) -> list[str]:
+    done = []
+    for email, bu in users.items():
+        attributes = [
+            {"Name": "email", "Value": email},
+            {"Name": "email_verified", "Value": "true"},
+            {"Name": "custom:bu", "Value": bu},
+        ]
+        try:
+            cognito.admin_create_user(UserPoolId=user_pool_id, Username=email, UserAttributes=attributes,
+                                      MessageAction="SUPPRESS")  # no invitation email: the password is set below
+            state = "created"
+        except cognito.exceptions.UsernameExistsException:
+            cognito.admin_update_user_attributes(UserPoolId=user_pool_id, Username=email,
+                                                 UserAttributes=[a for a in attributes if a["Name"] != "email"])
+            state = "updated"
+        cognito.admin_set_user_password(UserPoolId=user_pool_id, Username=email, Password=password, Permanent=True)
+        print(f"{email}: {state}, BU={bu}, password set", file=out)
+        done.append(email)
+    return done
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Create or update the demo users.")
+    parser.add_argument("--user-pool-id", help=f"default: the UserPoolId output of {AUTH_STACK}")
+    parser.add_argument("--password-stdin", action="store_true", help="read the password from stdin instead of a prompt")
+    args = parser.parse_args(argv)
+
+    import boto3
+
+    pool = args.user_pool_id or pool_id_from_stack(boto3.client("cloudformation", region_name=REGION))
+    if args.password_stdin:
+        password = sys.stdin.readline().rstrip("\n")
+    else:
+        password = getpass.getpass("Password for both demo users: ")
+        if getpass.getpass("Type it again: ") != password:
+            print("The passwords do not match. Nothing was changed.", file=sys.stderr)
+            return 2
+    if not password:
+        print("No password given. Nothing was changed.", file=sys.stderr)
+        return 2
+    cognito = boto3.client("cognito-idp", region_name=REGION)
+    try:
+        seed(cognito, pool, password)
+    except cognito.exceptions.InvalidPasswordException as exc:
+        print(f"Cognito rejected the password: {exc.response['Error']['Message']}", file=sys.stderr)
+        return 2
+    print(f"Done. Sign in at the CloudFront URL with either email and the password you typed (pool {pool}).")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

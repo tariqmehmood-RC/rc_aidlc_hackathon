@@ -1,6 +1,6 @@
 // MSW handlers that follow the API contract (design 6), backed by MockDb.
 import { http, HttpResponse } from 'msw'
-import { readMockToken } from '../auth/auth'
+import { readMockToken } from '../auth/mockAuth'
 import type { BriefContent, ParsedInvite } from '../api/types'
 import { MockDb } from './db'
 

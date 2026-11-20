@@ -58,15 +58,16 @@ def test_pipeline_runs_every_step_in_order_and_ends_ready():
         env.store.set_step = lambda b, j, s: steps_seen.append(s) or real_set_step(b, j, s)
         assert pipeline.handle_message(msg(brief_id, job, "pipeline"), env.deps) == "ready"
         got = env.store.get(brief_id)
-        assert steps_seen == ["Researching", "Checking attendees", "Matching case studies", "Writing brief"]
+        assert steps_seen == ["Researching", "Matching case studies", "Writing brief"]
         assert got["status"] == "ready"
-        assert got["stepsCompleted"] == ["Parsing", "Researching", "Checking attendees", "Matching case studies", "Writing brief"]
+        assert got["stepsCompleted"] == ["Parsing", "Researching", "Matching case studies", "Writing brief"]
+        assert "attendeeChecks" not in got
         assert got["draft"] == got["content"] and got["version"] == 0
         models.validate("brief_content", got["content"])
         models.validate("research_result", got["research"])
 
 
-def test_the_insurance_invite_gets_three_servicenow_case_studies_and_the_expected_attendee_flags():
+def test_the_insurance_invite_gets_three_servicenow_case_studies_and_lists_the_attendees():
     with backend() as env:
         brief_id, job = parse_and_confirm(env)
         pipeline.handle_message(msg(brief_id, job, "pipeline"), env.deps)
@@ -75,8 +76,9 @@ def test_the_insurance_invite_gets_three_servicenow_case_studies_and_the_expecte
         assert all(m["score"] >= 60 for m in got["caseStudyMatches"]["matches"])
         by_id = {s.id: s for s in env.deps.studies}
         assert all(by_id[m["caseStudyId"]].bu == "ServiceNow" for m in got["caseStudyMatches"]["matches"])
-        flags = [(a["email"], a["status"], a["reason"]) for a in got["attendeeChecks"]]
-        assert flags == [(a["email"], a["status"], a["reason"]) for a in EXPECTED["04-allstate.txt"]["attendees"]]
+        listed = [(a["email"], a["name"], a["title"]) for a in got["content"]["attendees"]]
+        assert listed == [(a["email"], a["name"], a["invitedTitle"]) for a in EXPECTED["04-allstate.txt"]["attendees"]]
+        assert all(set(a) == {"email", "name", "title"} for a in got["content"]["attendees"])
 
 
 def test_the_bu_used_is_the_one_stored_on_the_brief():
@@ -208,11 +210,11 @@ def test_retry_after_failure_reuses_finished_steps_and_the_research_cache():
         brief_id, job = parse_and_confirm(env)
         pipeline.handle_message(msg(brief_id, job, "pipeline"), env.deps)
         got = env.store.get(brief_id)
-        assert got["status"] == "failed" and set(got["stepsCompleted"]) >= {"Researching", "Checking attendees"}
+        assert got["status"] == "failed" and "Researching" in got["stepsCompleted"]
         calls_before = flaky.calls
         retry_job = env.store.requeue(brief_id, c.STATUS_FAILED, clear_error=True)
         assert pipeline.handle_message(msg(brief_id, retry_job, "pipeline"), env.deps) == "ready"
-        assert flaky.calls - calls_before == 2   # only matching and writing ran again
+        assert flaky.calls - calls_before == 2   # only matching and writing ran again (research was kept)
 
 
 def test_missing_confirmed_invite_fails_cleanly():

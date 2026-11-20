@@ -125,7 +125,8 @@ _SUFFIX_WORDS = {"inc", "incorporated", "corp", "corporation", "company", "co", 
 
 def company_terms(name: str | None, domain: str | None) -> list[str]:
     """Names a news headline may use for the company: the full name, the name without corporate
-    words ("Marriott International" -> "Marriott"), the first word, and the domain label."""
+    words ("Marriott International" -> "Marriott"), and the domain label. The first word on its
+    own is not used: for "Royal Cyber" it would let in any story about "Royal" anything."""
     terms: list[str] = []
     if name:
         words = re.findall(r"[A-Za-z0-9&']+", name)
@@ -133,8 +134,6 @@ def company_terms(name: str | None, domain: str | None) -> list[str]:
         core = [w for w in words if w.lower() not in _SUFFIX_WORDS]
         if core:
             terms.append(" ".join(core))
-        if words and len(words[0]) >= 4:
-            terms.append(words[0])
     if domain:
         label = domain.lower().removeprefix("www.").split(".")[0]
         if len(label) >= 4:
@@ -182,12 +181,18 @@ class PublicWebProvider:
             news_job = pool.submit(self._news, news_part, company_name, domain)
             wiki_confirmed, site_ok = wiki_job.result(), site_job.result()
             news_job.result()
+        wiki_found = any(d.kind in (KIND_WIKI_SUMMARY, KIND_WIKI_PAGE) for d in wiki_part.documents)
+        if wiki_found and not wiki_confirmed and site_ok:
+            # The Wikipedia page only shares a name with the company (for example "Royal Cyber" and
+            # the "Royal (cyber gang)" page) and never mentions its domain, while the company's own
+            # site loaded. Trust the site and do not use the other page at all.
+            wiki_part = RawResearch(sources=[SourceStatus("skipped:wikipedia-page-not-this-company", "skipped")])
+            wiki_found = False
         raw = RawResearch()
         for part in (wiki_part, site_part, news_part):
             raw.documents += part.documents
             raw.sources += part.sources
         raw.news = news_part.news
-        wiki_found = any(d.kind in (KIND_WIKI_SUMMARY, KIND_WIKI_PAGE) for d in raw.documents)
         raw.match_confidence = (
             "confirmed" if wiki_confirmed or (not wiki_found and site_ok) else "unverified_match"
         )

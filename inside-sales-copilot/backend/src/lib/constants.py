@@ -18,10 +18,9 @@ STATUSES = (
 
 STEP_PARSING = "Parsing"
 STEP_RESEARCHING = "Researching"
-STEP_ATTENDEES = "Checking attendees"
 STEP_MATCHING = "Matching case studies"
 STEP_WRITING = "Writing brief"
-STEPS = (STEP_PARSING, STEP_RESEARCHING, STEP_ATTENDEES, STEP_MATCHING, STEP_WRITING)
+STEPS = (STEP_PARSING, STEP_RESEARCHING, STEP_MATCHING, STEP_WRITING)  # attendee check removed
 
 RULES_STATUSES = ("none", "pending", "ready", "failed")
 JOB_TYPES = ("parse", "pipeline", "extract_rules")
@@ -80,18 +79,6 @@ RESEARCH_USER_AGENT_DEFAULT = (
 )
 ENV_RESEARCH_USER_AGENT = "RESEARCH_USER_AGENT"
 
-# --- Attendee profiles -------------------------------------------------------------------
-SYNTHETIC_SOURCE_URL = "synthetic://profiles"
-VERDICT_VERIFIED = "verified"
-VERDICT_UNVERIFIED = "unverified"
-UNVERIFIED_REASONS = (
-    "employer_mismatch",
-    "title_mismatch",
-    "no_profile_found",
-    "title_missing",
-    "ambiguous",
-)
-
 # --- Invite parsing ----------------------------------------------------------------------
 # A free mail domain does not name a company (requirement R2).
 FREE_MAIL_DOMAINS = frozenset({
@@ -100,24 +87,3 @@ FREE_MAIL_DOMAINS = frozenset({
     "protonmail.com", "gmx.com", "mail.com",
 })
 INVITE_WARNINGS = ("company_domain_mismatch", "only_free_email_domains")
-
-# Title matching is deterministic: lowercase, remove punctuation, expand these tokens (design 8.4).
-TITLE_ABBREVIATIONS = {
-    "vp": "vice president",
-    "svp": "senior vice president",
-    "evp": "executive vice president",
-    "avp": "assistant vice president",
-    "cto": "chief technology officer",
-    "cio": "chief information officer",
-    "ceo": "chief executive officer",
-    "cfo": "chief financial officer",
-    "coo": "chief operating officer",
-    "cdo": "chief data officer",
-    "ciso": "chief information security officer",
-    "sr": "senior",
-    "jr": "junior",
-    "dir": "director",
-    "mgr": "manager",
-    "eng": "engineering",
-    "it": "information technology",
-}

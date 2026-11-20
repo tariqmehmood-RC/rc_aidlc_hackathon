@@ -2,11 +2,11 @@
 // real API stay in step.
 
 export type BriefStatus = 'queued' | 'processing' | 'awaiting_confirmation' | 'ready' | 'approved' | 'failed'
-export type Step = 'Parsing' | 'Researching' | 'Checking attendees' | 'Matching case studies' | 'Writing brief'
+export type Step = 'Parsing' | 'Researching' | 'Matching case studies' | 'Writing brief'
 export type RulesStatus = 'none' | 'pending' | 'ready' | 'failed'
 export type BU = 'AWS' | 'ServiceNow' | 'Salesforce' | 'Data & AI'
 
-export const STEPS: Step[] = ['Parsing', 'Researching', 'Checking attendees', 'Matching case studies', 'Writing brief']
+export const STEPS: Step[] = ['Parsing', 'Researching', 'Matching case studies', 'Writing brief']
 
 export interface Attendee {
   name: string
@@ -43,14 +43,11 @@ export interface Research {
   painPoints: Array<{ id: string; hypothesis: string; basedOnFactIds: string[] }>
 }
 
-export type UnverifiedReason = 'employer_mismatch' | 'title_mismatch' | 'no_profile_found' | 'title_missing' | 'ambiguous'
-
+/** An attendee as written in the confirmed invite. */
 export interface BriefAttendee {
   email: string
   name: string
   title: string | null
-  status: 'verified' | 'unverified'
-  reason: UnverifiedReason | null
 }
 
 export interface CaseStudyMatch {
@@ -89,7 +86,6 @@ export interface BriefView {
   parsedInvite?: ParsedInvite
   confirmedInvite?: ParsedInvite
   research?: Research
-  attendeeChecks?: unknown[]
   caseStudyMatches?: { matches: CaseStudyMatch[]; message: string | null }
   content?: BriefContent
   rulesApplied?: Array<{ ruleId: string; text: string }>

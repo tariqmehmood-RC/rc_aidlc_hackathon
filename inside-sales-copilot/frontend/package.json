@@ -11,7 +11,8 @@
     "test": "vitest run",
     "dev:mock": "VITE_USE_MOCKS=true vite --host 127.0.0.1 --port 5174 --strictPort",
     "dev:workshop": "VITE_USE_MOCKS=true vite --host 127.0.0.1 --port 5174 --strictPort --base /absproxy/5174/",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "build:prod": "npm run build && node scripts/check-prod-build.mjs"
   },
   "dependencies": {
     "aws-amplify": "^6.22.2",

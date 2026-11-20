@@ -20,7 +20,7 @@ Inside Sales Copilot turns a pasted meeting invite into a cited discovery brief 
 ## User flow
 1. **Paste invite.** The SE pastes a meeting invite as free text: subject, company, attendees (names, titles, emails), and notes.
 2. **Company research.** The system researches the company from public sources: industry, size tier, recent news, likely pain points. Every fact carries a source URL.
-3. **Attendee check.** An attendee is "verified" only if both employer and title match the invite. Otherwise the attendee is "unverified". The system never guesses.
+3. **Attendees.** The brief lists the attendees as written in the invite (name, title, email). There is no verification of attendees (removed by decision, see Decisions).
 4. **Case study match.** The system picks the top 3 case studies from Royal Cyber's library, filtered by the user's business unit (BU), such as ServiceNow, AWS, Salesforce, or Data & AI. Each has a "why relevant" explanation.
 5. **Draft brief.** The system produces a discovery brief: agenda, discovery questions, pain-point hypotheses, and case studies to mention.
 6. **Edit and approve.** The SE edits and approves the brief. The SE's edits are saved as rules (for example, "always ask about budget cycle") and applied to the next brief.
@@ -53,11 +53,10 @@ Inside Sales Copilot turns a pasted meeting invite into a cited discovery brief 
 4. Research results are cached in DynamoDB by company domain for 7 days, so repeat requests do not call Bedrock again.
 5. Only real public companies are researched. If no reliable public information is found, the brief says so instead of inventing facts.
 
-### FR3. Attendee verification
-1. Attendee profiles are synthetic data. No real person data is used.
-2. An attendee is "verified" only when employer AND title both match the invite.
-3. Any other result (mismatch, missing, ambiguous) is "unverified". The system never guesses.
-4. The brief shows the status of each attendee and the reason for "unverified".
+### FR3. Attendees (verification removed)
+1. The brief lists each attendee as written in the invite: name, title, email.
+2. The system does not check attendees against any directory and shows no verified or unverified status.
+3. Attendee data in demos is synthetic.
 
 ### FR4. Case study match
 1. The library is loaded from a JSON seed file built from the public Royal Cyber website. Each entry has an id, title, a 1 to 2 sentence summary in our own words, BU, industry, tags, and the public URL of the case study.
@@ -79,7 +78,7 @@ Inside Sales Copilot turns a pasted meeting invite into a cited discovery brief 
 5. Approved briefs are stored and can be reopened.
 
 ### FR7. Progress and status
-1. The UI shows progress while the brief is built (for example: researching, verifying attendees, matching case studies, drafting).
+1. The UI shows progress while the brief is built (parsing, researching, matching case studies, writing the brief).
 2. Progress is streamed or polled, so the user is never looking at a blank screen.
 3. Failures show a clear message and a retry option.
 
@@ -152,7 +151,7 @@ The final document must include the items below. Numbers are filled in during de
 ## Success criteria
 - Pasting an invite for a real public company produces a brief with cited facts, a size tier, attendee statuses, and 3 matching case studies.
 - Every fact in the brief has a source URL.
-- An attendee whose employer or title does not match is shown as "unverified".
+- The brief lists the attendees from the invite.
 - A BU user never sees another BU's case studies.
 - Editing one line and approving saves a rule, and the next brief applies it.
 - Bedrock calls never exceed 1 per second, shown by a test.
@@ -163,7 +162,7 @@ The final document must include the items below. Numbers are filled in during de
 | Time | Part |
 |---|---|
 | 2 min | Problem: hours of manual prep, wrong profiles, no standard notes |
-| 3 min | Live demo: paste an invite for a real public company, the brief appears with cited facts, size tier, flagged attendees, and 3 case studies, then the SE edits one line and approves |
+| 3 min | Live demo: paste an invite for a real public company, the brief appears with cited facts, size tier, the attendee list, and 3 case studies, then the SE edits one line and approves |
 | 2 min | Result: prep time, citations, standard format, cost and Well-Architected summary |
 | 3 min | Next steps: Outlook integration, case study management, full RBAC, RFP response copilot |
 
@@ -187,4 +186,4 @@ All earlier open questions are closed. Details are in `.kiro/specs/inside-sales-
 | Enforcing 1 Bedrock request per second | All Bedrock calls run in one worker Lambda fed by an SQS queue, with reserved concurrency 1 and batch size 1. An in-process token bucket is a second guard. API Lambdas never call Bedrock. |
 | Data retention | Briefs expire 30 days after creation (DynamoDB TTL). Logs never contain invite text or attendee emails. CloudWatch log retention is 14 days. |
 | Case study library | Stores only title, a short summary in our own words, BU, industry, tags, and the public URL. If the site blocks fetching, the seed is written by hand from the public pages and the README says so. |
-| Attendee profiles | Synthetic directory in `data/attendee_profiles.json`, keyed by email. |
+| Attendee verification | **Removed** (product owner decision, Nov 20 2026). The brief lists attendees as written in the invite, with no verified or unverified status. The synthetic profile directory was deleted. |

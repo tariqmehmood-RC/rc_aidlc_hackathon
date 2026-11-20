@@ -71,7 +71,7 @@ Branch: `feature/wave-1`
   - Needs: the CSV file. Requirements: R5.12, R5.13, R5.14.
   - Note for README (task 6.2): the seed comes from the public site through the team, because the site blocks automated fetching.
 
-- [x] **1.5 [MVP] Attendee profile directory** [P]
+- [x] **1.5 [MVP] Attendee profile directory** (REMOVED Nov 20 with attendee verification) [P]
   - Files: `data/attendee_profiles.json`, `backend/src/lib/profiles.py`, `backend/tests/test_profiles.py`
   - Do: synthetic profiles keyed by lowercase email: `name`, `employer`, `employer_domain`, `title`, `source_url = "synthetic://profiles"`. Loader validates the schema and rejects duplicate emails.
   - Test: schema valid; every `source_url` is `synthetic://profiles`; duplicate email is rejected; lookup is case-insensitive.
@@ -130,7 +130,7 @@ Branch: `feature/wave-2` (from `main` after Wave 1). Each task is a service or l
   - Test (fake Bedrock returning canned JSON for the three sample invites): fields extracted; missing fields stay `null`; duplicate emails merged; free-mail-only invite flagged; 21 attendees rejected on confirm; mismatch rejected until confirmed; injected instruction text in the invite does not change the output shape (the fake receives it inside `<invite>` tags).
   - Needs: 2.2, 1.6, 1.7. Requirements: R2.4 to R2.14.
 
-- [x] **2.5 [MVP] Attendee verifier** [P, group C]
+- [x] **2.5 [MVP] Attendee verifier** (REMOVED Nov 20 by product owner decision) [P, group C]
   - Files: `backend/src/services/attendee_verifier.py`, `backend/tests/test_attendee_verifier.py`
   - Do: D§8.4, deterministic, no Bedrock.
   - Test: results match `data/sample_invites/expected.json`; each reason (`employer_mismatch`, `title_mismatch`, `no_profile_found`, `title_missing`, `ambiguous`); "VP Sales" equals "Vice President, Sales"; "Sr. Engineer" equals "Senior Engineer"; different titles never match; employer matches by name or by domain; no field is ever invented (profile is `null` when none).
@@ -256,39 +256,39 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
 - Group G: 4.2, 4.3, 4.4, 4.5, 4.6 (after 4.1).
 - Group H (after 4.5 and 4.6): 4.7, 4.8, 4.9.
 
-- [ ] **4.1 [MVP] API client, types, and mock server**
+- [x] **4.1 [MVP] API client, types, and mock server**
   - Files: `frontend/src/api/{client,types}.ts`, `frontend/src/mocks/{handlers,server}.ts`, `frontend/src/api/client.test.ts`
   - Do: typed client for all 11 routes; sends the ID token as bearer; maps the error body; on 401 signals sign-out. MSW handlers simulate every status and a queue.
   - Test: sends `Authorization` header; 401 triggers the sign-out callback; error body becomes a typed error.
   - Needs: 1.3. Requirements: D§6.
 
-- [ ] **4.2 [MVP] Sign in** [P, group G]
+- [x] **4.2 [MVP] Sign in** [P, group G]
   - Files: `frontend/src/auth/{AuthProvider,LoginPage}.tsx`, `frontend/src/auth/*.test.tsx`
   - Do: custom login form with `aws-amplify` Auth, generic error message, sign-out button, return to sign-in when the token expires, no sign-up link, config read from `/config.json`.
   - Test: wrong password shows the generic message only; signed-out users see only the login page; sign-out clears the session; expired token returns to login.
   - Needs: 4.1. Requirements: R1.
 
-- [ ] **4.3 [MVP] Paste invite page** [P, group G]
+- [x] **4.3 [MVP] Paste invite page** [P, group G]
   - Files: `frontend/src/pages/NewBrief.tsx`, `NewBrief.test.tsx`
   - Test: submit disabled for empty or whitespace text; character counter; 10,001 characters blocked with the limit message; submit calls `POST /briefs` and moves to the progress view.
   - Needs: 4.1. Requirements: R2.1 to R2.3.
 
-- [ ] **4.4 [MVP] Parse preview and confirm** [P, group G]
+- [x] **4.4 [MVP] Parse preview and confirm** [P, group G]
   - Files: `frontend/src/pages/ParsePreview.tsx`, `ParsePreview.test.tsx`
   - Test: all parsed fields editable; invalid email blocked; mismatch warning requires an explicit confirmation checkbox; missing company or domain blocks confirm; free-mail warning shown; 21 attendees blocked; confirm calls `PUT` then `POST .../confirm`.
   - Needs: 4.1. Requirements: R2.6 to R2.12.
 
-- [ ] **4.5 [MVP] Progress view** [P, group G]
+- [x] **4.5 [MVP] Progress view** [P, group G]
   - Files: `frontend/src/pages/Progress.tsx`, `frontend/src/hooks/useBriefPolling.ts`, tests
   - Test (fake timers): polls every 2 s while `queued` or `processing`; stops on `awaiting_confirmation`, `ready`, `approved`, `failed`; shows the five steps with the current one marked; shows "Queued (position N)"; `failed` shows the message and a Retry button that calls `POST .../retry`; reloading shows the current progress of the same brief.
   - Needs: 4.1. Requirements: R9.
 
-- [ ] **4.6 [MVP] Brief view and inline editor** [P, group G]
+- [x] **4.6 [MVP] Brief view and inline editor** [P, group G]
   - Files: `frontend/src/pages/BriefView.tsx`, `frontend/src/components/{Section,EditableItem,SourceLink,AttendeeBadge}.tsx`, tests
   - Test: 7 sections in order; every fact shows its source link; unverified attendees show a flag and reason; size tier shows rule and source; case studies show reason and link; "No strong match" messages shown; editing one item saves with `PUT`; editing is disabled when not `ready`; `approved` is read-only.
   - Needs: 4.1. Requirements: R3.6, R4.12, R5.6 to R5.9, R6, R7.1 to R7.5.
 
-- [ ] **4.7 [MVP] Approve and rules review** (group H, needs 4.5, 4.6)
+- [x] **4.7 [MVP] Approve and rules review** (group H, needs 4.5, 4.6)
   - Files: `frontend/src/components/{ApproveDialog,RulesReview}.tsx`, tests
   - Test: approve asks for confirmation; after approve the page shows "checking for rules" while `rulesStatus` is `pending` and polls; proposals appear with Keep and Discard each; submitting calls `POST .../rules`; `none` and `failed` show the right message and the brief stays approved.
   - Needs: 4.5, 4.6. Requirements: R7.4 to R7.13.
@@ -298,7 +298,7 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
   - Test: newest first; shows company, meeting date, status, created time; failed rows show the error; empty state; "load more" uses the cursor for pages of 20; approved briefs open read-only.
   - Needs: 4.1. Requirements: R8.
 
-- [ ] **4.9 [MVP] BU badge** (group H)
+- [x] **4.9 [MVP] BU badge** (group H)
   - Files: `frontend/src/components/BuBadge.tsx`, `frontend/src/components/Header.tsx`, tests
   - Do: show the signed-in user's BU in the header, read from the ID token. There is **no "All" option** (G1). "Switching BU" in the demo means signing out and signing in as the other demo user.
   - Test: the badge shows the BU from the token; no BU selector is rendered anywhere.
@@ -310,7 +310,7 @@ Branch: `feature/wave-4`. Can start after Wave 1 and run in parallel with Waves 
   - Test: delete removes the rule; the case studies page lists only the items returned by `GET /case-studies` and never renders a BU selector.
   - Needs: 4.1, 4.2. Requirements: R7.14.
 
-- [ ] **4.10 [MVP] App shell, routing, and Wave 4 gate**
+- [x] **4.10 [MVP] App shell, routing, and Wave 4 gate**
   - Files: `frontend/src/App.tsx`, `frontend/src/routes.tsx`, test
   - Do: routes for login, new brief, preview, progress, and brief (with approve and rules review). Stretch tasks add their routes (history, rules, case studies). Run the whole flow against the mock server. Show the diff and screenshots. After your approval: merge, create `inside-sales-copilot-wave-4.bundle`.
   - Test: a full mocked flow in Vitest from paste to approve reaches the rules review.
@@ -325,40 +325,40 @@ Branch: `feature/wave-5`. Needs Wave 3 and Wave 4 merged.
 - Group I: 5.1, 5.2, 5.3, 5.6 (independent of each other).
 - Then 5.4 (needs 5.1, 5.2, 5.3), then 5.5, then 5.7 to 5.11 in order.
 
-- [ ] **5.1 [MVP] AuthStack** [P, group I]
+- [x] **5.1 [MVP] AuthStack** [P, group I]
   - Files: `infra/lib/auth-stack.ts`, `infra/test/auth-stack.test.ts`
   - Test (CDK assertions): self sign-up disabled; custom attribute `custom:bu`; app client without secret that cannot write `custom:bu`; ID and access token validity 1 hour; email sign-in.
   - Needs: 1.2. Requirements: R1.
 
-- [ ] **5.2 [MVP] DataStack** [P, group I]
+- [x] **5.2 [MVP] DataStack** [P, group I]
   - Files: `infra/lib/data-stack.ts`, `infra/test/data-stack.test.ts`
   - Test: three on-demand tables with the right keys; TTL attributes (`expiresAt`); `byUser` and sparse `byQueue` indexes; standard queue with visibility timeout 1080 s; DLQ with `maxReceiveCount` 3.
   - Needs: 1.2. Requirements: R8.7, R10.11, R10.22, R10.23.
 
-- [ ] **5.3 [MVP] Backend packaging** [P, group I]
+- [x] **5.3 [MVP] Backend packaging** [P, group I]
   - Files: `infra/lib/backend-bundle.ts`, `scripts/build_backend.sh`, `infra/test/bundle.test.ts`
   - Do: build the Lambda asset for Python 3.12 on Linux (dependencies installed for the Lambda platform with uv, plus `data/*.json`). No Docker if avoidable.
   - Test: the built asset contains the handlers, `case_studies.json`, `attendee_profiles.json`, and no `.venv`, tests, or `.env` files.
   - Needs: Wave 3. Requirements: R10.25.
 
-- [ ] **5.4 [MVP] ApiStack** (needs 5.1, 5.2, 5.3)
+- [x] **5.4 [MVP] ApiStack** (needs 5.1, 5.2, 5.3)
   - Files: `infra/lib/api-stack.ts`, `infra/test/api-stack.test.ts`
   - Do: HTTP API with the 11 routes under `/api`, Cognito JWT authorizer on all routes, API Lambdas, worker Lambda (reserved concurrency 1, batch size 1, timeout 180 s, env vars incl. model IDs), alarms (DLQ depth above 0, worker errors, Bedrock throttling, API 5xx), dashboard, log retention 14 days.
   - Test: every route has the authorizer; worker reserved concurrency 1 and batch size 1; only the worker role has `bedrock:InvokeModel`; Bedrock resources are exactly the two inference profiles and two foundation models, no wildcards on the profile; no IAM statement has `Resource: *` except where AWS requires it (logs, X-Ray); log groups retain 14 days; DLQ alarm exists.
   - Needs: 5.1, 5.2, 5.3. Requirements: R1, R10.
 
-- [ ] **5.5 [MVP] WebStack** (needs 5.4)
+- [x] **5.5 [MVP] WebStack** (needs 5.4)
   - Files: `infra/lib/web-stack.ts`, `infra/test/web-stack.test.ts`
   - Test: bucket blocks all public access; CloudFront viewer protocol redirects to HTTPS, minimum TLS 1.2; `/api/*` behavior points to the HTTP API with caching off; security headers policy present; `config.json` contains only the pool id, client id and region.
   - Needs: 5.4, 1.3. Requirements: R10.18, R10.19.
 
-- [ ] **5.6 [MVP] Seed demo users script** [P, group I]
+- [x] **5.6 [MVP] Seed demo users script** [P, group I]
   - Files: `scripts/seed-demo-users`, `backend/tests/test_seed_demo_users.py`
   - Do: `scripts/seed-demo-users --user-pool-id <id> --password <value>` creates `se-aws@demo.local` (`custom:bu=AWS`) and `se-servicenow@demo.local` (`ServiceNow`) with a permanent password. The password is never printed or written to a file. Safe to run twice.
   - Test (moto Cognito): both users exist with the right BU; running twice causes no error; the password does not appear in stdout, stderr, or any file in the repo.
   - Needs: none (uses moto). Requirements: R1.8, R1.11.
 
-- [ ] **5.7 [MVP] First deploy to us-east-1** (needs your approval to create lasting resources)
+- [x] **5.7 [MVP] First deploy to us-east-1** (needs your approval to create lasting resources)
   - Do: `cdk synth`, show `cdk diff`, then after your approval `cdk deploy --all`. Check the worker role against the account's Bedrock allowlist. Run `scripts/seed-demo-users` with a password you provide on the command line.
   - Test: stack outputs exist; a manual check shows sign-in works for both users.
   - Needs: 5.1 to 5.6. Requirements: R10.25.

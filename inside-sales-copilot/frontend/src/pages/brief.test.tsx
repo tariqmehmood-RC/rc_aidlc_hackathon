@@ -63,14 +63,17 @@ describe('brief view', () => {
     expect(within(pain).getAllByRole('link').length).toBeGreaterThan(0)
   })
 
-  it('flags unverified attendees in amber with the reason', async () => {
+  it('lists attendees as written in the invite, with no verification status', async () => {
     await openBrief()
     const rows = screen.getAllByTestId('attendee')
+    expect(rows).toHaveLength(3)
     expect(rows[0]).toHaveTextContent('Rowan Achterberg')
-    expect(rows[0]).toHaveTextContent('✓ Verified')
-    expect(rows[1]).toHaveTextContent('⚠ Unverified · Title does not match')
-    expect(rows[1]).toHaveTextContent('Invite says: “Chief Information Officer”')
-    expect(rows[2]).toHaveTextContent('⚠ Unverified · No profile found')
+    expect(rows[0]).toHaveTextContent('VP, IT Service Management')
+    expect(rows[1]).toHaveTextContent('Tomas Whitlock-Abara')
+    expect(rows[1]).toHaveTextContent('Chief Information Officer')
+    expect(rows[1]).toHaveTextContent('tomas.whitlock-abara@allstate.com')
+    const section = document.getElementById('attendees')!
+    expect(section).not.toHaveTextContent(/verified|unverified|⚠|✓/i)
   })
 
   it('shows each case study with score, reason, and link', async () => {

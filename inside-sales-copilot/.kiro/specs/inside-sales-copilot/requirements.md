@@ -119,24 +119,9 @@ The requirement "must name a company or company email domain" is therefore check
 
 ---
 
-## R4. Attendee check
+## R4. Attendee check (REMOVED)
 
-**User story:** As an SE, I want each attendee marked verified or unverified, so that I never prepare for the wrong person.
-
-**Acceptance criteria**
-1. WHEN the pipeline reaches the attendee step, THE SYSTEM SHALL check each attendee against `data/attendee_profiles.json`, matching on email.
-2. THE SYSTEM SHALL mark an attendee "verified" only WHEN the profile's employer matches the invite company AND the profile's title matches the invite title.
-3. WHEN the employer does not match, THE SYSTEM SHALL mark the attendee "unverified" with the reason "employer mismatch" and show both values.
-4. WHEN the title does not match, THE SYSTEM SHALL mark the attendee "unverified" with the reason "title mismatch" and show both values.
-5. WHEN no profile exists for the attendee's email, THE SYSTEM SHALL mark the attendee "unverified" with the reason "no profile found".
-6. WHEN the invite gives no title for an attendee, THE SYSTEM SHALL mark the attendee "unverified" with the reason "title missing".
-7. WHEN more than one profile could fit an attendee, THE SYSTEM SHALL mark the attendee "unverified" with the reason "ambiguous" and SHALL NOT pick one.
-8. THE SYSTEM SHALL compare titles after lowercasing, removing punctuation and extra spaces, and expanding a fixed abbreviation table (VP = Vice President, CTO = Chief Technology Officer, Sr = Senior, and similar), and SHALL NOT use fuzzy or AI matching.
-9. THE SYSTEM SHALL compare employers by normalized company name, or by equal domain.
-10. THE SYSTEM SHALL NOT invent, complete, or guess any profile field.
-11. THE SYSTEM SHALL use synthetic profile data only, with `source_url` set to `synthetic://profiles`.
-12. THE SYSTEM SHALL show the status and reason of every attendee in the brief.
-13. THE TEAM SHALL provide sample invites in `data/sample_invites/` that together cover at least one verified attendee, one unverified attendee for a title mismatch, and one unverified attendee for no profile found.
+Removed by product owner decision on Nov 20, 2026. The brief lists attendees as written in the invite (name, title, email). There is no verified or unverified status, no reason, and no profile directory. R6.8 (unverified roles) is removed with it. The progress steps are Parsing, Researching, Matching case studies, Writing brief (R9.2).
 
 ---
 
@@ -174,7 +159,7 @@ The requirement "must name a company or company email domain" is therefore check
 5. THE SYSTEM SHALL list every source URL used in the Sources section, without duplicates.
 6. WHEN the user has saved rules, THE SYSTEM SHALL apply up to the 10 most recent rules when writing the brief, and SHALL show which rules were applied.
 7. WHEN a section's input is "unknown" or empty, THE SYSTEM SHALL say so in that section and SHALL NOT fill it with guesses.
-8. WHEN an attendee is "unverified", THE SYSTEM SHALL show the flag in the Attendees section and SHALL NOT use that attendee's claimed role as a fact elsewhere in the brief.
+8. (Removed with R4.)
 9. WHEN the model output does not match the required structure, THE SYSTEM SHALL retry once and then mark the brief `failed` with a message.
 10. THE SYSTEM SHALL save the brief with status `ready` when all sections are complete.
 
@@ -225,7 +210,7 @@ The requirement "must name a company or company email domain" is therefore check
 
 **Acceptance criteria**
 1. WHEN the SE submits an invite or confirms the parsed invite, THE SYSTEM SHALL return immediately with the brief id and status `queued`, without waiting for the pipeline.
-2. WHILE a brief is `processing`, THE SYSTEM SHALL show the current step: Parsing, Researching, Checking attendees, Matching case studies, Writing brief.
+2. WHILE a brief is `processing`, THE SYSTEM SHALL show the current step: Parsing, Researching, Matching case studies, Writing brief.
 3. WHEN a step finishes, THE SYSTEM SHALL record the new step before the next step starts.
 4. WHILE a brief is `queued`, THE SYSTEM SHALL show "queued", and the queue position when it is known.
 5. WHILE a brief is `queued` or `processing`, THE UI SHALL poll `GET /briefs/{id}` every 2 seconds.

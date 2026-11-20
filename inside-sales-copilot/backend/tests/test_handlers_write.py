@@ -132,7 +132,7 @@ def test_a_stale_version_gives_409_conflict():
 @pytest.mark.parametrize("mutate,message", [
     (lambda c_: c_["agenda"][0].update(minutes=c_["agenda"][0]["minutes"] + 1), "adds up to 31"),
     (lambda c_: c_["companySnapshot"][1]["sourceUrls"].append("https://invented.example/"), "cannot be invented"),
-    (lambda c_: c_["attendees"][1].update(status="verified", reason=None), "'attendees' section cannot be edited"),
+    (lambda c_: c_["attendees"][1].update(title="CEO"), "'attendees' section cannot be edited"),
     (lambda c_: c_["caseStudies"].pop(), "'caseStudies' section cannot be edited"),
     (lambda c_: c_["sources"].append({"url": "https://x.example/", "label": "x"}), "'sources' section cannot be edited"),
     (lambda c_: c_["painPointHypotheses"][0].update(basedOnFactIds=["f999"]), "fact that does not exist"),

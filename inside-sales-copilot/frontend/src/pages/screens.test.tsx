@@ -28,7 +28,7 @@ function briefAt(state: 'awaiting' | 'processing' | 'ready' | 'failed') {
   if (state === 'awaiting') return id
   backend.db.startPipeline(b, structuredClone(b.parsedInvite!))
   if (state === 'processing') {
-    backend.advance(500 + 1000 + 100) // into "Checking attendees"
+    backend.advance(500 + 1000 + 100) // into "Matching case studies"
     return id
   }
   backend.advance(10_000)
@@ -165,20 +165,21 @@ describe('progress', () => {
 
   it('marks steps done, current, and pending from the API state', () => {
     const v: BriefView = { ...base, status: 'processing', step: 'Matching case studies', confirmedInvite: {} as ParsedInvite }
-    expect(stepStates(v)).toEqual({ Parsing: 'done', Researching: 'done', 'Checking attendees': 'done', 'Matching case studies': 'current', 'Writing brief': 'pending' })
+    expect(stepStates(v)).toEqual({ Parsing: 'done', Researching: 'done', 'Matching case studies': 'current', 'Writing brief': 'pending' })
     expect(stepStates({ ...base, status: 'queued' }).Parsing).toBe('pending')
     expect(stepStates({ ...base, status: 'queued', confirmedInvite: {} as ParsedInvite }).Parsing).toBe('done')
     const failed: BriefView = { ...base, status: 'failed', error: { code: 'X', step: 'Researching', message: 'm' }, confirmedInvite: {} as ParsedInvite }
     expect(stepStates(failed).Researching).toBe('failed')
   })
 
-  it('shows the 5 steps live and opens the brief when it is ready', async () => {
+  it('shows the 4 steps live and opens the brief when it is ready', async () => {
     const id = briefAt('processing')
     renderApp(`/briefs/${id}`, await signInAs())
     const list = await screen.findByRole('list', { name: 'Progress' })
     const items = within(list).getAllByRole('listitem')
-    expect(items.map((li) => li.dataset.state)).toEqual(['done', 'done', 'current', 'pending', 'pending'])
-    expect(items).toHaveLength(5)
+    expect(items.map((li) => li.dataset.state)).toEqual(['done', 'done', 'current', 'pending'])
+    expect(items).toHaveLength(4)
+    expect(list).not.toHaveTextContent(/attendee/i)
     act(() => backend.advance(1000))
     await waitFor(() => expect(within(screen.getByRole('list', { name: 'Progress' })).getAllByRole('listitem')[3].dataset.state).toBe('current'))
     act(() => backend.advance(5000))

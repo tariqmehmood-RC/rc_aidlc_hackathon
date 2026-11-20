@@ -87,13 +87,29 @@ def test_wikipedia_candidate_is_chosen_by_matching_the_domain():
     assert PAGE_BAND in fetcher.requested and PAGE_AIR in fetcher.requested  # the band was checked first and rejected
 
 
-def test_without_a_domain_match_the_first_name_match_is_used_and_marked_unverified():
+def _no_wiki_page_mentions_the_domain():
     routes = full_routes()
     routes[PAGE_AIR] = "wikipedia_page_band.html"  # no page mentions example-air.com
     routes[SUMMARY_BAND] = "wikipedia_summary_airline.json"
+    return routes
+
+
+def test_without_a_domain_match_or_a_site_the_first_name_match_is_used_and_marked_unverified():
+    routes = _no_wiki_page_mentions_the_domain()
+    del routes[HOME]  # the company site does not load either
     raw, _ = run(routes)
     assert raw.match_confidence == "unverified_match"
     assert any(d.kind == "wikipedia_page" for d in raw.documents)
+
+
+def test_a_wikipedia_page_that_only_shares_the_name_is_dropped_when_the_site_loads():
+    # "Royal Cyber" found the "Royal (cyber gang)" page, which never mentions royalcyber.com.
+    raw, _ = run(_no_wiki_page_mentions_the_domain())
+    assert raw.match_confidence == "confirmed"
+    assert not any(d.kind.startswith("wikipedia") for d in raw.documents)
+    assert not any("wikipedia.org" in u for u in raw.usable_urls)
+    assert not any("wikipedia.org" in s.url and s.status == "ok" for s in raw.sources)
+    assert {"homepage", "about"} <= set(kinds(raw))
 
 
 def test_unrelated_search_results_are_ignored():
@@ -318,6 +334,7 @@ def test_duplicate_stories_are_removed_by_headline():
     ("Allstate", "allstate.com", ["Allstate"]),
     (None, "duolingo.com", ["duolingo"]),
     ("3M", "3m.com", ["3M"]),
+    ("Royal Cyber", "royalcyber.com", ["Royal Cyber", "royalcyber"]),
 ])
 def test_company_terms(name, domain, expected):
     assert rp.company_terms(name, domain) == expected
@@ -353,3 +370,13 @@ def test_sources_are_fetched_in_parallel_but_merged_in_a_fixed_order():
     assert elapsed < 0.05 * len(started)                      # faster than one fetch after another
     kinds_order = [d.kind for d in raw.documents]
     assert kinds_order.index("wikipedia_summary") < kinds_order.index("homepage") < kinds_order.index("news")
+
+
+@pytest.mark.parametrize("text,ok", [
+    ("Royal Cyber: Transforming Your Business with Big Data, IoT & Cloud Services", True),
+    ("RoyalCyber named a ServiceNow partner", True),
+    ("OKNG, Royal Brunei Armed Forces strengthen cyber readiness", False),
+    ("Mount Royal University student portal reopens after June cyber attack", False),
+])
+def test_news_for_a_two_word_name_needs_the_full_name(text, ok):
+    assert rp.mentions_company(text, rp.company_terms("Royal Cyber", "royalcyber.com")) is ok

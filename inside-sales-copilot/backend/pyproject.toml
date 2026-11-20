@@ -1,0 +1,23 @@
+[project]
+name = "inside-sales-copilot-backend"
+version = "0.1.0"
+description = "Backend for Inside Sales Copilot (Lambda, Python 3.12)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "boto3",
+  "aws-lambda-powertools",
+  "jsonschema",
+  "defusedxml",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "moto[dynamodb,sqs,cognitoidp]",
+]
+
+[tool.pytest.ini_options]
+# rootdir is backend/, so ".." is the repo root. Modules import as backend.src.*
+pythonpath = [".."]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

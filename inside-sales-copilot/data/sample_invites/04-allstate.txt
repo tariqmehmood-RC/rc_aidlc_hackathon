@@ -1,0 +1,11 @@
+Subject: Discovery call - Allstate - IT operations, vendor risk and asset visibility on ServiceNow
+Date: Thursday, December 10, 2026, 11:00-11:30 AM CT
+Organizer: Royal Cyber presales team
+Company: Allstate (allstate.com)
+
+Attendees:
+- Rowan Achterberg, VP, IT Service Management, rowan.achterberg@allstate.com
+- Tomas Whitlock-Abara, Chief Information Officer, tomas.whitlock-abara@allstate.com
+- Ulrike Papadakis, Manager, Vendor Risk and Compliance, ulrike.papadakis@allstate.com
+
+Notes: Warm introduction from a partner. They want faster incident resolution across IT operations, better visibility of IT assets, and a cleaner process for assessing third-party vendors. Ask which ServiceNow modules they already run and who owns the budget.

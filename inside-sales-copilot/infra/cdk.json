@@ -1,0 +1,27 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/app.ts",
+  "watch": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "**/*.d.ts",
+      "**/*.js",
+      "tsconfig.json",
+      "package*.json",
+      "node_modules",
+      "test",
+      "cdk.out"
+    ]
+  },
+  "context": {
+    "haikuModelId": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "sonnetModelId": "us.anthropic.claude-sonnet-5",
+    "@aws-cdk/core:checkSecretUsage": true,
+    "@aws-cdk/aws-iam:minimizePolicies": true,
+    "researchUserAgent": "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)",
+    "briefModel": "haiku"
+  }
+}

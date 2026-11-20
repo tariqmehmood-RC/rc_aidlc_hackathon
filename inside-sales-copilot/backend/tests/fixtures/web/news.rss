@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>"Example Air" - Google News</title>
+<item><title>Example Air oldest story - Daily Wire</title><link>https://news.example/old</link><pubDate>Mon, 02 Nov 2026 08:00:00 GMT</pubDate></item>
+<item><title>Example Air newest story - The Journal</title><link>https://news.example/new</link><pubDate>Thu, 19 Nov 2026 23:30:00 GMT</pubDate></item>
+<item><title>Example Air middle story - Aviation Weekly</title><link>https://news.example/mid</link><pubDate>Tue, 10 Nov 2026 12:00:00 GMT</pubDate></item>
+<item><title>Example Air second newest - Biz Times</title><link>https://news.example/second</link><pubDate>Wed, 18 Nov 2026 09:15:00 GMT</pubDate></item>
+<item><title>Example Air newest story - Another Outlet</title><link>https://news.example/new-copy</link><pubDate>Thu, 19 Nov 2026 23:45:00 GMT</pubDate></item>
+<item><title>Busiest month ever at a small regional airport - Example Air Weekly</title><link>https://news.example/unrelated</link><pubDate>Thu, 19 Nov 2026 23:50:00 GMT</pubDate></item>
+<item><title>Unsafe link Example Air</title><link>javascript:alert(1)</link><pubDate>Wed, 18 Nov 2026 09:15:00 GMT</pubDate></item>
+<item><title>Example Air no date story</title><link>https://news.example/nodate</link></item>
+</channel></rss>

@@ -1,0 +1,11 @@
+Subject: Discovery call - Delta Air Lines - IT service management and cloud
+Date: Thursday, December 3, 2026, 10:00-10:30 AM ET
+Organizer: Royal Cyber presales team
+Company: Delta Air Lines (delta.com)
+
+Attendees:
+- Avery Lindqvist, VP, Information Technology, avery.lindqvist@delta.com
+- Bram Okonkwo-Reyes, Chief Technology Officer, bram.okonkwo-reyes@delta.com
+- Cleo Vantongeren, Sr. Manager, Service Management, cleo.vantongeren@delta.com
+
+Notes: First conversation. They mentioned an interest in modernizing how IT requests are handled and in moving more workloads to the cloud. Ask about timing and who owns the budget.

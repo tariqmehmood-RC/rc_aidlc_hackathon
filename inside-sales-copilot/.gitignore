@@ -1,0 +1,23 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# CDK
+cdk.out/
+
+# Secrets and local config (never commit)
+.env
+.env.*
+*.pem
+*.key
+
+# Backups and build output
+*.bundle
+build/
+.DS_Store

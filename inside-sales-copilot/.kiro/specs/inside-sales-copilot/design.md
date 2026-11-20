@@ -843,3 +843,16 @@ One dashboard shows brief count, failures by step, Bedrock calls and throttles, 
 | Google News RSS | 302 to the URL with locale parameters, then 200 (136 KB of RSS). | The provider follows redirects and sends the locale parameters. |
 | royalcyber.com | HTTP 403 on every page including `/` and `/robots.txt`. The page is a Cloudflare block. | The case study seed is written by hand from the public pages, and the README says so (R5.13, G18). No attempt to get around the block. |
 | Playwright | Not installed. The npm registry and download CDN are reachable. Google Chrome 158 is installed at `/usr/bin/google-chrome`. The OS is Amazon Linux 2023, which Playwright does not officially support. | Wave 6 can run Playwright against the installed Chrome (`channel: 'chrome'`) if `playwright install chromium` fails. |
+
+## 17. Changes after the Wave 3 gate (approved)
+
+| Area | Change | Why |
+|---|---|---|
+| P3 matching | The invite subject and notes are sent first as `<stated_needs>`. The system prompt tells the model to weigh them above the researched pain points. The prefilter gives tags and title words that match the stated needs 2x the weight of research words. | The gate run matched only on Wikipedia and news pain points and missed the invite's actual needs (Allstate: 2 of 3). |
+| P3 message | `uncoveredNeed` is a short label (schema max 80 characters, cut to at most 6 words in code). | The message was a full sentence. |
+| P4 brief model | `BRIEF_MODEL` (`haiku` or `sonnet`) chooses the model for P4. CDK context `briefModel` sets it for the worker; the local runner reads the same context, and the environment variable overrides it. Haiku's read timeout is 45 s. | Speed and cost choice. |
+| P4 size | At most 5 company snapshot items (news is added by code, not repeated by the model). `maxTokens` 2500 (was 4000). | Shorter output, faster writing. |
+| P4 checks | A failed check is logged by name (`agenda_minutes`, `question_count`, `unverified_title_used`), never with brief text. The client also counts JSON repairs per model. | The gate run had a repair round with no record of why. |
+| Research | Wikipedia, company site, and news are fetched in parallel (3 threads) and merged in a fixed order. No Bedrock call is involved, so the 1 request per second limit is not affected. | Research took 11 to 26 s one source after another. |
+| News | An item is kept only if its headline (outlet removed) names the company: full name, the name without corporate words, its first word, or the domain label, matched as whole words. Duplicates are removed by normalized headline and by URL. Max 3. | Unrelated stories appeared (a Sonoma airport story for Delta). |
+| Demo | `scripts/warm_cache.py` parses each demo invite and runs research only, storing results in ResearchCache (7 days). | On demo day research comes from the cache. |

@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 
 import pytest
 
@@ -122,4 +123,6 @@ def test_api_lambdas_never_import_bedrock():
         if path.name == "worker.py":
             continue
         text = path.read_text(encoding="utf-8")
-        assert "bedrock" not in text.lower(), path.name
+        # imports of the Bedrock client, or a boto3 bedrock client, are not allowed (comments are fine)
+        assert not re.search(r"^\s*(from|import)\s+\S*bedrock", text, re.MULTILINE), path.name
+        assert not re.search(r"client\(\s*[\"']bedrock", text), path.name

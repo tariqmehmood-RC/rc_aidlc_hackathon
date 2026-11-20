@@ -695,9 +695,9 @@ Code checks after the call: agenda minutes sum to 30, question count 8 to 10, ev
 
 ### P5. Extract rules from edits (Haiku, `maxTokens` 800)
 
-System: "You are given the draft and the final version of a sales brief, as lists of items with ids. Find the changes the user made. Propose 0 to 3 short, reusable instructions (each under 200 characters, imperative, not tied to this company) that would make future drafts match the user's edits, for example 'Always ask about the budget cycle'. If the changes are only company-specific corrections or typos, return none. Do not repeat the existing rules."
+System: "You are given the changes a sales engineer made to a draft discovery brief, as before and after values. Propose 0 to 3 short, reusable instructions (each under 200 characters, imperative, not tied to this company) that would make future drafts match the user's edits, for example 'Always ask about the budget cycle'. If the changes are only company-specific corrections or typos, return none. Do not repeat the existing rules."
 
-User: `<existing_rules>`, `<draft>` and `<final>` as JSON (only the changed items plus 1 item of context each), wrapped in tags.
+User: `<existing_rules>` and `<changes>`. `<changes>` is a JSON list of the items the SE edited, added, or removed, each with `before` and `after` values for the editable fields only (text, agenda minutes, topic, and note). Whitespace-only edits are not changes. Both blocks are wrapped in tags, and a closing tag inside the text is neutralized.
 
 Output schema:
 

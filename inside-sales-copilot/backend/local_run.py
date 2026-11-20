@@ -43,13 +43,17 @@ def _cdk_context() -> dict[str, Any]:
         return {}
 
 
-def _configure_env(fake: bool) -> None:
+def _configure_env(fake: bool, brief_model: str | None = None) -> None:
     """Defaults from CDK context, so the local run uses the same models as the deployed one.
     Environment variables that are already set win."""
     from .src.lib import constants as c
 
     ctx = _cdk_context()
     os.environ.setdefault(c.ENV_RESEARCH_USER_AGENT, ctx.get("researchUserAgent", c.RESEARCH_USER_AGENT_DEFAULT))
+    if brief_model:
+        os.environ[c.ENV_BRIEF_MODEL] = brief_model
+    else:
+        os.environ.setdefault(c.ENV_BRIEF_MODEL, ctx.get("briefModel", c.DEFAULT_BRIEF_MODEL))
     if not fake:
         os.environ.setdefault(c.ENV_MODEL_HAIKU, ctx.get("haikuModelId", ""))
         os.environ.setdefault(c.ENV_MODEL_SONNET, ctx.get("sonnetModelId", ""))
@@ -75,10 +79,14 @@ class ScoreRecorder:
     def usage(self) -> dict[str, dict[str, int]]:
         return getattr(self.inner, "usage", {})
 
+    @property
+    def json_repairs(self) -> dict[str, int]:
+        return getattr(self.inner, "json_repairs", {})
+
 
 def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "local-user",
-        rules: list[str] | None = None, out=sys.stdout) -> dict[str, Any]:
-    _configure_env(fake)
+        rules: list[str] | None = None, out=sys.stdout, brief_model: str | None = None) -> dict[str, Any]:
+    _configure_env(fake, brief_model)
     import boto3
     from moto import mock_aws
 
@@ -87,6 +95,7 @@ def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "l
     from .src.lib.brief_store import BRIEFS_TABLE_DEFINITION, BriefStore
     from .src.lib.profiles import load_profiles
     from .src.services import invite_parser, pipeline
+    from .src.services.brief_writer import brief_model_from_env
     from .src.services.case_study_matcher import load_case_studies
     from .src.services.offline_model import OfflineModel
     from .src.services.research import ResearchService
@@ -115,8 +124,10 @@ def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "l
             return real_set_step(brief_id, job_id, step)
 
         store.set_step = timed_set_step  # type: ignore[method-assign]
+        events: list[tuple[str, dict[str, Any]]] = []
         deps = pipeline.Deps(store=store, research=ResearchService(model, provider, cache), bedrock=model,
-                             rules=RulesStore(rules_table), studies=load_case_studies(), profiles=load_profiles())
+                             rules=RulesStore(rules_table), studies=load_case_studies(), profiles=load_profiles(),
+                             log=lambda e, d: events.append((e, d)), brief_model=brief_model_from_env())
         for rule in rules or []:
             deps.rules.add(user, rule)
 
@@ -146,9 +157,14 @@ def run(invite_path: str, bu: str, *, fake: bool, fixtures: bool, user: str = "l
                   "totalSeconds": round(done - started, 1)}
         step_times = [(name, round((steps[i + 1][1] if i + 1 < len(steps) else done) - t, 1)) for i, (name, t) in enumerate(steps)]
         qualifying = [s for s in model.raw_scores if s["score"] >= c.CASE_STUDY_MIN_SCORE]
+        failed_checks = [d.get("checks", []) for e, d in events if e == "brief_check_failed"]
         summary = {"status": final["status"], "timing": timing, "steps": step_times,
                    "scoredAtLeast60": len(qualifying), "candidatesScored": len(model.raw_scores),
                    "candidateIds": [s["caseStudyId"] for s in model.raw_scores],
+                   "allScores": sorted((s["score"] for s in model.raw_scores), reverse=True),
+                   "briefModel": deps.brief_model,
+                   "checkRepairs": len(failed_checks), "failedChecks": [x for f in failed_checks for x in f],
+                   "jsonRepairs": dict(model.json_repairs),
                    "usage": model.usage, "brief": final}
         _print_brief(final, bu, summary, out)
         return summary
@@ -218,7 +234,9 @@ def _print_brief(brief: dict[str, Any], bu: str, summary: dict[str, Any], out) -
     p(f"Time: parse {t['parseSeconds']} s + pipeline {t['pipelineSeconds']} s = {t['totalSeconds']} s total")
     p("Steps: " + ", ".join(f"{name} {secs} s" for name, secs in summary["steps"]))
     p(f"Case studies scoring 60 or more: {summary['scoredAtLeast60']} of {summary['candidatesScored']} candidates scored "
-      f"(top {len(content['caseStudies'])} shown)")
+      f"(top {len(content['caseStudies'])} shown). All scores: {summary['allScores']}")
+    p(f"Brief model: {summary['briefModel']}. Check repairs: {summary['checkRepairs']} {summary['failedChecks'] or ''}. "
+      f"JSON repairs: {summary['jsonRepairs'] or 0}")
     for model, u in summary["usage"].items():
         p(f"Bedrock {model}: {u['calls']} calls, {u['inputTokens']} input tokens, {u['outputTokens']} output tokens")
 
@@ -233,8 +251,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fixtures", action="store_true", help="read recorded research instead of the live web")
     parser.add_argument("--rule", action="append", default=[], help="a saved rule to apply (repeatable)")
     parser.add_argument("--json", action="store_true", help="also print the result as JSON")
+    parser.add_argument("--brief-model", choices=c.BRIEF_MODELS, help="model that writes the brief (default: BRIEF_MODEL or cdk.json)")
     args = parser.parse_args(argv)
-    result = run(args.invite, args.bu, fake=args.fake_bedrock, fixtures=args.fixtures, rules=args.rule)
+    result = run(args.invite, args.bu, fake=args.fake_bedrock, fixtures=args.fixtures, rules=args.rule,
+                 brief_model=args.brief_model)
     if args.json:
         print(json.dumps({k: v for k, v in result.items() if k != "brief"}, indent=2))
     return 0 if result.get("status") == c.STATUS_READY else 1

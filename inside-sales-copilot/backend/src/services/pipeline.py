@@ -52,6 +52,7 @@ class Deps:
     profiles: Mapping[str, Profile]
     metrics: Any = None
     log: Callable[[str, dict[str, Any]], None] = field(default=lambda event, data: None)
+    brief_model: str = c.DEFAULT_BRIEF_MODEL
 
     def count(self, name: str) -> None:
         if self.metrics is not None:
@@ -118,7 +119,8 @@ def _pipeline_job(brief: dict[str, Any], job_id: str, deps: Deps) -> str:
                      "version": 0},
                     completed_step=step))
                 deps.count("BriefGenerated")
-                deps.log("brief_ready", {"seconds": round(time.monotonic() - started, 1)})
+                deps.log("brief_ready", {"seconds": round(time.monotonic() - started, 1), "model": written.model,
+                                         "repairs": written.repairs, "failedChecks": written.repair_problems})
                 return "ready"
             field_name, value = _run_step(step, data, invite, deps)
             data[field_name] = value
@@ -150,7 +152,9 @@ def _run_step(step: str, data: dict[str, Any], invite: dict[str, Any], deps: Dep
     if step == c.STEP_MATCHING:
         try:
             # The BU stored on the brief came from the creator's verified token (R5.1).
-            matches = case_study_matcher.match_case_studies(deps.bedrock, data.get("bu"), data["research"], deps.studies)
+            matches = case_study_matcher.match_case_studies(
+                deps.bedrock, data.get("bu"), data["research"], deps.studies,
+                stated_needs=case_study_matcher.stated_needs_from_invite(invite))
         except BedrockUnavailable as exc:
             raise _Fail("BEDROCK_UNAVAILABLE", step, str(exc)) from None
         except InvalidModelOutput as exc:
@@ -169,6 +173,8 @@ def _write(data: dict[str, Any], deps: Deps) -> brief_writer.WrittenBrief:
             case_matches=data["caseStudyMatches"],
             rules=deps.rules.list_newest(data["userId"]),
             meeting={"subject": invite.get("subject"), "meetingDate": invite.get("meetingDate"), "notes": invite.get("notes")},
+            model=deps.brief_model,
+            log=deps.log,
         )
     except BedrockUnavailable as exc:
         raise _Fail("BEDROCK_UNAVAILABLE", c.STEP_WRITING, str(exc)) from None

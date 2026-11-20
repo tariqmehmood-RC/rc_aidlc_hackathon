@@ -79,7 +79,7 @@ def test_sections_are_in_the_required_order_and_valid():
 def test_uses_sonnet_with_the_write_token_limit():
     _, fake = write([good_draft()])
     call = fake.calls[0]
-    assert call["model"] == "sonnet" and call["max_tokens"] == 4000 and call["schema"] is bw.P4_SCHEMA
+    assert call["model"] == "sonnet" and call["max_tokens"] == 2500 and call["schema"] is bw.P4_SCHEMA
 
 
 def test_ids_are_assigned_by_code():
@@ -296,3 +296,37 @@ def test_model_errors_pass_through():
 
     with pytest.raises(InvalidModelOutput):
         write([InvalidModelOutput("bad")])
+
+
+# --- model choice and repair reporting -------------------------------------------------------------------
+def test_haiku_can_write_the_brief():
+    fake = FakeBedrock([good_draft()])
+    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="haiku")
+    assert fake.calls[0]["model"] == "haiku" and out.model == "haiku" and out.repairs == 0
+
+
+def test_an_unknown_model_is_refused():
+    with pytest.raises(ValueError):
+        bw.write_brief(FakeBedrock([]), research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING, model="opus")
+
+
+def test_a_failed_check_is_logged_by_name_and_counted():
+    bad = good_draft()
+    bad["agenda"][3]["minutes"] = 4
+    logged = []
+    fake = FakeBedrock([bad, good_draft()])
+    out = bw.write_brief(fake, research=RESEARCH, attendee_checks=CHECKS, case_matches=MATCHES, rules=[], meeting=MEETING,
+                         log=lambda e, d: logged.append((e, d)))
+    assert out.repairs == 1 and out.repair_problems == ["agenda_minutes"]
+    assert logged == [("brief_check_failed", {"model": "sonnet", "checks": ["agenda_minutes"]})]
+
+
+def test_at_most_five_snapshot_items_are_requested():
+    assert bw.P4_SCHEMA["properties"]["companySnapshot"]["maxItems"] == 5
+    assert "at most 5 company snapshot items" in bw.P4_SYSTEM
+
+
+@pytest.mark.parametrize("env,expected", [({"BRIEF_MODEL": "haiku"}, "haiku"), ({"BRIEF_MODEL": "SONNET"}, "sonnet"),
+                                          ({"BRIEF_MODEL": "opus"}, "sonnet"), ({}, "sonnet")])
+def test_brief_model_from_env(env, expected):
+    assert bw.brief_model_from_env(env) == expected

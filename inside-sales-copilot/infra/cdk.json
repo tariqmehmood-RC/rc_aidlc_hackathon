@@ -21,6 +21,7 @@
     "sonnetModelId": "us.anthropic.claude-sonnet-5",
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/aws-iam:minimizePolicies": true,
-    "researchUserAgent": "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)"
+    "researchUserAgent": "InsideSalesCopilot/0.1 (Royal Cyber AWS AI-DLC hackathon; +https://github.com/tariqmehmood-RC/rc_aidlc_hackathon)",
+    "briefModel": "sonnet"
   }
 }

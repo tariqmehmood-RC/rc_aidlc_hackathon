@@ -21,7 +21,9 @@ P4_SYSTEM = (
     "taken from the facts. Where information is unknown, say it is unknown. Never use an "
     "unverified attendee's claimed role as a fact. Write exactly 8 to 10 discovery questions and "
     "an agenda of time blocks that add up to exactly 30 minutes. Apply the user's rules where "
-    "they fit. Keep each item short. Do not add sections."
+    "they fit. Write at most 5 company snapshot items, the most useful for the call; do not "
+    "repeat news headlines there, they are added separately. Keep each item short. Do not add "
+    "sections."
 )
 
 P4_SCHEMA: dict[str, Any] = {
@@ -30,7 +32,7 @@ P4_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
     "properties": {
         "companySnapshot": {
-            "type": "array", "maxItems": 8,
+            "type": "array", "maxItems": c.MAX_SNAPSHOT_ITEMS,
             "items": {"type": "object", "required": ["text", "sourceUrls"], "additionalProperties": False,
                       "properties": {"text": {"type": "string", "maxLength": 400},
                                      "sourceUrls": {"type": "array", "minItems": 1, "items": {"type": "string"}}}},
@@ -70,6 +72,9 @@ class BriefWriteError(Exception):
 class WrittenBrief:
     content: dict[str, Any]
     rules_applied: list[dict[str, str]]
+    model: str = c.DEFAULT_BRIEF_MODEL
+    repairs: int = 0                      # check-failure corrections (0 or 1)
+    repair_problems: list[str] | None = None  # which checks failed, for the logs
 
 
 # --- helpers -------------------------------------------------------------------------------------
@@ -249,20 +254,34 @@ def _ordered(item: dict[str, Any], keys: Sequence[str]) -> dict[str, Any]:
 
 
 # --- main entry ------------------------------------------------------------------------------------
+def brief_model_from_env(env: dict[str, str] | None = None) -> str:
+    """haiku or sonnet, from BRIEF_MODEL. Anything else falls back to the default."""
+    import os
+
+    value = (env if env is not None else os.environ).get(c.ENV_BRIEF_MODEL, "").strip().lower()
+    return value if value in c.BRIEF_MODELS else c.DEFAULT_BRIEF_MODEL
+
+
 def write_brief(bedrock, *, research: dict[str, Any], attendee_checks: Sequence[dict[str, Any]],
                 case_matches: dict[str, Any], rules: Sequence[dict[str, Any]],
-                meeting: dict[str, Any]) -> WrittenBrief:
-    """Run prompt P4 (Sonnet), check the answer, correct it once if needed, and assemble the brief."""
+                meeting: dict[str, Any], model: str = c.DEFAULT_BRIEF_MODEL,
+                log=None) -> WrittenBrief:
+    """Run prompt P4 (Haiku or Sonnet), check the answer, correct it once if needed, assemble."""
+    if model not in c.BRIEF_MODELS:
+        raise ValueError(f"unknown brief model {model!r}")
     applied = [{"ruleId": r.get("ruleId", ""), "text": r["text"]} for r in list(rules)[: c.MAX_RULES_APPLIED]]
     user = build_user_message(research, attendee_checks, case_matches, applied, meeting)
 
     def ask(message: str) -> dict[str, Any]:
-        return bedrock.converse_json(model=c.MODEL_SONNET, system=P4_SYSTEM, user=message,
+        return bedrock.converse_json(model=model, system=P4_SYSTEM, user=message,
                                      max_tokens=c.MAX_TOKENS["write"], schema=P4_SCHEMA)
 
     draft = ask(user)
     problems = check_draft(draft, research, attendee_checks)
+    first_problems = list(problems)
     if problems:  # one correction, no more (R6.9)
+        if log:
+            log("brief_check_failed", {"model": model, "checks": [_check_name(p) for p in problems]})
         draft = ask(user + "\n\nYour previous answer had these problems. Fix them and return the full JSON again:\n"
                     + "\n".join(f"- {p}" for p in problems))
         problems = check_draft(draft, research, attendee_checks)
@@ -271,4 +290,17 @@ def write_brief(bedrock, *, research: dict[str, Any], attendee_checks: Sequence[
 
     content = _assemble(draft, research, attendee_checks, case_matches)
     models.validate("brief_content", content)
-    return WrittenBrief(content=content, rules_applied=applied)
+    return WrittenBrief(content=content, rules_applied=applied, model=model,
+                        repairs=1 if first_problems else 0,
+                        repair_problems=[_check_name(p) for p in first_problems])
+
+
+def _check_name(problem: str) -> str:
+    """A short, data-free name for a failed check (safe to log)."""
+    if problem.startswith("The agenda"):
+        return "agenda_minutes"
+    if problem.startswith("There are"):
+        return "question_count"
+    if "unverified attendee" in problem:
+        return "unverified_title_used"
+    return "other"

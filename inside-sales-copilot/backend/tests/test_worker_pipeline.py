@@ -252,3 +252,28 @@ def test_lambda_handler_reads_sqs_records(monkeypatch):
         out = worker.handler({"Records": [{"body": json.dumps(msg(brief["briefId"], job, "parse"))},
                                           {"body": "not json"}]}, None)
         assert out == {"outcomes": ["parsed", "invalid"]}
+
+
+
+def test_the_matcher_receives_the_invites_stated_needs_and_the_brief_uses_the_configured_model():
+    from backend.src.services import brief_writer, case_study_matcher
+
+    with backend() as env:
+        env.deps.brief_model = "haiku"
+        brief_id, job = parse_and_confirm(env)
+        seen = {}
+        real = env.model.converse_json
+
+        def spy(**kw):
+            if kw["schema"] is case_study_matcher.P3_SCHEMA:
+                seen["needs"] = kw["user"]
+            if kw["schema"] is brief_writer.P4_SCHEMA:
+                seen["model"] = kw["model"]
+            return real(**kw)
+
+        env.model.converse_json = spy
+        assert pipeline.handle_message(msg(brief_id, job, "pipeline"), env.deps) == "ready"
+        assert "faster incident resolution" in seen["needs"]
+        assert seen["model"] == "haiku"
+        ready = [d for e, d in env.events if e == "brief_ready"][0]
+        assert ready["model"] == "haiku" and ready["repairs"] == 0

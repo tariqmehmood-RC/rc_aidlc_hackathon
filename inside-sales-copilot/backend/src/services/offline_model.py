@@ -178,7 +178,9 @@ class OfflineModel:
     def _score(self, user: str) -> dict[str, Any]:
         industry = (re.search(r"^industry: (.*)$", user, re.MULTILINE) or [None, ""])[1].strip().lower()
         pain = " ".join(re.findall(r"^- p\d+: (.*)$", user, re.MULTILINE)).lower()
-        prospect_words = set(_WORD.findall(pain + " " + industry))
+        needs_m = re.search(r"<stated_needs>\n(.*?)\n</stated_needs>", user, re.DOTALL)
+        needs = html.unescape(needs_m.group(1)).lower() if needs_m else ""
+        prospect_words = set(_WORD.findall(pain + " " + industry + " " + needs))
         scores = []
         for cid, body in re.findall(r'<case_study id="([^"]+)">(.*?)</case_study>', user, re.DOTALL):
             body = html.unescape(body)
@@ -195,8 +197,8 @@ class OfflineModel:
             reason = ("Relevant because it covers " + " and ".join(why) + ".") if why else "Little overlap with the prospect's context."
             scores.append({"caseStudyId": cid, "score": score, "reason": reason})
         first_pain = re.search(r"^- p\d+: (.*)$", user, re.MULTILINE)
-        return {"scores": scores[: c.CASE_STUDY_CANDIDATES],
-                "uncoveredNeed": first_pain.group(1)[:150] if first_pain else None}
+        label = " ".join(first_pain.group(1).split()[:5]).strip(".,") if first_pain else None
+        return {"scores": scores[: c.CASE_STUDY_CANDIDATES], "uncoveredNeed": label}
 
     # -- P4: the brief -------------------------------------------------------------------------------------
     def _write(self, user: str) -> dict[str, Any]:

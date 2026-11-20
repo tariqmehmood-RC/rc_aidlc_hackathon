@@ -63,7 +63,13 @@ MODEL_SONNET = "sonnet"
 ENV_MODEL_HAIKU = "BEDROCK_MODEL_HAIKU"
 ENV_MODEL_SONNET = "BEDROCK_MODEL_SONNET"
 # max_tokens per prompt (design section 10)
-MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 4000, "rules": 800}
+MAX_TOKENS = {"parse": 1500, "research": 2500, "score": 1500, "write": 2500, "rules": 800}
+# Which model writes the brief (prompt P4). The CDK context `briefModel` sets it for Lambda;
+# the BRIEF_MODEL environment variable overrides it locally.
+ENV_BRIEF_MODEL = "BRIEF_MODEL"
+BRIEF_MODELS = (MODEL_HAIKU, MODEL_SONNET)
+DEFAULT_BRIEF_MODEL = MODEL_SONNET
+MAX_SNAPSHOT_ITEMS = 5
 
 # --- Research fetching -------------------------------------------------------------------
 # Default User-Agent for company research (Wikimedia asks for a contact). The same value is the

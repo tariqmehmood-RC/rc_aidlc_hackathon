@@ -43,7 +43,7 @@ THROTTLE_CODES = frozenset({"ThrottlingException", "TooManyRequestsException"})
 _RETRYABLE_NETWORK_ERRORS = (ReadTimeoutError, ConnectTimeoutError, EndpointConnectionError)
 
 # Per-attempt read timeouts keep each step well under the 120 s stuck limit (design 7.3).
-READ_TIMEOUT_S = {c.MODEL_HAIKU: 20, c.MODEL_SONNET: 60}
+READ_TIMEOUT_S = {c.MODEL_HAIKU: 45, c.MODEL_SONNET: 60}  # Haiku may now write the brief
 # Default temperature per model. None means "do not send it": Claude Sonnet 5 rejects the
 # temperature parameter with a ValidationException (found in the 3.11 gate run).
 DEFAULT_TEMPERATURE: dict[str, float | None] = {c.MODEL_HAIKU: 0.2, c.MODEL_SONNET: None}
@@ -129,6 +129,9 @@ class BedrockClient:
         self.max_attempts = max_attempts
         # Token counts per model, read by the smoke test and the cost estimate.
         self.usage: dict[str, dict[str, int]] = {}
+        # How often a reply needed the JSON repair round, per model (for logs and the gate runs).
+        self.json_repairs: dict[str, int] = {}
+        self.last_repair_problem: str | None = None
 
     # --- configuration ---------------------------------------------------------------------
     def model_id(self, model: str) -> str:
@@ -175,6 +178,8 @@ class BedrockClient:
             return data
 
         # One repair attempt (design 9.4). It takes a token like every other call.
+        self.json_repairs[model] = self.json_repairs.get(model, 0) + 1
+        self.last_repair_problem = problem  # schema paths only, never values
         messages = messages + [
             {"role": "assistant", "content": [{"text": reply_text}]},
             {"role": "user", "content": [{"text": REPAIR_MESSAGE}]},

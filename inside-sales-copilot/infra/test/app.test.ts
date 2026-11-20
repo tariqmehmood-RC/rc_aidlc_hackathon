@@ -47,6 +47,10 @@ describe('cdk.json context', () => {
     );
   });
 
+  test('brief model is haiku or sonnet', () => {
+    expect(['haiku', 'sonnet']).toContain(cdkJson.context.briefModel);
+  });
+
   test('model IDs are the tested defaults', () => {
     expect(cdkJson.context.haikuModelId).toBe('us.anthropic.claude-haiku-4-5-20251001-v1:0');
     expect(cdkJson.context.sonnetModelId).toBe('us.anthropic.claude-sonnet-5');

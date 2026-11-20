@@ -1,13 +1,15 @@
 """Tests for data/case_studies.json and scripts/import_case_studies.py."""
+import collections
 import importlib.util
 import json
-import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 SEED = ROOT / "data" / "case_studies.json"
+CSV = ROOT / "data" / "royal_cyber_case_studies.csv"
 
 _spec = importlib.util.spec_from_file_location("import_case_studies", ROOT / "scripts" / "import_case_studies.py")
 importer = importlib.util.module_from_spec(_spec)
@@ -27,31 +29,44 @@ def test_seed_file_is_valid():
     assert importer.validate_items(load_seed()) == []
 
 
-def test_seed_has_all_four_bus():
+def test_seed_has_27_real_entries():
+    assert len(load_seed()) == 27
+
+
+def test_seed_has_at_least_5_entries_for_aws_and_servicenow():
+    counts = collections.Counter(i["bu"] for i in load_seed())
+    assert counts["AWS"] >= 5
+    assert counts["ServiceNow"] >= 5
+
+
+def test_seed_covers_all_four_bus():
     assert {i["bu"] for i in load_seed()} == set(importer.ALLOWED_BUS)
 
 
-def test_seed_has_15_placeholders_until_replaced():
-    items = load_seed()
-    placeholders = importer.find_placeholders(items)
-    if placeholders:  # once the real seed replaces the placeholders this check no longer applies
-        assert len(placeholders) == 15
-        assert all(i["title"].startswith("[PLACEHOLDER]") for i in items if i["id"] in placeholders)
+def test_every_url_is_on_royalcyber_com():
+    for item in load_seed():
+        assert item["url"].startswith(("https://royalcyber.com/", "https://www.royalcyber.com/")), item["url"]
+        assert urlparse(item["url"]).hostname in {"royalcyber.com", "www.royalcyber.com"}
 
 
-def test_find_placeholders_detects_by_id_and_title():
-    items = [
-        {"id": "placeholder-01", "title": "x"},
-        {"id": "cs-1", "title": "[PLACEHOLDER] y"},
-        {"id": "cs-2", "title": "Real"},
-    ]
-    assert importer.find_placeholders(items) == ["placeholder-01", "cs-1"]
+def test_no_placeholder_entries_remain():
+    for item in load_seed():
+        assert not item["id"].startswith("placeholder")
+        assert "placeholder" not in item["title"].lower()
+        assert "placeholder" not in item["summary"].lower()
 
 
-@pytest.mark.skipif(os.environ.get("DEMO_MODE") != "true", reason="only enforced when DEMO_MODE=true")
-def test_no_placeholders_in_demo_mode():
-    left = importer.find_placeholders(load_seed())
-    assert left == [], f"DEMO_MODE=true but {len(left)} placeholder case studies remain: {left}"
+def test_seed_json_is_in_sync_with_the_csv(tmp_path):
+    """If someone edits the CSV, they must run the importer. The JSON must equal a fresh import."""
+    out = tmp_path / "fresh.json"
+    assert importer.main([str(CSV), "--output", str(out)]) == 0
+    assert json.loads(out.read_text(encoding="utf-8")) == load_seed()
+
+
+def test_the_real_csv_has_the_expected_columns_and_rows():
+    items, problems = importer.read_csv(CSV)
+    assert problems == []
+    assert len(items) == 27
 
 
 # --- the validator -------------------------------------------------------------
@@ -93,7 +108,7 @@ def test_validator_rejects_missing_and_extra_fields():
 def test_validator_rejects_duplicates_and_empty_list():
     assert importer.validate_items([]) != []
     assert importer.validate_items([good_item(), good_item()]) != []
-    assert importer.validate_items([good_item(id="a"), good_item(id="b")]) != []  # same real url twice
+    assert importer.validate_items([good_item(id="a"), good_item(id="b")]) != []  # same url twice
 
 
 # --- the CSV importer ----------------------------------------------------------
@@ -117,6 +132,22 @@ def test_import_good_csv(tmp_path):
     assert importer.validate_items(items) == []
 
 
+def test_import_ignores_blank_lines_before_the_header_and_between_rows(tmp_path):
+    row2 = GOOD_ROW.replace("example", "other")
+    code, out = run(tmp_path, "\n" + HEADER + "\n" + GOOD_ROW + "\n" + row2 + "\n")
+    assert code == 0
+    assert len(json.loads(out.read_text())) == 2
+
+
+def test_import_handles_quoted_fields_with_commas(tmp_path):
+    row = '"A title, with a comma",https://royalcyber.com/x,AWS,Retail,"Summary, with a comma.",a;b\n'
+    code, out = run(tmp_path, HEADER + row)
+    assert code == 0
+    item = json.loads(out.read_text())[0]
+    assert item["title"] == "A title, with a comma"
+    assert item["summary"] == "Summary, with a comma."
+
+
 def test_import_is_stable_when_rows_reorder(tmp_path):
     row2 = GOOD_ROW.replace("example", "other")
     _, out1 = run(tmp_path, HEADER + GOOD_ROW + row2)
@@ -132,16 +163,26 @@ def test_import_rejects_bad_bu_and_writes_nothing(tmp_path):
     assert not out.exists()
 
 
+def test_import_rejects_non_royalcyber_url(tmp_path):
+    code, out = run(tmp_path, HEADER + GOOD_ROW.replace("https://www.royalcyber.com", "https://example.com"))
+    assert code == 1 and not out.exists()
+
+
+def test_import_rejects_duplicate_urls(tmp_path):
+    code, out = run(tmp_path, HEADER + GOOD_ROW + GOOD_ROW)
+    assert code == 1 and not out.exists()
+
+
 def test_import_rejects_wrong_header(tmp_path):
     code, out = run(tmp_path, "title,url\nx,y\n")
     assert code == 1 and not out.exists()
 
 
-def test_import_rejects_wrong_column_count(tmp_path):
-    code, out = run(tmp_path, HEADER + "only,two\n")
+def test_import_rejects_empty_file(tmp_path):
+    code, out = run(tmp_path, "\n\n")
     assert code == 1 and not out.exists()
 
 
-def test_import_rejects_placeholder_rows(tmp_path):
-    code, out = run(tmp_path, HEADER + GOOD_ROW.replace("Example title", "[PLACEHOLDER] x"))
+def test_import_rejects_wrong_column_count(tmp_path):
+    code, out = run(tmp_path, HEADER + "only,two\n")
     assert code == 1 and not out.exists()

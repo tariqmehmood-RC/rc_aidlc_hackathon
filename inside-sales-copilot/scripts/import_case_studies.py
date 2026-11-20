@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Turn a simple CSV of Royal Cyber case studies into data/case_studies.json.
+"""Turn the CSV of Royal Cyber case studies into data/case_studies.json.
 
 CSV columns (header row required): title,url,bu,industry,summary,tags
 - `tags` are separated by semicolons, for example "ServiceNow;ITSM;automation".
 - `summary` is 1 to 2 sentences in our own words. Do not paste page text.
 - `url` is the public case study page on royalcyber.com.
+- Blank lines are ignored.
 
 Usage:
-    python scripts/import_case_studies.py input.csv [--output data/case_studies.json]
+    python scripts/import_case_studies.py data/royal_cyber_case_studies.csv [--output data/case_studies.json]
 
 Standard library only. Exits with a non-zero code and prints every problem if the
 CSV or the resulting JSON fails validation. Nothing is written in that case.
@@ -27,22 +28,12 @@ REQUIRED_FIELDS = ("id", "title", "summary", "bu", "client_industry", "tags", "u
 CSV_COLUMNS = ("title", "url", "bu", "industry", "summary", "tags")
 MAX_TITLE = 200
 MAX_SUMMARY = 300
-PLACEHOLDER_MARK = "[PLACEHOLDER]"
 DEFAULT_OUTPUT = Path(__file__).resolve().parent.parent / "data" / "case_studies.json"
 
 
 def make_id(url: str) -> str:
     """Stable id from the URL, so reordering the CSV does not change ids."""
     return "cs-" + hashlib.sha1(url.strip().encode("utf-8")).hexdigest()[:8]
-
-
-def is_placeholder(item: dict) -> bool:
-    return str(item.get("id", "")).startswith("placeholder-") or PLACEHOLDER_MARK in str(item.get("title", ""))
-
-
-def find_placeholders(items: list[dict]) -> list[str]:
-    """Return the ids of placeholder entries."""
-    return [str(i.get("id")) for i in items if is_placeholder(i)]
 
 
 def _valid_url(url: str) -> bool:
@@ -94,35 +85,43 @@ def validate_items(items: object) -> list[str]:
         if item["id"] in seen_ids:
             problems.append(f"{where}: duplicate id")
         seen_ids.add(item["id"])
-        # Placeholders all share one URL on purpose, so only real entries must be unique.
-        if not is_placeholder(item):
-            if item["url"] in seen_urls:
-                problems.append(f"{where}: duplicate url")
-            seen_urls.add(item["url"])
+        if item["url"] in seen_urls:
+            problems.append(f"{where}: duplicate url")
+        seen_urls.add(item["url"])
     return problems
 
 
 def read_csv(path: Path) -> tuple[list[dict], list[str]]:
+    """Read the CSV. Blank lines (before the header or between rows) are ignored."""
     problems: list[str] = []
     items: list[dict] = []
     with path.open(newline="", encoding="utf-8-sig") as fh:
-        reader = csv.DictReader(fh)
-        if reader.fieldnames is None or [c.strip() for c in reader.fieldnames] != list(CSV_COLUMNS):
-            return [], [f"CSV header must be exactly: {','.join(CSV_COLUMNS)}"]
-        for line_no, row in enumerate(reader, 2):
-            if None in row or any(v is None for v in row.values()):
-                problems.append(f"line {line_no}: wrong number of columns")
+        reader = csv.reader(fh)
+        header: list[str] | None = None
+        for row in reader:
+            if not any(cell.strip() for cell in row):
+                continue  # blank line
+            if header is None:
+                header = [c.strip() for c in row]
+                if header != list(CSV_COLUMNS):
+                    return [], [f"CSV header must be exactly: {','.join(CSV_COLUMNS)}"]
                 continue
-            url = row["url"].strip()
+            if len(row) != len(CSV_COLUMNS):
+                problems.append(f"line {reader.line_num}: expected {len(CSV_COLUMNS)} columns, found {len(row)}")
+                continue
+            rec = dict(zip(CSV_COLUMNS, row))
+            url = rec["url"].strip()
             items.append({
                 "id": make_id(url),
-                "title": row["title"].strip(),
-                "summary": row["summary"].strip(),
-                "bu": row["bu"].strip(),
-                "client_industry": row["industry"].strip(),
-                "tags": [t.strip() for t in row["tags"].split(";") if t.strip()],
+                "title": rec["title"].strip(),
+                "summary": rec["summary"].strip(),
+                "bu": rec["bu"].strip(),
+                "client_industry": rec["industry"].strip(),
+                "tags": [t.strip() for t in rec["tags"].split(";") if t.strip()],
                 "url": url,
             })
+        if header is None:
+            return [], ["CSV is empty"]
     return items, problems
 
 
@@ -135,8 +134,6 @@ def main(argv: list[str] | None = None) -> int:
     items, problems = read_csv(args.csv_path)
     if not problems:
         problems = validate_items(items)
-    if not problems and find_placeholders(items):
-        problems = ["CSV contains placeholder entries"]
     if problems:
         print(f"Not written. {len(problems)} problem(s):", file=sys.stderr)
         for p in problems:

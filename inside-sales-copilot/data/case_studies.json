@@ -1,167 +1,381 @@
 [
   {
-    "id": "placeholder-01",
-    "title": "[PLACEHOLDER] AWS case study 1",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "AWS",
-    "client_industry": "Retail",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-02",
-    "title": "[PLACEHOLDER] AWS case study 2",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "AWS",
-    "client_industry": "Financial Services",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-03",
-    "title": "[PLACEHOLDER] AWS case study 3",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "AWS",
-    "client_industry": "Healthcare",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-04",
-    "title": "[PLACEHOLDER] AWS case study 4",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "AWS",
-    "client_industry": "Manufacturing",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-05",
-    "title": "[PLACEHOLDER] ServiceNow case study 1",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
+    "id": "cs-5229ebec",
+    "title": "Accelerating IT Issue Resolution with ServiceNow ITOM",
+    "summary": "Rolled out ServiceNow IT Operations Management so the client resolves incidents faster and sees business-service health problems early.",
     "bu": "ServiceNow",
-    "client_industry": "Financial Services",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-06",
-    "title": "[PLACEHOLDER] ServiceNow case study 2",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "ServiceNow",
-    "client_industry": "Healthcare",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-07",
-    "title": "[PLACEHOLDER] ServiceNow case study 3",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "ServiceNow",
-    "client_industry": "Telecommunications",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-08",
-    "title": "[PLACEHOLDER] ServiceNow case study 4",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "ServiceNow",
-    "client_industry": "Retail",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-09",
-    "title": "[PLACEHOLDER] Salesforce case study 1",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Salesforce",
-    "client_industry": "Retail",
-    "tags": [
-      "placeholder"
-    ],
-    "url": "https://www.royalcyber.com/"
-  },
-  {
-    "id": "placeholder-10",
-    "title": "[PLACEHOLDER] Salesforce case study 2",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Salesforce",
     "client_industry": "Insurance",
     "tags": [
-      "placeholder"
+      "itom",
+      "incident management",
+      "observability",
+      "it operations"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://royalcyber.com/resources/case-studies/servicenow-itom"
   },
   {
-    "id": "placeholder-11",
-    "title": "[PLACEHOLDER] Salesforce case study 3",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Salesforce",
+    "id": "cs-8800aad7",
+    "title": "Agile Project Delivery with ServiceNow ITBM for a Fortune 500 Insurer",
+    "summary": "Used ServiceNow ITBM to get projects delivered on time and shorten release cycles for a large US insurer.",
+    "bu": "ServiceNow",
+    "client_industry": "Insurance",
+    "tags": [
+      "itbm",
+      "project management",
+      "agile",
+      "release management"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/servicenow-itbm-agile-delivery-of-projects"
+  },
+  {
+    "id": "cs-cb91f561",
+    "title": "ServiceNow Performance Analytics for Data-Driven Decisions",
+    "summary": "Set up ServiceNow Performance Analytics dashboards and metrics to give leaders end-to-end visibility into each process.",
+    "bu": "ServiceNow",
+    "client_industry": "Unspecified",
+    "tags": [
+      "performance analytics",
+      "dashboards",
+      "kpis",
+      "reporting"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/performance-tracking-with-servicenow-analytics"
+  },
+  {
+    "id": "cs-92ad4421",
+    "title": "Leading Insurer Automates Provisioning with ServiceNow",
+    "summary": "Connected an in-house application to ServiceNow to automate provisioning while keeping full compliance.",
+    "bu": "ServiceNow",
+    "client_industry": "Insurance",
+    "tags": [
+      "provisioning",
+      "automation",
+      "compliance",
+      "integration"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/automating-servicenow-provisioning-for-leading-insurer"
+  },
+  {
+    "id": "cs-f1d8f8b6",
+    "title": "Automated Server Remediation for a Leading Information Provider",
+    "summary": "Automated detection of failed and stale servers and kicked off remediation in ServiceNow for a London-based provider short on staff.",
+    "bu": "ServiceNow",
+    "client_industry": "Information Services",
+    "tags": [
+      "remediation",
+      "automation",
+      "itom",
+      "servers"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/maximize-servicenow-with-automated-remediation"
+  },
+  {
+    "id": "cs-2697d2b4",
+    "title": "Streamlining Manufacturing Operations with ServiceNow",
+    "summary": "Combined ServiceNow HRSD, inventory management and project portfolio management for a heavy-machinery maker, lifting HR productivity by about 25%.",
+    "bu": "ServiceNow",
     "client_industry": "Manufacturing",
     "tags": [
-      "placeholder"
+      "hrsd",
+      "inventory",
+      "ppm",
+      "employee experience"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://royalcyber.com/resources/case-studies/streamlining-manufacturing-operations-with-servicenow"
   },
   {
-    "id": "placeholder-12",
-    "title": "[PLACEHOLDER] Data & AI case study 1",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Data & AI",
+    "id": "cs-73691b83",
+    "title": "Migrating ITSM from Cherwell to ServiceNow",
+    "summary": "Moved an education services provider from Cherwell to ServiceNow, including about 1M tickets and 50K users, and added self-service, SSO and Power BI reporting.",
+    "bu": "ServiceNow",
+    "client_industry": "Education Services",
+    "tags": [
+      "itsm",
+      "migration",
+      "cherwell",
+      "self-service",
+      "sso"
+    ],
+    "url": "https://www.royalcyber.com/resources/case-studies/itsm-upgrade-cherwell-to-servicenow/"
+  },
+  {
+    "id": "cs-191bd229",
+    "title": "Vendor Risk Management with ServiceNow GRC",
+    "summary": "Implemented ServiceNow GRC and Vendor Risk Management for faster vendor onboarding, automated assessments and clearer risk reporting.",
+    "bu": "ServiceNow",
+    "client_industry": "Insurance",
+    "tags": [
+      "grc",
+      "vendor risk",
+      "compliance",
+      "assessments"
+    ],
+    "url": "https://royalcyber.com/blogs/servicenow/servicenow-vendor-risk-management"
+  },
+  {
+    "id": "cs-cc862b4d",
+    "title": "Global Service Desk Migration from SharePoint to ServiceNow",
+    "summary": "Replaced a SharePoint-based service desk with ServiceNow request forms that include notifications, tracking and reporting for a London firm.",
+    "bu": "ServiceNow",
+    "client_industry": "Banking and Financial Services",
+    "tags": [
+      "service desk",
+      "migration",
+      "sharepoint",
+      "itsm"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/servicenow-migration-global-service-desk"
+  },
+  {
+    "id": "cs-5395e0cc",
+    "title": "Connected IT and Asset Visibility with ServiceNow ITAM",
+    "summary": "Brought apps, processes and data together on ServiceNow IT service and operations products, cutting maintenance effort by about 90%.",
+    "bu": "ServiceNow",
+    "client_industry": "Insurance",
+    "tags": [
+      "itam",
+      "asset management",
+      "silos",
+      "cost reduction"
+    ],
+    "url": "https://www.royalcyber.com/resources/case-studies/modernize-it-infrastructure-with-servicenow-to-eliminate-silos/"
+  },
+  {
+    "id": "cs-0cedb07b",
+    "title": "Unified Vulnerability Remediation via ServiceNow Integration",
+    "summary": "Integrated threat findings from TrustWave into ServiceNow in real time so security teams could start remediation automatically.",
+    "bu": "ServiceNow",
+    "client_industry": "Information Services",
+    "tags": [
+      "security",
+      "vulnerability management",
+      "integration",
+      "secops"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/visibility-and-security-with-servicenow-integration"
+  },
+  {
+    "id": "cs-04165b44",
+    "title": "Incident Management Automation for a Financial Company",
+    "summary": "Automated incident management with announcement tracking in ServiceNow, reducing errors by about 90% and improving transparency.",
+    "bu": "ServiceNow",
     "client_industry": "Financial Services",
     "tags": [
-      "placeholder"
+      "incident management",
+      "automation",
+      "itsm",
+      "transparency"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://www.royalcyber.com/resources/case-studies/servicenow-incident-management-for-financial-services/"
   },
   {
-    "id": "placeholder-13",
-    "title": "[PLACEHOLDER] Data & AI case study 2",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Data & AI",
-    "client_industry": "Healthcare",
+    "id": "cs-a2275f0c",
+    "title": "Server Attestation in ServiceNow for a Financial Services Company",
+    "summary": "Streamlined server attestation in ServiceNow ITAM so servers missed by discovery are no longer a compliance gap.",
+    "bu": "ServiceNow",
+    "client_industry": "Financial Services",
     "tags": [
-      "placeholder"
+      "itam",
+      "compliance",
+      "discovery",
+      "cmdb"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://royalcyber.com/resources/case-studies/server-attestation-servicenow-compliance"
   },
   {
-    "id": "placeholder-14",
-    "title": "[PLACEHOLDER] Data & AI case study 3",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Data & AI",
+    "id": "cs-4d59c4a8",
+    "title": "Logistics Company Migrates from On-Prem to AWS",
+    "summary": "Moved a long-established logistics firm from on-premises to AWS, cutting software release costs and raising developer productivity on a secure setup.",
+    "bu": "AWS",
+    "client_industry": "Logistics",
+    "tags": [
+      "migration",
+      "cloud",
+      "devops",
+      "security"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/logistics-company-migrates-from-on-prem-to-aws"
+  },
+  {
+    "id": "cs-052c508a",
+    "title": "Application Performance and Salesforce Integration on AWS for a Wealth Manager",
+    "summary": "Fixed application performance problems for a US wealth management firm and integrated Salesforce with AWS.",
+    "bu": "AWS",
+    "client_industry": "Financial Services",
+    "tags": [
+      "performance",
+      "integration",
+      "salesforce",
+      "wealth management"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/aws-business-performance-solutions"
+  },
+  {
+    "id": "cs-611ed903",
+    "title": "On-Prem to AWS Microservices Migration for a Software Company",
+    "summary": "Re-architected an image-processing software company onto AWS microservices, with large gains in application performance and profitability.",
+    "bu": "AWS",
+    "client_industry": "Software",
+    "tags": [
+      "migration",
+      "microservices",
+      "modernization",
+      "performance"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/migration-from-on-prem-to-aws-microservices-architecture"
+  },
+  {
+    "id": "cs-5d4c4b1a",
+    "title": "AWS Cost Optimization for a Logistics and Distribution Company",
+    "summary": "Used automated AWS Config rules and a central aggregator to find idle resources, unused volumes and old snapshots and cut spend.",
+    "bu": "AWS",
+    "client_industry": "Logistics and Distribution",
+    "tags": [
+      "cost optimization",
+      "aws config",
+      "governance",
+      "finops"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/aws-cost-optimization-logistics-case-study"
+  },
+  {
+    "id": "cs-7c8c1a5b",
+    "title": "Ransomware Protection on AWS for an Online STEAM Academy",
+    "summary": "Hardened an online school against ransomware with AWS WAF, Shield, Config and Systems Manager while keeping costs in check.",
+    "bu": "AWS",
+    "client_industry": "Education",
+    "tags": [
+      "security",
+      "ransomware",
+      "waf",
+      "compliance"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/boosting-security-against-ransomware-aws"
+  },
+  {
+    "id": "cs-084dffd3",
+    "title": "Streamlining Cloud Deployments with AWS DevOps",
+    "summary": "Built consistent CI/CD for EC2 and Lambda workloads using CodePipeline, CodeBuild, CodeDeploy and GitHub Actions.",
+    "bu": "AWS",
+    "client_industry": "Unspecified",
+    "tags": [
+      "devops",
+      "ci/cd",
+      "lambda",
+      "automation"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/aws-devops-cloud-deployments"
+  },
+  {
+    "id": "cs-d43c6b80",
+    "title": "Automation and Cost Optimization on AWS for an Automobile Company",
+    "summary": "Delivered automated cost optimization for a company already running fully on AWS.",
+    "bu": "AWS",
+    "client_industry": "Automotive",
+    "tags": [
+      "cost optimization",
+      "automation",
+      "finops",
+      "cloud operations"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/automation-cost-optimization-aws-leading-automobile-industry"
+  },
+  {
+    "id": "cs-9c30e658",
+    "title": "File Exchange Automation on AWS for a Finance Company",
+    "summary": "Automated file exchange gateway onboarding on AWS, reducing data loss and incorrect entries and improving ROI.",
+    "bu": "AWS",
+    "client_industry": "Finance",
+    "tags": [
+      "automation",
+      "file transfer",
+      "integration",
+      "data quality"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/file-exchange-automation-for-finance-company"
+  },
+  {
+    "id": "cs-4e55fe54",
+    "title": "Streamlined Data Protection for a Biotech Firm on AWS",
+    "summary": "Helped a biotech company meet security certification needs and replace slow storage with a compliant AWS setup.",
+    "bu": "AWS",
+    "client_industry": "Biotech",
+    "tags": [
+      "data protection",
+      "compliance",
+      "storage",
+      "security"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/streamlined-data-protection-leading-bio-tech-firm-aws"
+  },
+  {
+    "id": "cs-2f189401",
+    "title": "Revolutionizing Services for a Financial Advisory Firm using Salesforce",
+    "summary": "Modernized client service for a New York registered investment advisor on Salesforce.",
+    "bu": "Salesforce",
+    "client_industry": "Financial Services",
+    "tags": [
+      "crm",
+      "financial services cloud",
+      "client service",
+      "wealth management"
+    ],
+    "url": "https://royalcyber.com/resources/case-studies/revolutionizing-services-for-a-financial-advisory-firm-using-salesforce"
+  },
+  {
+    "id": "cs-9664a392",
+    "title": "Leading Retailer Improves ROI by Integrating Salesforce with MuleSoft",
+    "summary": "Connected Salesforce to other systems through the MuleSoft Anypoint Platform, improving ROI for a retailer.",
+    "bu": "Salesforce",
     "client_industry": "Retail",
     "tags": [
-      "placeholder"
+      "integration",
+      "mulesoft",
+      "crm",
+      "retail"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://royalcyber.com/resources/case-studies/improving-roi-by-integrating-salesforce-with-mulesoft"
   },
   {
-    "id": "placeholder-15",
-    "title": "[PLACEHOLDER] Data & AI case study 4",
-    "summary": "[PLACEHOLDER] Not a real case study. A teammate replaces this file with real entries from the public Royal Cyber site.",
-    "bu": "Data & AI",
-    "client_industry": "Telecommunications",
+    "id": "cs-c2469a54",
+    "title": "Marketing Automation with Salesforce for Better Customer Experience",
+    "summary": "Set up automated, personalized one-to-one campaigns in Salesforce to raise loyalty, upselling and retention.",
+    "bu": "Salesforce",
+    "client_industry": "Unspecified",
     "tags": [
-      "placeholder"
+      "marketing cloud",
+      "personalization",
+      "campaigns",
+      "customer experience"
     ],
-    "url": "https://www.royalcyber.com/"
+    "url": "https://royalcyber.com/resources/case-studies/salesforce-marketing-automation-improvements"
+  },
+  {
+    "id": "cs-57541f43",
+    "title": "Asset Intelligence Modernization with Microsoft Fabric at Texas Roadhouse",
+    "summary": "Modernized ETL on Microsoft Fabric for a restaurant chain, cutting data latency from 24-48 hours to under 3 hours.",
+    "bu": "Data & AI",
+    "client_industry": "Hospitality / Restaurant",
+    "tags": [
+      "microsoft fabric",
+      "etl",
+      "data modernization",
+      "analytics"
+    ],
+    "url": "https://www.royalcyber.com/resources/case-studies/microsoft-fabric-asset-intelligence-texas-roadhouse/"
+  },
+  {
+    "id": "cs-0dea4233",
+    "title": "Faster Performance Decisions for Solar Energy Producers with Microsoft Fabric",
+    "summary": "Used Microsoft Fabric analytics to help solar producers make performance decisions about 40% faster.",
+    "bu": "Data & AI",
+    "client_industry": "Energy & Utility",
+    "tags": [
+      "microsoft fabric",
+      "prediction",
+      "energy",
+      "analytics"
+    ],
+    "url": "https://www.royalcyber.com/resources/case-studies/solar-energy-prediction-microsoft-fabric/"
   }
 ]
